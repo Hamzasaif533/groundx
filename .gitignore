@@ -1,0 +1,6 @@
+# Raw research files (≈1.9 GB, some >100 MB) — the website uses the web-ready copies in assets/
+file/
+# Local editor / tool settings
+.claude/
+.DS_Store
+Thumbs.db
