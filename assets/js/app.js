@@ -1280,4 +1280,14 @@
   setTimeout(() => document.documentElement.classList.remove("gx-preload"), 4000);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { moveTabInk(false); hasGSAP && ScrollTrigger.refresh(); });
   window.addEventListener("load", () => hasGSAP && ScrollTrigger.refresh());
+  // deep link: ?at=compare scrolls straight to that section once the page has settled (handy for sharing)
+  try {
+    const at = new URLSearchParams(location.search).get("at");
+    const target = at && document.getElementById(at);
+    if (target) window.addEventListener("load", () => setTimeout(() => {
+      if (hasGSAP) ScrollTrigger.refresh();
+      window.scrollTo(0, target.getBoundingClientRect().top + scrollY - 70);
+      setTimeout(() => $("#nav").classList.remove("is-hidden"), 50);
+    }, 600));
+  } catch (e) {}
 })();
