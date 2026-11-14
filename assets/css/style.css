@@ -982,3 +982,24 @@ html[dir="rtl"] .analog__body h3 { font-family: var(--font); text-transform: non
 .shot--mars { --c: var(--mars); }
 .shot--oman { --c: #f2c94c; }
 .site-card--mars .site-card__code { color: var(--mars); }
+
+/* ==========================================================================
+   PERFORMANCE: frosted blur only on the fixed nav and the lightbox.
+   (backdrop-filter on panels inside scrolling content must re-blur every
+   frame while scrolling — the main cause of dropped frames.) Panels keep
+   the glass look with translucent gradients + highlights instead.
+   ========================================================================== */
+.glass, .chart, .seg, .world-tabs, .sitebar, .ruler, .orb__tag, .twins__badge, .site-card__code,
+.vs__world, .map figcaption span, .seg--terrain, .analog__country, .tctl {
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.hero__side.glass { background: linear-gradient(145deg, rgba(48, 47, 44, .86), rgba(35, 35, 34, .8)); }
+.sitebar { background: rgba(35, 35, 34, .94); }
+.ruler { background: rgba(35, 35, 34, .9); }
+.orb__tag { background: rgba(35, 35, 34, .88); }
+.chart { background: linear-gradient(145deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02)); }
+/* static ambient light, no filter (radial gradients are already soft) */
+.blob { filter: none; will-change: auto; opacity: .16; }
+.blob--a { background: radial-gradient(circle, rgba(191, 178, 154, .9), transparent 60%); }
+.blob--b { background: radial-gradient(circle, rgba(215, 255, 197, .8), transparent 60%); opacity: .1; }
+.blob--c { background: radial-gradient(circle, rgba(255, 138, 92, .8), transparent 60%); opacity: .07; }

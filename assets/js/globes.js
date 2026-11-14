@@ -164,7 +164,7 @@
     boost *= 0.94;
     bodies.forEach((b) => {
       const r = b.el.getBoundingClientRect();
-      const op = parseFloat(getComputedStyle(b.el).opacity) || 0;
+      const op = window.gsap ? +gsap.getProperty(b.el, "opacity") : (parseFloat(getComputedStyle(b.el).opacity) || 0);
       b.group.visible = op > 0.01 && r.width > 2;
       if (!b.group.visible) return;
       b.group.position.set(r.left - rect.left + r.width / 2, -(r.top - rect.top + r.height / 2), 0);

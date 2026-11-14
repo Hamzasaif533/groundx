@@ -7,7 +7,6 @@
 
   const hasGSAP = typeof window.gsap !== "undefined";
   if (hasGSAP) gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
-  if (hasGSAP && window.ScrollSmoother) gsap.registerPlugin(ScrollSmoother);
   if (hasGSAP && window.ScrambleTextPlugin) gsap.registerPlugin(ScrambleTextPlugin);
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ANIM = hasGSAP && !REDUCED;
@@ -919,10 +918,6 @@
       $$(".site-card__media, .shot__img").forEach((el) => gsap.from(el, { clipPath: "inset(100% 0 0 0)", duration: 1.3, ease: "expo.inOut", scrollTrigger: { trigger: el, start: "top 90%" } }));
       // kicker rule draws in
       $$(".kicker").forEach((el) => gsap.from(el, { "--kw": "0px", duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 90%" } }));
-      // ambient light blobs drift slowly behind the glass
-      gsap.to(".blob--a", { xPercent: 30, yPercent: 20, duration: 18, ease: "sine.inOut", repeat: -1, yoyo: true });
-      gsap.to(".blob--b", { xPercent: -25, yPercent: -15, duration: 22, ease: "sine.inOut", repeat: -1, yoyo: true });
-      gsap.to(".blob--c", { xPercent: 20, yPercent: -25, duration: 26, ease: "sine.inOut", repeat: -1, yoyo: true });
       // planets hint gently nudges
       gsap.to(".twins__hint-ico", { rotate: -360, duration: 6, ease: "none", repeat: -1 });
 
@@ -1146,11 +1141,13 @@
       const dd = f * xMax;
       val.textContent = `[ ${fmt(elevAt(dd), 0)} m ]`;
       dist.textContent = `${fmt(dd, 2)} km`;
-      mark.style.transform = `translateY(${(f * track.clientHeight).toFixed(1)}px)`;
+      mark.style.transform = `translateY(${(f * trackH).toFixed(1)}px)`;
       fill.style.transform = `scaleY(${f.toFixed(4)})`;
       track.setAttribute("aria-valuenow", Math.round(f * 100));
     };
+    let trackH = track.clientHeight;
     const layout = () => {
+      trackH = track.clientHeight;
       track.setAttribute("aria-label", t("ruler.aria"));
       const max = maxScroll();
       ticks.innerHTML = SECTIONS.map(([sel, key]) => {
@@ -1185,10 +1182,9 @@
   }
 
   /* ================================================================ BOOT */
-  let smoother = null;
-  if (ANIM && window.ScrollSmoother && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1.1, effects: true, smoothTouch: 0 });
-  }
+  // Native scrolling (no JS scroll smoothing): it runs on the browser's compositor thread, so it
+  // stays smooth even while the 3D scenes render, and layout re-measuring can't make the page jump.
+  const smoother = null;
   renderAll();
   bindOnce();
   bindRuler();
