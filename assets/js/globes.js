@@ -65,18 +65,20 @@
     return m;
   }
 
+  // longitude (deg, east +) that should face the camera -> sphere rotation.y
+  const faceAngle = (lon) => 2 * Math.PI * (0.25 - (0.5 + lon / 360));
   const geo = new T.SphereGeometry(1, 72, 54);
   const BODIES = [
-    { sel: ".orb--moon", spin: 0.045, tilt: 0.12, start: 2.2, build: () => {
+    /* near side: the dark maria (the Moon is tidally locked) */ { sel: ".orb--moon", lon: 0, sway: 0.12, tilt: 0.12, build: () => {
       const map = tex("moon.webp");
       return [new T.Mesh(geo, new T.MeshLambertMaterial({ map, bumpMap: map, bumpScale: 0.035, transparent: true }))];   // the Moon has no air
     } },
-    { sel: ".orb--mars", spin: 0.07, tilt: 0.44, start: 4.0, build: () => {
+    /* Valles Marineris + Tharsis volcanoes */ { sel: ".orb--mars", lon: -75, sway: 0.3, tilt: 0.44, build: () => {
       const map = tex("mars.webp");
       return [new T.Mesh(geo, new T.MeshLambertMaterial({ map, bumpMap: map, bumpScale: 0.03, transparent: true })),
         haze(0xf2b48a, 0.22, 1.004, 3.5, false), haze(0xe9a27a, 0.28, 1.03, 2.2, true)];
     } },
-    { sel: ".orb--earth", spin: 0.06, tilt: 0.41, start: 4.4, build: () => {
+    /* Atlantic: Americas, Africa, Europe, Greenland */ { sel: ".orb--earth", lon: -25, sway: 0.3, tilt: 0.41, build: () => {
       const earth = new T.Mesh(geo, new T.MeshLambertMaterial({ map: tex("earth.webp"), transparent: true, color: 0xe8e8e0 }));
       const clouds = new T.Mesh(new T.SphereGeometry(1.01, 64, 48), new T.MeshLambertMaterial({ color: 0xffffff, alphaMap: lin("clouds.webp"), transparent: true, opacity: 0.85, depthWrite: false }));
       clouds.userData.clouds = true;
@@ -92,7 +94,7 @@
     const spinner = new T.Group(); // axial tilt + self rotation
     spinner.rotation.z = b.tilt;
     const parts = b.build();
-    parts.forEach((p) => { if (p.userData.haze) { drag.add(p); return; } p.rotation.y = b.start; spinner.add(p); });
+    parts.forEach((p) => { if (p.userData.haze) { drag.add(p); return; } p.rotation.y = faceAngle(b.lon); spinner.add(p); });
     drag.add(spinner); group.add(drag); scene.add(group);
     const s = { ...b, el, group, drag, spinner, parts, vx: 0, vy: 0, rx: 0, ry: 0, dragging: false };
     bindDrag(s);
@@ -175,11 +177,14 @@
         b.rx += (0 - b.rx) * 0.01;
       }
       b.drag.rotation.set(b.rx + cy, b.ry + cx, 0);
+      // keep the interesting face toward the viewer: gentle sway instead of a full spin
+      // (scrolling adds a small extra turn that eases back; dragging still spins freely)
+      b.extra = (b.extra || 0) * 0.96 + boost * 0.004;
       b.spinner.children.forEach((m) => {
-        m.rotation.y += dt * b.spin * (1 + boost) * (m.userData.clouds ? 1.25 : 1);
+        m.rotation.y = faceAngle(b.lon) + Math.sin(clock.elapsedTime * 0.18 + b.lon) * b.sway + b.extra + (m.userData.clouds ? clock.elapsedTime * 0.012 : 0);
       });
       b.parts.forEach((p) => {
-        if (p.userData.haze) p.material.uniforms.o.value = op;
+        if (p.userData.haze) p.material.uniforms.o.value = op * (document.documentElement.dataset.theme === "light" ? 0.3 : 1); // glow adds light: keep it faint on the beige theme
         else p.material.opacity = op * (p.userData.clouds ? 0.85 : 1);
       });
     });

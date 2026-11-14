@@ -810,7 +810,7 @@
     const root = document.documentElement;
     root.dataset.theme = th;
     try { localStorage.setItem("gx-theme", th); } catch (e) {}
-    const meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute("content", th === "light" ? "#f2efe6" : "#232322");
+    const meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute("content", th === "light" ? "#e5dccb" : "#232322");
     $("#themeToggle").setAttribute("aria-label", t(th === "light" ? "theme.toDark" : "theme.toLight"));
     if (GX.setTerrainTheme) GX.setTerrainTheme();
   }

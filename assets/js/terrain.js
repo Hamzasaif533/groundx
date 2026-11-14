@@ -14,7 +14,7 @@
   const isLight = () => document.documentElement.dataset.theme === "light";
   const PAL = {
     dark: { bg: 0x232322, low: new T.Color(0x7d725f), mid: new T.Color(0xb3a68c), high: new T.Color(0xd7ffc5) },
-    light: { bg: 0xf2efe6, low: new T.Color(0xb3a68a), mid: new T.Color(0x75664c), high: new T.Color(0x1e7444) }
+    light: { bg: 0xe5dccb, low: new T.Color(0xb3a68a), mid: new T.Color(0x75664c), high: new T.Color(0x17633a) }
   };
   const pal = () => PAL[isLight() ? "light" : "dark"];
   const live = [];                                   // every mounted terrain re-themes itself on toggle
