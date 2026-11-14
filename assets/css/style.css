@@ -1180,3 +1180,7 @@ html[data-theme="light"] .theme-btn .i-moon { transform: translateY(-120%) rotat
 
 /* every image fills its frame (no letterboxing) */
 .shot__img img, .site-card__media img, .analog__media img, .vs__media img, .thumb img { object-fit: cover; }
+
+/* Arabic typeface: Firjar (Yazeed Omar). Every Arabic rule already uses var(--font). */
+html[lang="ar"] { --font: "Firjar", "Readex Pro", system-ui, Tahoma, sans-serif; --label: "Firjar", "Readex Pro", sans-serif; }
+html[lang="ar"] body { font-family: var(--font); }
