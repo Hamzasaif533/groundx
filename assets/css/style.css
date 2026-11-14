@@ -1003,3 +1003,9 @@ html[dir="rtl"] .analog__body h3 { font-family: var(--font); text-transform: non
 .blob--a { background: radial-gradient(circle, rgba(191, 178, 154, .9), transparent 60%); }
 .blob--b { background: radial-gradient(circle, rgba(215, 255, 197, .8), transparent 60%); opacity: .1; }
 .blob--c { background: radial-gradient(circle, rgba(255, 138, 92, .8), transparent 60%); opacity: .07; }
+
+/* compact side ruler: progress track + section marks only */
+.ruler { width: 58px; padding: 12px 8px; justify-items: center; }
+.ruler__track { margin-top: 0; height: 240px; }
+.ruler__tick span { inset-inline-start: calc(100% + 52px); }
+.ruler__hint { font-size: 9.5px; line-height: 1.3; letter-spacing: .1em; }

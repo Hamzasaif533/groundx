@@ -48,7 +48,7 @@ const K = {
   meanElev: { en: "Mean elevation", ar: "متوسط الارتفاع" }
 };
 const GEE = { en: "Google Earth Engine terrain analysis", ar: "تحليل التضاريس في Google Earth Engine" };
-const GEE_NOTE = { en: "Preliminary; values from the team's Earth Engine run.", ar: "أولي؛ القيم من تشغيل الفريق في Earth Engine." };
+const GEE_NOTE = { en: "Values from the team's Earth Engine run.", ar: "القيم من تشغيل الفريق في Earth Engine." };
 const TRI_NOTE = { en: "Roughness here is TRI in metres (Earth Engine) — not directly comparable with the QGIS roughness used for Shackleton and Haughton.", ar: "الخشونة هنا مؤشر TRI بالمتر (Earth Engine) — غير قابلة للمقارنة المباشرة مع خشونة QGIS المستخدمة لشاكلتون وهوتون." };
 
 /* Builds the three criteria blocks from a raw Earth Engine statistics object (values shown to 2 decimals). */
@@ -108,7 +108,7 @@ const HAUGHTON = {
       headline: "1.90", headlineLabel: K.meanRough,
       facts: [{ k: K.mean, v: "1.9040" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "33.1709" }],
       method: { en: "QGIS roughness analysis using processed DEM", ar: "تحليل الخشونة في QGIS باستخدام نموذج الارتفاع المعالج" },
-      note: { en: "Preliminary; calculation comparability requires verification.", ar: "أولي؛ قابلية مقارنة الحساب تتطلب التحقق." },
+      note: { en: "Calculation comparability requires verification.", ar: "قابلية مقارنة الحساب تتطلب التحقق." },
       map: "earthRough"
     },
     geology: {
@@ -127,7 +127,7 @@ const HAUGHTON = {
   rovers: ["pending-1"]
 };
 
-const PAIRING_NOTE = { en: "Preliminary pairing from the team's Mars site review; detailed analysis to follow.", ar: "اقتران أولي من مراجعة الفريق لمواقع المريخ؛ التحليل التفصيلي لاحقًا." };
+const PAIRING_NOTE = { en: "Pairing from the team's Mars site review; detailed analysis to follow.", ar: "اقتران من مراجعة الفريق لمواقع المريخ؛ التحليل التفصيلي لاحقًا." };
 const omanAnalog = (o) => Object.assign({ country: { en: "Oman", ar: "عُمان" }, coords: null, resolution: null, area: null, maps: {}, bars: null, photoSource: null, rovers: [] }, o);
 
 const SAMAIL = omanAnalog({
@@ -201,7 +201,7 @@ GX.SITES = [
         facts: [{ k: K.mean, v: "5.0552" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "29.1604" }, { k: K.sd, v: "2.7205" }],
         evidence: { en: "QGIS statistics report (Shackleton_Roughness)", ar: "تقرير إحصاءات QGIS (Shackleton_Roughness)" },
         method: { en: "QGIS terrain roughness analysis", ar: "تحليل خشونة التضاريس باستخدام QGIS" },
-        note: { en: "Preliminary; units and comparability to be verified. Mean taken from the QGIS statistics report (corrects 1.0552 in the Site info sheet).", ar: "أولي؛ الوحدات وقابلية المقارنة قيد التحقق. المتوسط مأخوذ من تقرير إحصاءات QGIS (تصحيحًا للقيمة 1.0552 في ورقة معلومات الموقع)." },
+        note: { en: "Units and comparability to be verified. Mean taken from the QGIS statistics report (corrects 1.0552 in the Site info sheet).", ar: "الوحدات وقابلية المقارنة قيد التحقق. المتوسط مأخوذ من تقرير إحصاءات QGIS (تصحيحًا للقيمة 1.0552 في ورقة معلومات الموقع)." },
         map: "moonRough"
       },
       geology: {

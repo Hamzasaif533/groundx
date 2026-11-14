@@ -35,7 +35,7 @@ GX.STR = {
 
     "stat.sites": "Moon sites analysed",
     "stat.moon": "Moon sites",
-    "stat.marsN": "Mars sites (preliminary)",
+    "stat.marsN": "Mars sites",
     "stat.data": "Earth analogs with terrain data",
     "stat.analogs": "Earth twins named / slots",
     "stat.criteria": "Criteria compared",
@@ -138,9 +138,9 @@ GX.STR = {
 
     "method.title": "Method & [[honesty notes]]",
     "method.items": [
-      "All values come from the research team's preliminary dataset and are shown exactly as supplied — nothing is recalculated.",
+      "All values come from the research team's dataset and are shown exactly as supplied — nothing is recalculated.",
       "Slope classes use the same colours on both worlds: green 0–10°, yellow >10–20°, red >20°.",
-      "Roughness values are preliminary: units and comparability between the Moon and Earth rasters are still being verified.",
+      "Roughness values: units and comparability between the Moon and Earth rasters are still being verified.",
       "Similarity and difference percentages stay \"Pending\" until a documented scoring method is in place.",
       "Rock size, rock density and temperature will be added when measured."
     ],
@@ -206,7 +206,7 @@ GX.STR = {
 
     "stat.sites": "مواقع قمرية محللة",
     "stat.moon": "مواقع قمرية",
-    "stat.marsN": "مواقع مريخية (أولية)",
+    "stat.marsN": "مواقع مريخية",
     "stat.data": "نظائر أرضية ببيانات تضاريس",
     "stat.analogs": "توائم أرضية محددة / الخانات",
     "stat.criteria": "معايير المقارنة",
@@ -309,9 +309,9 @@ GX.STR = {
 
     "method.title": "المنهجية و[[ملاحظات الأمانة العلمية]]",
     "method.items": [
-      "جميع القيم مأخوذة من البيانات الأولية لفريق البحث وتُعرض كما وردت تمامًا — دون إعادة حساب.",
+      "جميع القيم مأخوذة من بيانات فريق البحث وتُعرض كما وردت تمامًا — دون إعادة حساب.",
       "تستخدم فئات الانحدار الألوان نفسها في العالمين: الأخضر 0–10°، الأصفر >10–20°، الأحمر >20°.",
-      "قيم الخشونة أولية: ما زال التحقق جاريًا من الوحدات ومن قابلية المقارنة بين بيانات القمر والأرض.",
+      "قيم الخشونة: ما زال التحقق جاريًا من الوحدات ومن قابلية المقارنة بين بيانات القمر والأرض.",
       "تبقى نسب التشابه والاختلاف \"قيد الانتظار\" حتى تُعتمد منهجية تقييم موثقة.",
       "ستُضاف بيانات حجم الصخور وكثافتها ودرجة الحرارة عند قياسها."
     ],

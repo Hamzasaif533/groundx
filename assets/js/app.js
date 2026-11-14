@@ -146,7 +146,7 @@
         <div class="site-card__body">
           <h3>${esc(L(s.name))}</h3>
           <p class="loc">${esc(L(s.location))}${s.resolution ? ` · ${num(s.resolution)}` : ""}</p>
-          <div class="tagline"><span class="tag tag--warn">${esc(t("common.preliminary"))}</span><span class="tag">${esc(L(s.dataset))}</span></div>
+          <div class="tagline"><span class="tag">${esc(L(s.dataset))}</span></div>
           <div>
             <small class="mono" style="color:var(--dim)">${esc(t("site.twins"))}</small>
             <div class="twin-slots" style="margin-top:8px">
@@ -162,17 +162,7 @@
 
   function renderSites() {
     const grid = $("#siteGrid");
-    const list = GX.SITES.filter((s) => s.body === state.world).map(siteCard).join("");
-    const next = state.world === "moon"
-      ? { tex: "moon", code: "M-02", h: state.lang === "ar" ? "موقع قمري جديد" : "Next lunar site", p: state.lang === "ar" ? "مواقع قمرية إضافية وتوائمها الأرضية ستُضاف مع تقدم البحث." : "Additional lunar sites and their Earth twins will be added as the research progresses." }
-      : { tex: "mars", code: "R-05", h: t("site.marsSoon"), p: t("site.marsSoonD") };
-    grid.innerHTML = list + `
-      <div class="site-card site-card--soon">
-        <div class="ring"><i class="globe tex-${next.tex}" style="animation-delay:-23s"></i><span>${next.code}</span></div>
-        <h3>${esc(next.h)}</h3>
-        <p>${esc(next.p)}</p>
-        <span class="tag tag--warn">${esc(t("common.inProgress"))}</span>
-      </div>`;
+    grid.innerHTML = GX.SITES.filter((s) => s.body === state.world).map(siteCard).join("");
   }
 
   /* ---------- compare ---------- */
@@ -190,7 +180,7 @@
     if (c.evidence) tags.push(`<span class="tag">${esc(t("compare.evidence"))}: ${esc(L(c.evidence))}</span>`);
     if ("evidence" in c && !c.evidence) tags.push(`<span class="tag tag--pend">${esc(t("compare.evidence"))}: ${esc(t("common.pending"))}</span>`);
     if ("reference" in c) tags.push(c.reference ? `<a class="tag" href="${c.reference}" target="_blank" rel="noopener">${esc(t("compare.reference"))} ↗</a>` : `<span class="tag tag--pend">${esc(t("compare.reference"))}: ${esc(t("common.pending"))}</span>`);
-    tags.push(`<span class="tag tag--warn">${esc(t("compare.status"))}: ${esc(c.note ? L(c.note) : t("common.preliminary"))}</span>`);
+    if (c.note) tags.push(`<span class="tag tag--warn">${esc(L(c.note))}</span>`);
     const map = c.map ? `<button class="thumb" type="button" data-zoom="${c.map}" data-cursor><img src="${img(c.map).src}" alt="" loading="lazy"><span>${esc(t("compare.viewMap"))} ↗</span></button>` : "";
     return `
       <div class="crit__side crit__side--${worldClass}">
@@ -306,7 +296,7 @@
         const max = Math.max(mv, ev) * 1.12;
         return `
           <div class="bar">
-            <div class="bar__label"><span>${esc(t(label))}</span>${prelim ? `<small>${esc(t("bar.prelim"))}</small>` : ""}</div>
+            <div class="bar__label"><span>${esc(t(label))}</span></div>
             <div class="bar__rows">
               <div class="bar__row bar__row--${W}"><span><i></i>${esc(L(s.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${mv / max}"></div></div><b>${num(fmt(mv, dec))}</b></div>
               <div class="bar__row bar__row--earth"><span><i></i>${esc(L(a.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${ev / max}"></div></div><b>${num(fmt(ev, dec))}</b></div>
@@ -739,24 +729,6 @@
       card.style.setProperty("--my", `${e.clientY - r.top}px`);
     }, { passive: true });
 
-    // footer X is magnetic: it leans toward the pointer and springs back
-    if (ANIM) {
-      const xw = $(".footer__x"), foot = $(".footer");
-      const qx = gsap.quickTo(xw, "x", { duration: .9, ease: "power3" });
-      const qy = gsap.quickTo(xw, "y", { duration: .9, ease: "power3" });
-      const qr = gsap.quickTo(xw, "rotation", { duration: 1.1, ease: "power3" });
-      const qs = gsap.quickTo(xw, "scale", { duration: .9, ease: "power3" });
-      foot.addEventListener("pointermove", (e) => {
-        const r = xw.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        const dx = e.clientX - cx, dy = e.clientY - cy, dist = Math.hypot(dx, dy), pull = Math.max(0, 1 - dist / 520);
-        qx(Math.max(-60, Math.min(60, dx * .22 * pull)));
-        qy(Math.max(-40, Math.min(40, dy * .22 * pull)));
-        qr(Math.max(-25, Math.min(25, dx * .06 * pull)));
-        qs(1 + pull * .12);
-      });
-      foot.addEventListener("pointerleave", () => { qx(0); qy(0); qr(0); qs(1); });
-    }
-
     const dlg = $("#lightbox");
     dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
 
@@ -1019,8 +991,14 @@
       fx.innerHTML = '<span class="fx">X</span>';
       gsap.timeline({ scrollTrigger: { trigger: ".footer", start: "top 92%" } })
         .from(fchars, { yPercent: 105, duration: 1.2, ease: "expo.out", stagger: { each: .06, from: "start" } })
-        .from(".footer__x .fx", { yPercent: -170, rotation: -120, duration: 1.6, ease: "bounce.out" }, .45)
-        .add(() => gsap.to(".footer__x .fx", { y: -10, rotation: 4, duration: 2.4, ease: "sine.inOut", repeat: -1, yoyo: true }), "+=.1");
+        .from(".footer__x .fx", { yPercent: 105, duration: 1.2, ease: "expo.out" }, fchars.length * .06);
+      // the X spins once each time the pointer enters it
+      const fxEl = $(".footer__x .fx");
+      fxEl.addEventListener("pointerenter", () => {
+        fxEl.classList.add("is-hot");
+        gsap.to(fxEl, { rotation: "+=360", duration: .9, ease: "power3.inOut", overwrite: "auto" });
+      });
+      fxEl.addEventListener("pointerleave", () => fxEl.classList.remove("is-hot"));
       // scroll parallax: letters settle from slightly spread to tight
       gsap.fromTo(fchars, { y: (i) => (i % 2 ? 18 : -18) }, { y: 0, ease: "none", scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 1 } });
       // hover: letters near the pointer lift
@@ -1116,31 +1094,26 @@
     if (!auto && id === "footer") restartCycle();
   }
 
-  /* Fixed side ruler — an interactive scrubber.
-     The marker moves steadily down with page progress; the mini profile beside it is the real
-     Shackleton transect, and the read-out shows the elevation at that point. Drag / click / arrow keys to travel. */
+  /* Fixed side ruler — an interactive scrubber showing page progress.
+     Click anywhere on it to glide there, drag to scrub, hover a mark to see the section, arrow keys work too. */
   function bindRuler() {
-    const P = window.SHACKLETON_PROFILE; const el = $("#ruler");
-    if (!P || !P.length || !el) return;
-    const track = $(".ruler__track", el), val = $(".ruler__val", el), dist = $(".ruler__dist", el);
+    const el = $("#ruler");
+    if (!el) return;
+    const track = $(".ruler__track", el);
     const mark = $(".ruler__mark", el), fill = $(".ruler__fill", el), ticks = $(".ruler__ticks", el);
-    const lo = Math.min(...P.map((p) => p[1])), hi = Math.max(...P.map((p) => p[1])), xMax = P[P.length - 1][0];
-    const pts = P.map((p) => [2 + ((p[1] - lo) / (hi - lo)) * 26, (p[0] / xMax) * 200]);
-    const d = pts.map((q, i) => `${i ? "L" : "M"}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" ");
-    $(".ruler__line", el).setAttribute("d", d);
-    $(".ruler__area", el).setAttribute("d", `M0 0 ${d.replace(/^M/, "L")} L0 200 Z`);
     const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#analogs", "nav.analogs"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
     const maxScroll = () => Math.max(1, (window.ScrollTrigger ? ScrollTrigger.maxScroll(window) : document.documentElement.scrollHeight - innerHeight));
     const progress = () => smoother ? smoother.progress : Math.min(1, Math.max(0, scrollY / maxScroll()));
-    const go = (f) => { const y = Math.min(1, Math.max(0, f)) * maxScroll(); if (smoother) smoother.scrollTop(y); else window.scrollTo(0, y); };
-    const elevAt = (dd) => { let i = 1; while (i < P.length - 1 && P[i][0] < dd) i++; const a = P[i - 1], b = P[i]; const k = b[0] === a[0] ? 0 : (dd - a[0]) / (b[0] - a[0]); return a[1] + (b[1] - a[1]) * Math.max(0, Math.min(1, k)); };
+    // click = glide smoothly to that point; dragging follows the pointer with a short ease
+    const go = (f, dur = 1.1) => {
+      const y = Math.min(1, Math.max(0, f)) * maxScroll();
+      if (hasGSAP && !REDUCED) gsap.to(window, { scrollTo: { y, autoKill: true }, duration: dur, ease: dur > .5 ? "expo.inOut" : "power2.out", overwrite: true });
+      else window.scrollTo(0, y);
+    };
     let last = -1;
     const update = () => {
       const f = progress();
       if (Math.abs(f - last) < 0.0005) return; last = f;
-      const dd = f * xMax;
-      val.textContent = `[ ${fmt(elevAt(dd), 0)} m ]`;
-      dist.textContent = `${fmt(dd, 2)} km`;
       mark.style.transform = `translateY(${(f * trackH).toFixed(1)}px)`;
       fill.style.transform = `scaleY(${f.toFixed(4)})`;
       track.setAttribute("aria-valuenow", Math.round(f * 100));
@@ -1165,7 +1138,7 @@
       if (e.target.closest(".ruler__tick")) return;
       dragging = true; el.classList.add("is-dragging"); track.setPointerCapture(e.pointerId); go(fromEvent(e));
     });
-    track.addEventListener("pointermove", (e) => { if (dragging) go(fromEvent(e)); });
+    track.addEventListener("pointermove", (e) => { if (dragging) go(fromEvent(e), .35); });
     const end = () => { dragging = false; el.classList.remove("is-dragging"); };
     track.addEventListener("pointerup", end); track.addEventListener("pointercancel", end);
     track.addEventListener("keydown", (e) => {
