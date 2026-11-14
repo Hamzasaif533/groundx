@@ -114,57 +114,70 @@
 
   /* Hero site bar (like a tab strip along the bottom of the hero) */
   function renderSitebar() {
-    const s = GX.SITES[0], a = s.analogs[0];
+    const moon = GX.SITES.filter((s) => s.body === "moon"), mars = GX.SITES.filter((s) => s.body === "mars");
+    const s = moon[0], a = s.analogs[0];
     $("#sitebar").innerHTML = `
       <span class="sitebar__lab label">${esc(t("sitebar.label"))}:</span>
-      <a href="#compare" class="sitebar__item" data-analog-link="0"><i class="globe tex-moon"></i>${esc(L(s.name))} <span class="mono">↔</span> ${esc(L(a.name))}</a>
-      <a href="#compare" class="sitebar__item is-soon" data-analog-link="1"><i class="globe tex-earth"></i>${esc(t("sitebar.twin2"))} · ${esc(t("common.pending"))}</a>
-      <a href="#sites" class="sitebar__item is-soon" data-world-link="mars"><i class="globe tex-mars"></i>${esc(t("sitebar.mars"))} · ${esc(t("common.inProgress"))}</a>`;
+      <a href="#compare" class="sitebar__item" data-site="${s.id}"><i class="globe tex-moon"></i>${esc(L(s.name))} <span class="mono">↔</span> ${esc(L(a.name))}</a>
+      <a href="#sites" class="sitebar__item" data-world-link="mars"><i class="globe tex-mars"></i>${esc(t("sitebar.mars"))} · <bdi dir="ltr">${mars.length}</bdi> ${esc(t("sitebar.sites"))}</a>
+      <a href="#analogs" class="sitebar__item is-soon"><i class="globe tex-earth"></i>${esc(t("analogs.short"))} · <bdi dir="ltr">${GX.ANALOG_LIBRARY.length}</bdi></a>`;
   }
 
-  function renderSites() {
-    const grid = $("#siteGrid");
-    if (state.world === "mars") {
-      grid.innerHTML = Array.from({ length: GX.MARS_PLACEHOLDERS }, (_, i) => `
-        <div class="site-card site-card--soon">
-          <div class="ring"><i class="globe tex-mars" style="animation-delay:-${i * 17}s"></i><span>R-0${i + 1}</span></div>
-          <h3>${esc(t("site.marsSoon"))}</h3>
-          <p>${esc(t("site.marsSoonD"))}</p>
-          <span class="tag tag--warn">${esc(t("common.inProgress"))}</span>
-        </div>`).join("");
-      return;
-    }
-    grid.innerHTML = GX.SITES.filter((s) => s.body === state.world).map((s) => `
-      <a class="site-card" href="#compare" data-site="${s.id}" data-cursor>
+  /* World tab counters + headline stats come straight from the data */
+  function renderCounts() {
+    const n = (b) => GX.SITES.filter((s) => s.body === b).length;
+    $$(".world-tab").forEach((b) => { const sm = $("small", b); if (sm) sm.textContent = n(b.dataset.world); });
+    const twins = GX.SITES.reduce((k, s) => k + s.analogs.filter(Boolean).length, 0);
+    const slots = GX.SITES.reduce((k, s) => k + s.analogs.length, 0);
+    const withData = GX.ANALOG_LIBRARY.filter((x) => x.stats).length;
+    const set = (sel, v) => { const el = $(sel); if (el) { el.dataset.count = v; el.textContent = v; } };
+    set('[data-stat="moon"]', n("moon")); set('[data-stat="mars"]', n("mars"));
+    set('[data-stat="twins"]', twins); set('[data-stat="data"]', withData);
+    const sl = $('[data-stat="slots"]'); if (sl) sl.textContent = "/" + slots;
+  }
+
+  function siteCard(s) {
+    const photo = s.photo ? img(s.photo) : null;
+    return `
+      <a class="site-card site-card--${s.body}" href="#compare" data-site="${s.id}" data-cursor>
         <div class="site-card__media">
-          <img src="${img(s.photo).src}" alt="${esc(L(s.name))}" loading="lazy">
+          ${photo ? `<img src="${photo.src}" alt="${esc(L(s.name))}" loading="lazy">` : ""}
           <span class="site-card__code mono">${esc(s.code)}</span>
         </div>
         <div class="site-card__body">
           <h3>${esc(L(s.name))}</h3>
-          <p class="loc">${esc(L(s.location))} · ${num(s.resolution)}</p>
+          <p class="loc">${esc(L(s.location))}${s.resolution ? ` · ${num(s.resolution)}` : ""}</p>
           <div class="tagline"><span class="tag tag--warn">${esc(t("common.preliminary"))}</span><span class="tag">${esc(L(s.dataset))}</span></div>
           <div>
             <small class="mono" style="color:var(--dim)">${esc(t("site.twins"))}</small>
             <div class="twin-slots" style="margin-top:8px">
               ${s.analogs.map((a, i) => a
-                ? `<div class="twin-slot is-filled"><small>#${i + 1}</small>${esc(L(a.name))}</div>`
+                ? `<div class="twin-slot is-filled"><small>#${i + 1} · ${esc(L(a.country))}</small>${esc(L(a.name))}</div>`
                 : `<div class="twin-slot is-empty"><small>#${i + 1}</small>${esc(t("common.pending"))}</div>`).join("")}
             </div>
           </div>
           <span class="site-card__go">${esc(t("site.open"))}${ICON.arrow}</span>
         </div>
-      </a>`).join("") + `
+      </a>`;
+  }
+
+  function renderSites() {
+    const grid = $("#siteGrid");
+    const list = GX.SITES.filter((s) => s.body === state.world).map(siteCard).join("");
+    const next = state.world === "moon"
+      ? { tex: "moon", code: "M-02", h: state.lang === "ar" ? "موقع قمري جديد" : "Next lunar site", p: state.lang === "ar" ? "مواقع قمرية إضافية وتوائمها الأرضية ستُضاف مع تقدم البحث." : "Additional lunar sites and their Earth twins will be added as the research progresses." }
+      : { tex: "mars", code: "R-05", h: t("site.marsSoon"), p: t("site.marsSoonD") };
+    grid.innerHTML = list + `
       <div class="site-card site-card--soon">
-        <div class="ring"><i class="globe tex-moon" style="animation-delay:-23s"></i><span>M-02</span></div>
-        <h3>${esc(state.lang === "ar" ? "موقع قمري جديد" : "Next lunar site")}</h3>
-        <p>${esc(state.lang === "ar" ? "مواقع قمرية إضافية وتوائمها الأرضية ستُضاف مع تقدم البحث." : "Additional lunar sites and their Earth twins will be added as the research progresses.")}</p>
+        <div class="ring"><i class="globe tex-${next.tex}" style="animation-delay:-23s"></i><span>${next.code}</span></div>
+        <h3>${esc(next.h)}</h3>
+        <p>${esc(next.p)}</p>
         <span class="tag tag--warn">${esc(t("common.inProgress"))}</span>
       </div>`;
   }
 
   /* ---------- compare ---------- */
-  function sideValue(c, key) {
+  function sideValue(c) {
     if (!c) return `<b class="txt">${esc(t("common.pending"))}</b>`;
     if (c.headline) return `<b>${num(c.headline)}</b><small><i></i>${esc(L(c.headlineLabel))}</small>`;
     return `<b class="txt">${esc(L(c.display))}</b>`;
@@ -177,7 +190,7 @@
     if (c.method) tags.push(`<span class="tag">${esc(t("compare.method"))}: ${esc(L(c.method))}</span>`);
     if (c.evidence) tags.push(`<span class="tag">${esc(t("compare.evidence"))}: ${esc(L(c.evidence))}</span>`);
     if ("evidence" in c && !c.evidence) tags.push(`<span class="tag tag--pend">${esc(t("compare.evidence"))}: ${esc(t("common.pending"))}</span>`);
-    if ("reference" in c) tags.push(c.reference ? `<a class="tag" href="${c.reference}" target="_blank" rel="noopener">${esc(t("compare.reference"))}</a>` : `<span class="tag tag--pend">${esc(t("compare.reference"))}: ${esc(t("common.pending"))}</span>`);
+    if ("reference" in c) tags.push(c.reference ? `<a class="tag" href="${c.reference}" target="_blank" rel="noopener">${esc(t("compare.reference"))} ↗</a>` : `<span class="tag tag--pend">${esc(t("compare.reference"))}: ${esc(t("common.pending"))}</span>`);
     tags.push(`<span class="tag tag--warn">${esc(t("compare.status"))}: ${esc(c.note ? L(c.note) : t("common.preliminary"))}</span>`);
     const map = c.map ? `<button class="thumb" type="button" data-zoom="${c.map}" data-cursor><img src="${img(c.map).src}" alt="" loading="lazy"><span>${esc(t("compare.viewMap"))} ↗</span></button>` : "";
     return `
@@ -194,7 +207,16 @@
   function renderCompare() {
     const s = site();
     const a = s.analogs[state.analog];
-    const switcher = `
+    const W = s.body; // "moon" | "mars" — colours the site side
+    const siteSwitch = `
+      <div class="site-switch" role="tablist" aria-label="${esc(t("nav.sites"))}">
+        ${["moon", "mars"].map((b) => `
+          <div class="site-switch__group">
+            <span class="site-switch__lab label"><i class="globe tex-${b}"></i>${esc(t("world." + b))}</span>
+            ${GX.SITES.filter((x) => x.body === b).map((x) => `<button type="button" role="tab" data-site="${x.id}" data-stay class="${x.id === s.id ? "is-active" : ""}" aria-selected="${x.id === s.id}">${esc(L(x.name))}</button>`).join("")}
+          </div>`).join("")}
+      </div>`;
+    const switcher = siteSwitch + `
       <div class="twin-switch" role="tablist">
         ${s.analogs.map((x, i) => `<button type="button" role="tab" data-analog="${i}" class="${i === state.analog ? "is-active" : ""}" aria-selected="${i === state.analog}">
           <span class="mono">${esc(t("compare.twin"))} ${i + 1}</span> · ${esc(x ? L(x.name) : t("common.pending"))}</button>`).join("")}
@@ -210,7 +232,7 @@
       return;
     }
 
-    const cmp = a.comparison;
+    const cmp = a.comparison || {};
     const hasScore = typeof cmp.similarity === "number";
     const R = 80, C = 2 * Math.PI * R;
     const score = `
@@ -232,28 +254,33 @@
         ${hasScore ? "" : `<p class="score__note">${esc(t("compare.scoreNote"))}</p>`}
       </div>`;
 
-    const card = (o, world, isSite) => `
+    const worldLabel = (w) => t(w === "earth" ? "hero.earth" : "world." + w);
+    const meta = (k, v) => v ? `<dt>${esc(k)}</dt><dd>${v}</dd>` : "";
+    const card = (o, world, isSite) => {
+      const ph = o.photo ? img(o.photo) : null;
+      return `
       <article class="vs__card vs__card--${world}">
-        <button class="vs__media" type="button" data-zoom="${o.photo}" data-cursor aria-label="${esc(L(o.name))}">
-          <img src="${img(o.photo).src}" alt="${esc(L(o.name))}" loading="lazy">
-          <span class="vs__world"><i></i>${esc(t(world === "moon" ? "hero.moon" : "hero.earth"))}</span>
-        </button>
+        ${ph ? `<button class="vs__media" type="button" data-zoom="${o.photo}" data-cursor aria-label="${esc(L(o.name))}"><img src="${ph.src}" alt="${esc(L(o.name))}" loading="lazy">`
+             : `<div class="vs__media vs__media--empty"><span class="mono">${esc(t("compare.imagePending"))}</span>`}
+          <span class="vs__world"><i></i>${esc(worldLabel(world))}${!isSite && o.country ? ` · ${esc(L(o.country))}` : ""}</span>
+        ${ph ? "</button>" : "</div>"}
         <div class="vs__body">
           <h3>${esc(L(o.name))}</h3>
           <p class="loc">${esc(L(o.location))}${o.coords ? ` · ${num(o.coords)}` : ""}</p>
           <dl class="meta">
-            ${isSite ? `<dt>${esc(t("compare.dataset"))}</dt><dd>${esc(L(o.dataset))}</dd>` : `<dt>${esc(state.lang === "ar" ? "النوع" : "Type")}</dt><dd>${esc(L(o.type))}</dd>`}
-            <dt>${esc(t("compare.resolution"))}</dt><dd>${isSite ? num(o.resolution) : esc(L(o.resolution))}</dd>
-            <dt>${esc(t("compare.area"))}</dt><dd>${esc(L(o.area))}</dd>
-            <dt>${esc(t("compare.photoCredit"))}</dt><dd><a href="${o.photoSource}" target="_blank" rel="noopener" dir="ltr">${esc(o.photoSource.replace(/^https?:\/\//, "").slice(0, 42))}…</a></dd>
+            ${isSite ? meta(t("compare.dataset"), esc(L(o.dataset))) : meta(t("compare.type"), esc(L(o.type)))}
+            ${meta(t("compare.resolution"), o.resolution ? (typeof o.resolution === "string" ? num(o.resolution) : esc(L(o.resolution))) : "")}
+            ${meta(t("compare.area"), o.area ? esc(L(o.area)) : "")}
+            ${meta(t("compare.photoCredit"), o.photoSource ? `<a href="${o.photoSource}" target="_blank" rel="noopener" dir="ltr">${esc(o.photoSource.replace(/^https?:\/\//, "").slice(0, 42))}…</a>` : "")}
           </dl>
         </div>
       </article>`;
+    };
 
-    const CRITS = [
-      ["terrain", "crit.terrain"], ["slope", "crit.slope"], ["roughness", "crit.roughness"], ["geology", "crit.geology"],
-      ["rockSize", "crit.rockSize"], ["rockDensity", "crit.rockDensity"], ["temperature", "crit.temperature"]
-    ];
+    // criteria rows: the standard list, plus elevation when either side supplies it
+    const CRITS = [["terrain", "crit.terrain"], ["slope", "crit.slope"], ["roughness", "crit.roughness"], ["elevation", "crit.elevation"], ["geology", "crit.geology"],
+      ["rockSize", "crit.rockSize"], ["rockDensity", "crit.rockDensity"], ["temperature", "crit.temperature"]]
+      .filter(([k]) => k !== "elevation" || s.criteria.elevation || a.criteria.elevation);
     const rows = CRITS.map(([key, label], i) => {
       const m = s.criteria[key], e = a.criteria[key];
       const isPending = !m && !e;
@@ -261,78 +288,112 @@
         <div class="crit ${isPending ? "crit--pending" : ""}" data-crit="${key}">
           <button class="crit__btn" type="button" ${isPending ? "disabled" : `aria-expanded="false" aria-controls="cp-${key}"`}>
             <span class="crit__name"><span class="mono">${String(i + 1).padStart(2, "0")}</span>${esc(t(label))}</span>
-            <span class="crit__v crit__v--moon">${sideValue(m, key)}</span>
-            <span class="crit__v crit__v--earth">${sideValue(e, key)}</span>
+            <span class="crit__v crit__v--${W}">${sideValue(m)}</span>
+            <span class="crit__v crit__v--earth">${sideValue(e)}</span>
             <span class="crit__plus${isPending ? " crit__plus--none" : ""}" aria-hidden="true"></span>
           </button>
           ${isPending ? "" : `<div class="crit__panel" id="cp-${key}" role="region"><div class="crit__inner">
-            ${sidePanel(m, "moon", L(s.name))}${sidePanel(e, "earth", L(a.name))}
+            ${sidePanel(m, W, L(s.name))}${sidePanel(e, "earth", L(a.name))}
           </div></div>`}
         </div>`;
     }).join("");
 
-    const BARS = [
-      ["slopeMean", "bar.slopeMean", 2, false], ["flatShare", "bar.flatShare", 2, false],
-      ["roughMean", "bar.roughMean", 4, true], ["roughMax", "bar.roughMax", 4, true]
-    ];
-    const bars = BARS.map(([k, label, dec, prelim]) => {
-      const mv = s.bars[k], ev = a.bars[k];
-      const max = Math.max(mv, ev) * 1.12;
-      return `
-        <div class="bar">
-          <div class="bar__label"><span>${esc(t(label))}</span>${prelim ? `<small>${esc(t("bar.prelim"))}</small>` : ""}</div>
-          <div class="bar__rows">
-            <div class="bar__row bar__row--moon"><span><i></i>${esc(L(s.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${mv / max}"></div></div><b>${num(fmt(mv, k === "slopeMean" || k === "flatShare" ? 2 : dec))}</b></div>
-            <div class="bar__row bar__row--earth"><span><i></i>${esc(L(a.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${ev / max}"></div></div><b>${num(fmt(ev, k === "slopeMean" || k === "flatShare" ? 2 : dec))}</b></div>
-          </div>
-        </div>`;
-    }).join("");
+    // number bars — only when both sides have comparable numbers
+    let barsBlock = "";
+    if (s.bars && a.bars) {
+      const BARS = [["slopeMean", "bar.slopeMean", 2, false], ["flatShare", "bar.flatShare", 2, false], ["roughMean", "bar.roughMean", 4, true], ["roughMax", "bar.roughMax", 4, true]];
+      barsBlock = `<div class="crit-head"><h3 class="sub-h">${esc(t("compare.byNumbers"))}</h3></div><div class="bars">` + BARS.map(([k, label, dec, prelim]) => {
+        const mv = s.bars[k], ev = a.bars[k];
+        const max = Math.max(mv, ev) * 1.12;
+        return `
+          <div class="bar">
+            <div class="bar__label"><span>${esc(t(label))}</span>${prelim ? `<small>${esc(t("bar.prelim"))}</small>` : ""}</div>
+            <div class="bar__rows">
+              <div class="bar__row bar__row--${W}"><span><i></i>${esc(L(s.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${mv / max}"></div></div><b>${num(fmt(mv, dec))}</b></div>
+              <div class="bar__row bar__row--earth"><span><i></i>${esc(L(a.name))}</span><div class="bar__track"><div class="bar__fill" data-w="${ev / max}"></div></div><b>${num(fmt(ev, dec))}</b></div>
+            </div>
+          </div>`;
+      }).join("") + `</div>`;
+    }
 
-    const layerImg = (o, layer) => layer === "photo" ? o.photo : o.maps[layer];
-    const mapFig = (o, world) => `
-      <figure class="map" data-world="${world}">
-        ${["photo", "slope", "roughness"].map((ly) => {
-          const k = layerImg(o, ly);
-          return k ? `<img src="${img(k).src}" alt="${esc(L(o.name))} — ${esc(t("layer." + ly))}" data-layer="${ly}" data-key="${k}" class="${ly === state.layer ? "is-on" : ""}" loading="lazy">` : "";
-        }).join("")}
-        <button type="button" data-zoom-map aria-label="${esc(t("compare.viewMap"))}" data-cursor></button>
-        <figcaption><span>${esc(L(o.name))}</span><span>${esc(L(o.area))}</span></figcaption>
-      </figure>`;
+    // map viewer — only when both sides have rendered maps
+    let mapsBlock = "";
+    if (s.maps && s.maps.slope && a.maps && a.maps.slope) {
+      const layerImg = (o, layer) => layer === "photo" ? o.photo : o.maps[layer];
+      const mapFig = (o, world) => `
+        <figure class="map" data-world="${world}">
+          ${["photo", "slope", "roughness"].map((ly) => {
+            const k = layerImg(o, ly);
+            return k ? `<img src="${img(k).src}" alt="${esc(L(o.name))} — ${esc(t("layer." + ly))}" data-layer="${ly}" data-key="${k}" class="${ly === state.layer ? "is-on" : ""}" loading="lazy">` : "";
+          }).join("")}
+          <button type="button" data-zoom-map aria-label="${esc(t("compare.viewMap"))}" data-cursor></button>
+          <figcaption><span>${esc(L(o.name))}</span>${o.area ? `<span>${esc(L(o.area))}</span>` : ""}</figcaption>
+        </figure>`;
+      mapsBlock = `
+        <div class="crit-head" style="margin-bottom:0">
+          <div><h3 class="sub-h">${esc(t("compare.mapsTitle"))}</h3><p class="section__lead" style="margin-top:10px;font-size:16px">${esc(t("compare.mapsLead"))}</p></div>
+        </div>
+        <div class="maps__tools">
+          <div class="seg" role="tablist" id="layerSeg">
+            ${["photo", "slope", "roughness"].map((ly) => `<button type="button" role="tab" data-layer="${ly}" class="${ly === state.layer ? "is-active" : ""}" aria-selected="${ly === state.layer}">${esc(t("layer." + ly))}</button>`).join("")}
+          </div>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="maps">${mapFig(s, W)}${mapFig(a, "earth")}</div>`;
+    }
+
+    // verdict — whatever the team has written so far; missing parts show as pending
+    const v = (key, txt) => `<article><h4><i></i>${esc(t(key))}</h4><p>${txt ? esc(L(txt)) : `<span class="tag tag--pend">${esc(t("common.pending"))}</span>`}</p></article>`;
 
     $("#compareRoot").innerHTML = switcher + `
       <div class="vs">
-        ${card(s, "moon", true)}
+        ${card(s, W, true)}
         ${score}
         ${card(a, "earth", false)}
       </div>
 
       <div class="crit-head">
         <h3 class="sub-h">${esc(t("compare.criteria"))}</h3>
-        <div class="crit-legend"><span><i style="background:var(--moon)"></i>${esc(L(s.name))}</span><span><i style="background:var(--earth)"></i>${esc(L(a.name))}</span></div>
+        <div class="crit-legend"><span><i style="background:var(--${W === "mars" ? "mars" : "moon"})"></i>${esc(L(s.name))}</span><span><i style="background:var(--earth)"></i>${esc(L(a.name))}</span></div>
       </div>
       <div class="crits">${rows}</div>
-
-      <div class="crit-head"><h3 class="sub-h">${esc(t("compare.byNumbers"))}</h3></div>
-      <div class="bars">${bars}</div>
-
-      <div class="crit-head" style="margin-bottom:0">
-        <div><h3 class="sub-h">${esc(t("compare.mapsTitle"))}</h3><p class="section__lead" style="margin-top:10px;font-size:16px">${esc(t("compare.mapsLead"))}</p></div>
-      </div>
-      <div class="maps__tools">
-        <div class="seg" role="tablist" id="layerSeg">
-          ${["photo", "slope", "roughness"].map((ly) => `<button type="button" role="tab" data-layer="${ly}" class="${ly === state.layer ? "is-active" : ""}" aria-selected="${ly === state.layer}">${esc(t("layer." + ly))}</button>`).join("")}
-        </div>
-        <div class="legend" id="legend"></div>
-      </div>
-      <div class="maps">${mapFig(s, "moon")}${mapFig(a, "earth")}</div>
-
+      ${barsBlock}
+      ${mapsBlock}
       <div class="crit-head"><h3 class="sub-h">${esc(t("compare.verdict"))}</h3></div>
       <div class="verdict">
-        <article><h4><i></i>${esc(t("compare.similar"))}</h4><p>${esc(L(cmp.similar))}</p></article>
-        <article><h4><i></i>${esc(t("compare.different"))}</h4><p>${esc(L(cmp.different))}</p></article>
-        <article><h4><i></i>${esc(t("compare.conclusion"))}</h4><p>${esc(L(cmp.conclusion))}</p></article>
+        ${v("compare.similar", cmp.similar)}${v("compare.different", cmp.different)}${v("compare.conclusion", cmp.conclusion)}
       </div>`;
     renderLegend();
+  }
+
+  /* ---------- Earth analog library ---------- */
+  function renderAnalogs() {
+    const root = $("#analogGrid"); if (!root) return;
+    const siteName = (id) => { const s = GX.SITES.find((x) => x.id === id); return s ? L(s.name) : ""; };
+    root.innerHTML = GX.ANALOG_LIBRARY.map((it) => {
+      const a = it.analog, ph = a.photo ? img(a.photo) : null;
+      const twin = it.twinOf ? GX.SITES.find((x) => x.id === it.twinOf) : null;
+      const stat = (k, v) => `<div><small>${esc(t(k))}</small><b>${v ? num(v) : `<span class="pend">${esc(t("common.pending"))}</span>`}</b></div>`;
+      return `
+        <article class="analog ${ph ? "" : "analog--noimg"}">
+          <div class="analog__media">
+            ${ph ? `<button type="button" data-zoom="${a.photo}" data-cursor aria-label="${esc(L(a.name))}"><img src="${ph.src}" alt="${esc(L(a.name))}" loading="lazy"></button>` : `<i class="globe tex-earth"></i>`}
+            <span class="analog__country">${esc(L(a.country))}</span>
+          </div>
+          <div class="analog__body">
+            <h3>${esc(L(a.name))}</h3>
+            <p class="loc">${esc(L(a.location))}</p>
+            <p class="analog__type">${esc(L(a.type))}</p>
+            ${it.stats ? `<div class="analog__stats">${stat("analogs.slope", it.stats.slope)}${stat("analogs.rough", it.stats.rough)}${stat("analogs.elev", it.stats.elev)}</div>`
+                       : `<p class="analog__nodata"><span class="tag tag--pend">${esc(t("analogs.noData"))}</span></p>`}
+            <div class="analog__foot">
+              ${twin ? `<button type="button" class="analog__twin" data-site="${twin.id}"><i class="globe tex-${twin.body}"></i>${esc(t("analogs.twinOf"))} ${esc(siteName(twin.id))} →</button>`
+                     : `<span class="tag">${esc(L(it.tag || { en: "", ar: "" }))}</span>`}
+              ${it.source ? `<span class="analog__src mono">${esc(L(it.source))}</span>` : ""}
+            </div>
+          </div>
+        </article>`;
+    }).join("");
   }
 
   function renderLegend() {
@@ -490,11 +551,23 @@
   }
 
   function renderGallery() {
-    $("#gallery").innerHTML = GX.EVIDENCE.map((e, i) => `
-      <button class="shot shot--${e.body}" type="button" data-ev="${i}" data-cursor>
+    const g = state.gallery || "all";
+    const count = (id) => GX.EVIDENCE.filter((e) => id === "all" || e.group === id).length;
+    const chips = [{ id: "all", label: { en: t("gallery.all"), ar: t("gallery.all") } }, ...GX.EVIDENCE_GROUPS];
+    $("#galleryFilter").innerHTML = chips.map((c) => `<button type="button" role="tab" data-gfilter="${c.id}" class="${c.id === g ? "is-active" : ""}" aria-selected="${c.id === g}">${esc(L(c.label))} <small class="mono">${count(c.id)}</small></button>`).join("");
+    $("#gallery").innerHTML = GX.EVIDENCE.map((e, i) => (g === "all" || e.group === g) ? `
+      <button class="shot shot--${e.group}" type="button" data-ev="${i}" data-cursor>
         <span class="shot__img"><img src="${e.src}" alt="${esc(L(e.caption))}" loading="lazy"></span>
         <span class="cap"><i></i>${esc(L(e.caption))}</span>
-      </button>`).join("");
+      </button>` : "").join("");
+  }
+  function setGallery(id) {
+    state.gallery = id;
+    if (!ANIM) { renderGallery(); return; }
+    gsap.to("#gallery .shot", { autoAlpha: 0, y: 16, duration: .2, stagger: .015, onComplete: () => {
+      renderGallery();
+      gsap.from("#gallery .shot", { autoAlpha: 0, y: 30, duration: .6, stagger: .05, ease: "expo.out", onComplete: () => settleAround($("#evidence")) });
+    } });
   }
 
   function renderMethod() {
@@ -531,8 +604,8 @@
     applyStatic();
     rollButtons();
     renderTctl();
-    renderMarquee(); renderSteps(); renderSitebar(); renderSites(); renderCompare();
-    renderProfile(); renderRover(); renderGallery(); renderMethod();
+    renderMarquee(); renderSteps(); renderSitebar(); renderCounts(); renderSites(); renderCompare();
+    renderProfile(); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
     moveTabInk(false);
     if (window.GXRuler) window.GXRuler.layout();
   }
@@ -641,8 +714,17 @@
       if (wl) { e.preventDefault(); setWorld(wl.dataset.worldLink); scrollToId("#sites"); return; }
       const tm = e.target.closest("[data-tmode]");
       if (tm) { setTerrainMode(tm.closest(".tctl").dataset.terrain, tm.dataset.tmode); return; }
+      const gf = e.target.closest("[data-gfilter]");
+      if (gf) { setGallery(gf.dataset.gfilter); return; }
       const sc = e.target.closest("[data-site]");
-      if (sc) { e.preventDefault(); state.siteId = sc.dataset.site; state.analog = 0; renderCompare(); rebuildSoon(); scrollToId("#compare"); return; }
+      if (sc) {
+        e.preventDefault();
+        const changed = state.siteId !== sc.dataset.site;
+        state.siteId = sc.dataset.site; state.analog = 0;
+        if (changed) { if (sc.hasAttribute("data-stay")) swapCompare(); else { renderCompare(); rebuildSoon(); } }
+        if (!sc.hasAttribute("data-stay")) scrollToId("#compare");
+        return;
+      }
       const wt = e.target.closest(".world-tab");
       if (wt) { setWorld(wt.dataset.world); return; }
       if (e.target.closest(".rover-btn")) { toggleRover(); return; }
@@ -1052,7 +1134,7 @@
     const d = pts.map((q, i) => `${i ? "L" : "M"}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" ");
     $(".ruler__line", el).setAttribute("d", d);
     $(".ruler__area", el).setAttribute("d", `M0 0 ${d.replace(/^M/, "L")} L0 200 Z`);
-    const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
+    const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#analogs", "nav.analogs"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
     const maxScroll = () => Math.max(1, (window.ScrollTrigger ? ScrollTrigger.maxScroll(window) : document.documentElement.scrollHeight - innerHeight));
     const progress = () => smoother ? smoother.progress : Math.min(1, Math.max(0, scrollY / maxScroll()));
     const go = (f) => { const y = Math.min(1, Math.max(0, f)) * maxScroll(); if (smoother) smoother.scrollTop(y); else window.scrollTo(0, y); };

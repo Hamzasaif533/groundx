@@ -38,7 +38,9 @@ The 3D globes and the "Slope map" views need the site to be served over http(s).
 - **Similarity / difference %:** set `comparison.similarity` and `comparison.difference` to numbers between 0 and 100. Only do this once a documented scoring method exists. While a value is `null`, the site shows "Pending".
 - **Rock size, rock density, temperature:** add `rockSize`, `rockDensity` or `temperature` objects to a site's or analog's `criteria`, in the same shape as `slope`. The row becomes expandable automatically.
 - **Rover:** fill `GX.ROVERS["pending-1"]` (name, specs `v` values, image) or add a new rover and list its id in `analog.rovers`.
-- **Mars site:** add a site with `body: "mars"` to `GX.SITES`.
+- **Mars site:** add a site with `body: "mars"` to `GX.SITES` (see the four `marsSite({...})` entries). Each site appears automatically in the Mars tab, the site switcher above the comparison and the counts.
+- **Earth analog library:** add an entry to `GX.ANALOG_LIBRARY`. Raw Google Earth Engine statistics go in `GX.GEE_STATS`, and `geeCriteria()` turns them into slope, roughness and elevation criteria.
+- **Evidence images:** add to `GX.EVIDENCE` with a `group` (`moon`, `canada`, `mars` or `oman`). The filter chips count them automatically.
 - **Map links:** set `reference` on a criterion to a URL.
 
 The maps in `assets/img` were rendered straight from the team's GeoTIFFs: slope classes 0–10°, >10–20° and >20°, plus roughness in greyscale. No research values were recalculated. Every number on the site is copied from `Site info.pdf`.

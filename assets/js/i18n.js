@@ -9,6 +9,21 @@ GX.STR = {
     "nav.compare": "Compare",
     "nav.rovers": "Rovers",
     "nav.evidence": "Evidence",
+    "nav.analogs": "Analogs",
+    "sitebar.sites": "sites",
+    "analogs.short": "Earth analogs",
+    "analogs.kicker": "Earth analog library",
+    "analogs.title": "Every Earth twin, [[in one place]].",
+    "analogs.lead": "The places on Earth the team is studying, what they stand in for, and the terrain data measured so far.",
+    "analogs.slope": "Mean slope",
+    "analogs.rough": "Mean roughness",
+    "analogs.elev": "Mean elevation",
+    "analogs.noData": "Terrain data pending",
+    "analogs.twinOf": "Twin of",
+    "compare.imagePending": "Image pending",
+    "compare.type": "Type",
+    "crit.elevation": "Elevation",
+    "gallery.all": "All",
 
     "hero.title": "Every world {moon}|has a [[twin]]|{earth} on [[Earth]].",
     "hero.lead": "We match sites on the Moon and Mars with geologically similar places on Earth — two Earth twins for every site — compare them criterion by criterion, and pick the rovers built for that ground.",
@@ -19,7 +34,10 @@ GX.STR = {
     "hero.twin": "twin?",
 
     "stat.sites": "Moon sites analysed",
-    "stat.analogs": "Earth twins found",
+    "stat.moon": "Moon sites",
+    "stat.marsN": "Mars sites (preliminary)",
+    "stat.data": "Earth analogs with terrain data",
+    "stat.analogs": "Earth twins named / slots",
     "stat.criteria": "Criteria compared",
     "stat.mars": "Mars sites",
 
@@ -42,8 +60,8 @@ GX.STR = {
     "world.mars": "Mars",
     "site.open": "Open comparison",
     "site.twins": "Earth twins",
-    "site.marsSoon": "Mars site in research",
-    "site.marsSoonD": "Mars candidates and their Earth twins are being analysed. They will appear here when the data is ready.",
+    "site.marsSoon": "Next Mars site",
+    "site.marsSoonD": "More Mars candidates and their Earth twins will be added as the research progresses.",
 
     "compare.title": "Side by side. [[Criterion by criterion.]]",
     "compare.lead": "Each criterion opens to show the values, the method, the status and the map behind it.",
@@ -116,7 +134,7 @@ GX.STR = {
     "rovers.context": "Terrain the rover must handle",
 
     "evidence.title": "Show your [[working]].",
-    "evidence.lead": "Screenshots from the analysis in QGIS, NASA Moon Trek and ArcticDEM Explorer. Tap any image to enlarge.",
+    "evidence.lead": "Maps and screenshots from the team's work in QGIS, NASA Moon Trek and Mars Trek, ArcticDEM and Google Earth Engine. Filter by place; tap any image to enlarge.",
 
     "method.title": "Method & [[honesty notes]]",
     "method.items": [
@@ -162,6 +180,21 @@ GX.STR = {
     "nav.compare": "المقارنة",
     "nav.rovers": "المركبات",
     "nav.evidence": "الأدلة",
+    "nav.analogs": "النظائر",
+    "sitebar.sites": "مواقع",
+    "analogs.short": "النظائر الأرضية",
+    "analogs.kicker": "مكتبة النظائر الأرضية",
+    "analogs.title": "كل التوائم الأرضية [[في مكان واحد]].",
+    "analogs.lead": "الأماكن التي يدرسها الفريق على الأرض، وما تمثّله، وبيانات التضاريس المقاسة حتى الآن.",
+    "analogs.slope": "متوسط الانحدار",
+    "analogs.rough": "متوسط الخشونة",
+    "analogs.elev": "متوسط الارتفاع",
+    "analogs.noData": "بيانات التضاريس قيد الانتظار",
+    "analogs.twinOf": "توأم",
+    "compare.imagePending": "الصورة قيد الانتظار",
+    "compare.type": "النوع",
+    "crit.elevation": "الارتفاع",
+    "gallery.all": "الكل",
 
     "hero.title": "لكل عالمٍ {moon}|[[توأمٌ]]|{earth} على [[الأرض]].",
     "hero.lead": "نطابق مواقع على القمر والمريخ مع أماكن مشابهة جيولوجيًا على الأرض — توأمان أرضيان لكل موقع — ونقارنها معيارًا بمعيار، ثم نختار المركبات الجوّالة المصممة لتلك التضاريس.",
@@ -172,7 +205,10 @@ GX.STR = {
     "hero.twin": "توأم؟",
 
     "stat.sites": "مواقع قمرية محللة",
-    "stat.analogs": "توائم أرضية",
+    "stat.moon": "مواقع قمرية",
+    "stat.marsN": "مواقع مريخية (أولية)",
+    "stat.data": "نظائر أرضية ببيانات تضاريس",
+    "stat.analogs": "توائم أرضية محددة / الخانات",
     "stat.criteria": "معايير المقارنة",
     "stat.mars": "مواقع المريخ",
 
@@ -195,8 +231,8 @@ GX.STR = {
     "world.mars": "المريخ",
     "site.open": "افتح المقارنة",
     "site.twins": "التوائم الأرضية",
-    "site.marsSoon": "موقع مريخي قيد البحث",
-    "site.marsSoonD": "يجري تحليل المواقع المرشحة على المريخ وتوائمها الأرضية، وستظهر هنا عند جاهزية البيانات.",
+    "site.marsSoon": "موقع مريخي جديد",
+    "site.marsSoonD": "ستُضاف مواقع مريخية أخرى وتوائمها الأرضية مع تقدم البحث.",
 
     "compare.title": "جنبًا إلى جنب. [[معيارًا بمعيار.]]",
     "compare.lead": "افتح كل معيار لترى القيم والمنهجية والحالة والخريطة الداعمة له.",
@@ -269,7 +305,7 @@ GX.STR = {
     "rovers.context": "التضاريس التي يجب أن تتعامل معها المركبة",
 
     "evidence.title": "أظهر [[خطوات عملك]].",
-    "evidence.lead": "لقطات من التحليل في QGIS وNASA Moon Trek وArcticDEM Explorer. اضغط على أي صورة لتكبيرها.",
+    "evidence.lead": "خرائط ولقطات من عمل الفريق في QGIS وNASA Moon Trek وMars Trek وArcticDEM وGoogle Earth Engine. صنّفها حسب المكان؛ واضغط على أي صورة لتكبيرها.",
 
     "method.title": "المنهجية و[[ملاحظات الأمانة العلمية]]",
     "method.items": [

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=Michroma&family=Barlow+Condensed:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=10">
+  <link rel="stylesheet" href="assets/css/style.css?v=13">
   <script>
     /* Apply the saved language before first paint (avoids a flash of the wrong direction). */
     (function () {
@@ -37,6 +37,7 @@
       <a href="#how" data-i18n="nav.how"></a>
       <a href="#sites" data-i18n="nav.sites"></a>
       <a href="#compare" data-i18n="nav.compare"></a>
+      <a href="#analogs" data-i18n="nav.analogs"></a>
       <a href="#rovers" data-i18n="nav.rovers"></a>
       <a href="#evidence" data-i18n="nav.evidence"></a>
     </nav>
@@ -91,10 +92,10 @@
           <p class="section__lead" data-i18n="how.lead"></p>
         </header>
         <dl class="stats">
-          <div><dd class="stat__n"><span data-count="1">1</span></dd><dt data-i18n="stat.sites"></dt></div>
-          <div><dd class="stat__n"><bdi dir="ltr"><span data-count="1">1</span><small>/2</small></bdi></dd><dt data-i18n="stat.analogs"></dt></div>
-          <div><dd class="stat__n"><bdi dir="ltr"><span data-count="4">4</span><sup>+</sup></bdi></dd><dt data-i18n="stat.criteria"></dt></div>
-          <div><dd class="stat__n stat__n--soon" data-i18n="common.inProgress"></dd><dt data-i18n="stat.mars"></dt></div>
+          <div><dd class="stat__n"><span data-count="1" data-stat="moon">1</span></dd><dt data-i18n="stat.moon"></dt></div>
+          <div><dd class="stat__n"><span data-count="4" data-stat="mars">4</span></dd><dt data-i18n="stat.marsN"></dt></div>
+          <div><dd class="stat__n"><bdi dir="ltr"><span data-count="5" data-stat="twins">5</span><small data-stat="slots">/10</small></bdi></dd><dt data-i18n="stat.analogs"></dt></div>
+          <div><dd class="stat__n"><span data-count="3" data-stat="data">3</span></dd><dt data-i18n="stat.data"></dt></div>
         </dl>
       </div>
       <ol class="steps" id="steps"></ol>
@@ -135,10 +136,20 @@
       <figure class="chart" id="profileChart"></figure>
     </section>
 
+    <!-- ============ EARTH ANALOG LIBRARY ============ -->
+    <section class="section analogs" id="analogs">
+      <header class="section__head">
+        <p class="kicker"><span class="mono">05</span><span data-i18n="analogs.kicker"></span></p>
+        <h2 class="section__title" data-rich data-i18n="analogs.title" data-split></h2>
+        <p class="section__lead" data-i18n="analogs.lead"></p>
+      </header>
+      <div class="analog-grid" id="analogGrid"></div>
+    </section>
+
     <!-- ============ ROVERS ============ -->
     <section class="section rovers" id="rovers">
       <header class="section__head">
-        <p class="kicker"><span class="mono">05</span><span data-i18n="nav.rovers"></span></p>
+        <p class="kicker"><span class="mono">06</span><span data-i18n="nav.rovers"></span></p>
         <h2 class="section__title" data-rich data-i18n="rovers.title" data-split></h2>
         <p class="section__lead" data-i18n="rovers.lead"></p>
       </header>
@@ -148,10 +159,11 @@
     <!-- ============ EVIDENCE ============ -->
     <section class="section evidence" id="evidence">
       <header class="section__head">
-        <p class="kicker"><span class="mono">06</span><span data-i18n="nav.evidence"></span></p>
+        <p class="kicker"><span class="mono">07</span><span data-i18n="nav.evidence"></span></p>
         <h2 class="section__title" data-rich data-i18n="evidence.title" data-split></h2>
         <p class="section__lead" data-i18n="evidence.lead"></p>
       </header>
+      <div class="seg gallery-filter" id="galleryFilter" role="tablist"></div>
       <div class="gallery" id="gallery"></div>
     </section>
 
@@ -159,7 +171,7 @@
     <section class="section method" id="method">
       <div class="method__grid">
         <div>
-          <p class="kicker"><span class="mono">07</span><span data-i18n="kicker.method"></span></p>
+          <p class="kicker"><span class="mono">08</span><span data-i18n="kicker.method"></span></p>
           <h2 class="section__title" data-rich data-i18n="method.title" data-split></h2>
           <ul class="method__list" id="methodList"></ul>
         </div>
@@ -217,12 +229,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 
-  <script src="assets/data/profile.js?v=10"></script>
-  <script src="assets/data/terrain.js?v=10"></script>
-  <script src="assets/js/data.js?v=10"></script>
-  <script src="assets/js/i18n.js?v=10"></script>
-  <script src="assets/js/terrain.js?v=10"></script>
-  <script src="assets/js/app.js?v=10"></script>
-  <script src="assets/js/globes.js?v=10"></script>
+  <script src="assets/data/profile.js?v=13"></script>
+  <script src="assets/data/terrain.js?v=13"></script>
+  <script src="assets/js/data.js?v=13"></script>
+  <script src="assets/js/i18n.js?v=13"></script>
+  <script src="assets/js/terrain.js?v=13"></script>
+  <script src="assets/js/app.js?v=13"></script>
+  <script src="assets/js/globes.js?v=13"></script>
 </body>
 </html>
