@@ -11,8 +11,14 @@
   const T = window.THREE;
   if (!T) { GX.mountTerrain = () => null; return; }
 
-  const BG = 0x232322;
-  const LOW = new T.Color(0x7d725f), MID = new T.Color(0xb3a68c), HIGH = new T.Color(0xd7ffc5);
+  const isLight = () => document.documentElement.dataset.theme === "light";
+  const PAL = {
+    dark: { bg: 0x232322, low: new T.Color(0x7d725f), mid: new T.Color(0xb3a68c), high: new T.Color(0xd7ffc5) },
+    light: { bg: 0xf2efe6, low: new T.Color(0xb3a68a), mid: new T.Color(0x75664c), high: new T.Color(0x1e7444) }
+  };
+  const pal = () => PAL[isLight() ? "light" : "dark"];
+  const live = [];                                   // every mounted terrain re-themes itself on toggle
+  GX.setTerrainTheme = () => live.forEach((fn) => fn());
   const canTexture = location.protocol !== "file:";
   const AXIS_X = new T.Vector3(1, 0, 0);
   const easeOut = (x) => 1 - Math.pow(1 - x, 3);
@@ -34,8 +40,8 @@
     const EXAG = opts.exaggeration || 1.1;
     const hAt = (i, j) => { const v = val(i, j); return v == null ? 0 : ((v - zMin) / 1000) * EXAG; };
     const colorAt = (i, j, out) => {
-      const t = (val(i, j) - zMin) / span;
-      return t < 0.5 ? out.copy(LOW).lerp(MID, t / 0.5) : out.copy(MID).lerp(HIGH, (t - 0.5) / 0.5);
+      const t = (val(i, j) - zMin) / span, P = pal();
+      return t < 0.5 ? out.copy(P.low).lerp(P.mid, t / 0.5) : out.copy(P.mid).lerp(P.high, (t - 0.5) / 0.5);
     };
     const X0 = -SIZE / 2, Z0 = -(dz * (R - 1)) / 2;
 
@@ -48,15 +54,15 @@
 
     const scene = new T.Scene();
     const isFooter = opts.camera === "footer";
-    scene.fog = isFooter ? new T.Fog(BG, 14, 34) : new T.Fog(BG, 18, 40);
+    scene.fog = isFooter ? new T.Fog(pal().bg, 14, 34) : new T.Fog(pal().bg, 18, 40);
     const camera = new T.PerspectiveCamera(isFooter ? 40 : 38, 1, 0.1, 100);
     const world = new T.Group();
     scene.add(world);
 
     /* --- wireframe: grid lines coloured by height; gaps where there is no data --- */
     const STEP = opts.step || 2;
-    const pos = [], col = [], c = new T.Color();
-    const push = (i, j) => { pos.push(X0 + j * dx, hAt(i, j), Z0 + i * dz); colorAt(i, j, c); col.push(c.r, c.g, c.b); };
+    const pos = [], col = [], ij = [], c = new T.Color();
+    const push = (i, j) => { pos.push(X0 + j * dx, hAt(i, j), Z0 + i * dz); colorAt(i, j, c); col.push(c.r, c.g, c.b); ij.push(i, j); };
     const seg = (i1, j1, i2, j2) => { if (val(i1, j1) == null || val(i2, j2) == null) return; push(i1, j1); push(i2, j2); };
     for (let i = 0; i < R; i += STEP) for (let j = 0; j + STEP < C; j += STEP) seg(i, j, i, j + STEP);
     for (let j = 0; j < C; j += STEP) for (let i = 0; i + STEP < R; i += STEP) seg(i, j, i + STEP, j);
@@ -65,6 +71,12 @@
     lg.setAttribute("color", new T.Float32BufferAttribute(col, 3));
     const lineMat = new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.5, fog: true });
     const wireMesh = new T.LineSegments(lg, lineMat);
+    live.push(() => {
+      scene.fog.color.setHex(pal().bg);
+      const ca = lg.attributes.color;
+      for (let k = 0; k < ij.length / 2; k++) { colorAt(ij[2 * k], ij[2 * k + 1], c); ca.setXYZ(k, c.r, c.g, c.b); }
+      ca.needsUpdate = true;
+    });
     const useWire = opts.wire !== false;
     if (useWire) world.add(wireMesh);
 

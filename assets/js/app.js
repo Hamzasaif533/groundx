@@ -41,8 +41,8 @@
   const ICON = {
     arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>',
     steps: [
-      '<svg viewBox="0 0 64 64" stroke="#bfb29a"><circle cx="32" cy="32" r="24"/><circle cx="24" cy="26" r="5"/><circle cx="40" cy="38" r="7"/><circle cx="38" cy="20" r="2.5"/><path d="M32 2v8M32 54v8M2 32h8M54 32h8"/></svg>',
-      '<svg viewBox="0 0 64 64" stroke="#d7ffc5"><circle cx="22" cy="32" r="16"/><circle cx="46" cy="22" r="11"/><circle cx="46" cy="46" r="11"/><path d="M36 26l-2 2M36 38l-2-2" /></svg>',
+      '<svg viewBox="0 0 64 64" style="stroke:var(--moon)"><circle cx="32" cy="32" r="24"/><circle cx="24" cy="26" r="5"/><circle cx="40" cy="38" r="7"/><circle cx="38" cy="20" r="2.5"/><path d="M32 2v8M32 54v8M2 32h8M54 32h8"/></svg>',
+      '<svg viewBox="0 0 64 64" style="stroke:var(--earth)"><circle cx="22" cy="32" r="16"/><circle cx="46" cy="22" r="11"/><circle cx="46" cy="46" r="11"/><path d="M36 26l-2 2M36 38l-2-2" /></svg>',
       '<svg viewBox="0 0 64 64" stroke="#f5c842"><path d="M8 44a24 24 0 0 1 48 0"/><path d="M32 44l12-14"/><circle cx="32" cy="44" r="3"/><path d="M8 52h48"/></svg>',
       '<svg viewBox="0 0 64 64" stroke="#ff7a45"><rect x="14" y="22" width="34" height="14" rx="3"/><path d="M40 22V12h8M44 12v-4"/><circle cx="16" cy="46" r="6"/><circle cx="32" cy="46" r="6"/><circle cx="48" cy="46" r="6"/><path d="M16 36v4M32 36v4M48 36v4"/></svg>'
     ]
@@ -89,6 +89,7 @@
       else el.textContent = v;
     });
     $("#langToggle").setAttribute("aria-label", t("switchTo"));
+    $("#themeToggle").setAttribute("aria-label", t(document.documentElement.dataset.theme === "light" ? "theme.toDark" : "theme.toLight"));
     $("#lightbox [data-close]").setAttribute("aria-label", t("common.close"));
     document.title = state.lang === "ar" ? "Ground X — توائم كوكبية" : "Ground X — Planetary Twins";
   }
@@ -402,7 +403,7 @@
     const tdir = state.lang === "ar" ? "rtl" : "ltr";
     const tag = (cls, color, label, value, x, y, below) => `
       <g class="pmark ${cls}" transform="translate(${x} ${y})">
-        <circle r="6" fill="${color}"/><circle class="pmark__ring" r="6" fill="none" stroke="${color}"/>
+        <circle r="6" style="fill:${color}"/><circle class="pmark__ring" r="6" fill="none" style="stroke:${color}"/>
         <g transform="translate(0 ${below ? 26 : -26})"><rect x="-86" y="-15" width="172" height="28" rx="14"/>
         <text direction="${tdir}" text-anchor="middle" y="4">${esc(label)} · ${fmt(value, 1)} ${unitM}</text></g>
       </g>`;
@@ -423,10 +424,10 @@
       <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("profile.title"))}">
         <defs>
           <linearGradient id="pLine" gradientUnits="userSpaceOnUse" x1="0" y1="${Y(yMax)}" x2="0" y2="${Y(yMin)}">
-            <stop offset="0" stop-color="#d7ffc5"/><stop offset=".45" stop-color="#bfb29a"/><stop offset="1" stop-color="#ff8a5c"/>
+            <stop offset="0" style="stop-color:var(--earth)"/><stop offset=".45" style="stop-color:var(--moon)"/><stop offset="1" style="stop-color:var(--mars)"/>
           </linearGradient>
           <linearGradient id="pArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#d7ffc5" stop-opacity=".28"/><stop offset=".6" stop-color="#bfb29a" stop-opacity=".08"/><stop offset="1" stop-color="#bfb29a" stop-opacity="0"/>
+            <stop offset="0" style="stop-color:var(--earth);stop-opacity:.28"/><stop offset=".6" style="stop-color:var(--moon);stop-opacity:.08"/><stop offset="1" style="stop-color:var(--moon);stop-opacity:0"/>
           </linearGradient>
           <filter id="pGlow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
           <clipPath id="pReveal"><rect class="p-reveal" x="0" y="0" width="${m.l}" height="${H}"/></clipPath>
@@ -447,8 +448,8 @@
           <path class="glow" d="${line}" filter="url(#pGlow)"/>
           <path class="line" d="${line}"/>
         </g>
-        ${tag("pmark--hi", "#d7ffc5", t("profile.high"), hi[1], X(hi[0]), Y(hi[1]), false)}
-        ${tag("pmark--lo", "#ff8a5c", t("profile.low"), lo[1], X(lo[0]), Y(lo[1]), false)}
+        ${tag("pmark--hi", "var(--earth)", t("profile.high"), hi[1], X(hi[0]), Y(hi[1]), false)}
+        ${tag("pmark--lo", "var(--mars)", t("profile.low"), lo[1], X(lo[0]), Y(lo[1]), false)}
         <g class="probe">
           <line class="probe__line" y1="${m.t}" y2="${H - m.b}"/>
           <circle class="probe__halo" r="16"/>
@@ -726,6 +727,7 @@
     dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
 
     $("#langToggle").addEventListener("click", () => setLang(state.lang === "en" ? "ar" : "en"));
+    $("#themeToggle").addEventListener("click", (e) => toggleTheme(e.currentTarget));
     window.addEventListener("resize", () => { moveTabInk(false); inkTo($("#exploreSite"), false); inkTo($("#exploreMode"), false); });
 
     // nav: background after scroll, hide on scroll down
@@ -802,6 +804,28 @@
 
   let rebuildTimer = null;
   function rebuildSoon() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(buildCompareAnims, 30); }
+
+  /* ================================================================ THEME (dark / light) */
+  function applyTheme(th) {
+    const root = document.documentElement;
+    root.dataset.theme = th;
+    try { localStorage.setItem("gx-theme", th); } catch (e) {}
+    const meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute("content", th === "light" ? "#f2efe6" : "#232322");
+    $("#themeToggle").setAttribute("aria-label", t(th === "light" ? "theme.toDark" : "theme.toLight"));
+    if (GX.setTerrainTheme) GX.setTerrainTheme();
+  }
+  function toggleTheme(btn) {
+    const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    if (!document.startViewTransition || REDUCED) { applyTheme(next); return; }
+    // circular reveal growing from the button
+    const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const vt = document.startViewTransition(() => applyTheme(next));
+    vt.ready.then(() => {
+      document.documentElement.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+        { duration: 750, easing: "cubic-bezier(.2,.7,.1,1)", pseudoElement: "::view-transition-new(root)" });
+    }).catch(() => {});
+  }
 
   /* ================================================================ LANGUAGE */
   function setLang(lang) {
