@@ -252,8 +252,8 @@ GX.SITES = [
 /* ---------- Earth analog library (every Earth site the team is working on) ---------- */
 GX.ANALOG_LIBRARY = [
   { analog: HAUGHTON, twinOf: "shackleton", stats: { slope: "8.25°", rough: "1.90", elev: null }, source: { en: "QGIS", ar: "QGIS" } },
-  { analog: SAMAIL, twinOf: "syrtis-major", stats: { slope: SAMAIL.criteria.slope.headline, rough: SAMAIL.criteria.roughness.headline, elev: SAMAIL.criteria.elevation.headline }, source: { en: "Google Earth Engine", ar: "Google Earth Engine" } },
-  { analog: AMADEE, twinOf: null, stats: { slope: AMADEE.criteria.slope.headline, rough: AMADEE.criteria.roughness.headline, elev: AMADEE.criteria.elevation.headline }, source: { en: "Google Earth Engine", ar: "Google Earth Engine" }, tag: { en: "Mars analog mission site", ar: "موقع مهمة محاكاة للمريخ" } },
+  { analog: SAMAIL, twinOf: "syrtis-major", stats: { slope: SAMAIL.criteria.slope.headline, rough: SAMAIL.criteria.roughness.headline, elev: SAMAIL.criteria.elevation.headline } },
+  { analog: AMADEE, twinOf: null, stats: { slope: AMADEE.criteria.slope.headline, rough: AMADEE.criteria.roughness.headline, elev: AMADEE.criteria.elevation.headline }, tag: { en: "Mars analog mission site", ar: "موقع مهمة محاكاة للمريخ" } },
   { analog: WADI_GHUL, twinOf: "valles-marineris", stats: null },
   { analog: SHARQIYA, twinOf: "aonia-terra", stats: null },
   { analog: MISTAL, twinOf: "jezero", stats: null }
