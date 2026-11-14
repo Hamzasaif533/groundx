@@ -594,7 +594,7 @@
     rollButtons();
     renderTctl();
     renderMarquee(); renderSteps(); renderSitebar(); renderCounts(); renderSites(); renderCompare();
-    renderProfile(); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
+    renderProfile(); renderExplore(); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
     moveTabInk(false);
     if (window.GXRuler) window.GXRuler.layout();
   }
@@ -703,6 +703,10 @@
       if (wl) { e.preventDefault(); setWorld(wl.dataset.worldLink); scrollToId("#sites"); return; }
       const tm = e.target.closest("[data-tmode]");
       if (tm) { setTerrainMode(tm.closest(".tctl").dataset.terrain, tm.dataset.tmode); return; }
+      const xs = e.target.closest("[data-xsite]");
+      if (xs) { setExplore(xs.dataset.xsite, null); return; }
+      const xm = e.target.closest("[data-xmode]");
+      if (xm) { setExplore(null, xm.dataset.xmode); return; }
       const gf = e.target.closest("[data-gfilter]");
       if (gf) { setGallery(gf.dataset.gfilter); return; }
       const sc = e.target.closest("[data-site]");
@@ -996,9 +1000,13 @@
       const fxEl = $(".footer__x .fx");
       fxEl.addEventListener("pointerenter", () => {
         fxEl.classList.add("is-hot");
-        gsap.to(fxEl, { rotation: "+=360", duration: .9, ease: "power3.inOut", overwrite: "auto" });
+        gsap.to(fxEl, { yPercent: -14, duration: .35, ease: "power3.out", overwrite: "auto" });
+        gsap.to(fxEl, { rotation: "+=360", duration: .9, ease: "power3.inOut" });
       });
-      fxEl.addEventListener("pointerleave", () => fxEl.classList.remove("is-hot"));
+      fxEl.addEventListener("pointerleave", () => {
+        fxEl.classList.remove("is-hot");
+        gsap.to(fxEl, { yPercent: 0, duration: .9, ease: "elastic.out(1,.35)", overwrite: "auto" });
+      });
       // scroll parallax: letters settle from slightly spread to tight
       gsap.fromTo(fchars, { y: (i) => (i % 2 ? 18 : -18) }, { y: 0, ease: "none", scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 1 } });
       // hover: letters near the pointer lift
@@ -1057,6 +1065,57 @@
     ScrollTrigger.refresh();
   }
 
+  /* ================================================================ 3D TERRAIN EXPLORER */
+  // Shackleton: 16 world units ≈ 16 km, so ×1.1 is (almost) true scale.
+  // Haughton: 16 units = 20 km, so a height factor of 8 shows as ×10 vertical exaggeration.
+  const EXPLORE = {
+    shackleton: { site: "shackleton", dem: () => window.SHACKLETON_DEM, surface: "assets/img/moon-slope.webp", exaggeration: 1.1, exag: "×1.1",
+      area: { en: "Site04 tile ≈ 16 × 16 km", ar: "مربع Site04 ≈ 16 × 16 كم" }, data: { en: "NASA Site04 DEM · LRO LOLA · 5 m/px", ar: "نموذج ناسا Site04 · LRO LOLA · 5 م/بكسل" }, tex: "moon" },
+    haughton: { site: "haughton", dem: () => window.HAUGHTON_DEM, surface: "assets/img/earth-slope.webp", exaggeration: 8, exag: "×10",
+      area: { en: "10 km analysis buffer (20 km across)", ar: "نطاق تحليل 10 كم (قطر 20 كم)" }, data: { en: "Team-processed DEM · 2 m", ar: "نموذج ارتفاع عالجه الفريق · 2 م" }, tex: "earth" }
+  };
+  const x3d = {};
+  state.explore = "shackleton"; state.exploreMode = "wire";
+  const exploreName = (id) => id === "haughton" ? L(GX.SITES[0].analogs[0].name) : L(GX.SITES[0].name);
+  function renderExplore() {
+    const box = $("#exploreSite"); if (!box) return;
+    box.innerHTML = Object.keys(EXPLORE).map((id) => `<button type="button" role="tab" data-xsite="${id}" class="${id === state.explore ? "is-active" : ""}" aria-selected="${id === state.explore}"><i class="globe tex-${EXPLORE[id].tex}"></i>${esc(exploreName(id))}</button>`).join("");
+    const canSlope = location.protocol !== "file:";
+    $("#exploreMode").innerHTML = ["wire", "slope", "relief"].filter((m) => m !== "slope" || canSlope).map((m) => `<button type="button" role="tab" data-xmode="${m}" class="${m === state.exploreMode ? "is-active" : ""}" aria-selected="${m === state.exploreMode}">${esc(t("explore." + m))}</button>`).join("");
+    const c = EXPLORE[state.explore];
+    $("#exploreInfo").innerHTML = `
+      <div><dt>${esc(t("explore.area"))}</dt><dd>${esc(L(c.area))}</dd></div>
+      <div><dt>${esc(t("explore.data"))}</dt><dd>${esc(L(c.data))}</dd></div>
+      <div><dt>${esc(t("explore.exag"))}</dt><dd>${num(c.exag)}</dd></div>`;
+    $("#exploreLegend").innerHTML = state.exploreMode === "slope"
+      ? `<span><i style="background:var(--s-flat)"></i>${num(t("legend.flat"))}</span><span><i style="background:var(--s-mid)"></i>${num(t("legend.mid"))}</span><span><i style="background:var(--s-steep)"></i>${num(t("legend.steep"))}</span>` : "";
+  }
+  function mountExplore(id) {
+    if (x3d[id] || !GX.mountTerrain) return;
+    const c = EXPLORE[id], el = $(`[data-x3d="${id}"]`);
+    x3d[id] = GX.mountTerrain(el, { dem: c.dem(), camera: "explore", surface: c.surface, relief: true, exaggeration: c.exaggeration });
+    if (x3d[id]) x3d[id].setMode(state.exploreMode === "slope" ? "surface" : state.exploreMode);
+  }
+  function setExplore(site, mode) {
+    if (site && site !== state.explore) {
+      state.explore = site;
+      $$("[data-x3d]").forEach((v) => { v.hidden = v.dataset.x3d !== site; });
+      mountExplore(site);
+      if (ANIM) gsap.fromTo(`[data-x3d="${site}"]`, { autoAlpha: 0, scale: .96 }, { autoAlpha: 1, scale: 1, duration: .8, ease: "expo.out" });
+    }
+    if (mode) state.exploreMode = mode;
+    Object.values(x3d).forEach((api) => api && api.setMode(state.exploreMode === "slope" ? "surface" : state.exploreMode));
+    renderExplore();
+  }
+  function bindExplore() {
+    const sec = $("#explore"); if (!sec) return;
+    const io = new IntersectionObserver((en) => {
+      if (!en[0].isIntersecting) return;
+      io.disconnect(); mountExplore(state.explore);
+    }, { rootMargin: "700px 0px" });
+    io.observe(sec);
+  }
+
   /* ================================================================ TERRAIN + ELEVATION RULER */
   function mountTerrains() {
     if (!GX.mountTerrain) return;
@@ -1101,7 +1160,9 @@
     if (!el) return;
     const track = $(".ruler__track", el);
     const mark = $(".ruler__mark", el), fill = $(".ruler__fill", el), ticks = $(".ruler__ticks", el);
-    const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#analogs", "nav.analogs"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
+    const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#explore", "explore.kicker"], ["#analogs", "nav.analogs"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
+    const cur = $(".ruler__cur", el), tot = $(".ruler__tot", el), toc = $(".ruler__toc", el);
+    let fracs = [], active = -2;
     const maxScroll = () => Math.max(1, (window.ScrollTrigger ? ScrollTrigger.maxScroll(window) : document.documentElement.scrollHeight - innerHeight));
     const progress = () => smoother ? smoother.progress : Math.min(1, Math.max(0, scrollY / maxScroll()));
     // click = glide smoothly to that point; dragging follows the pointer with a short ease
@@ -1117,19 +1178,30 @@
       mark.style.transform = `translateY(${(f * trackH).toFixed(1)}px)`;
       fill.style.transform = `scaleY(${f.toFixed(4)})`;
       track.setAttribute("aria-valuenow", Math.round(f * 100));
+      let a = -1; fracs.forEach((x, i) => { if (f + 0.004 >= x) a = i; });
+      if (a !== active) {
+        active = a;
+        $$(".ruler__tick", ticks).forEach((b, i) => { b.classList.toggle("is-passed", i < a); b.classList.toggle("is-active", i === a); });
+        $$("button", toc).forEach((b, i) => b.classList.toggle("is-active", i === a));
+        cur.textContent = String(Math.max(0, a + 1)).padStart(2, "0");
+      }
     };
     let trackH = track.clientHeight;
     const layout = () => {
       trackH = track.clientHeight;
       track.setAttribute("aria-label", t("ruler.aria"));
       const max = maxScroll();
-      ticks.innerHTML = SECTIONS.map(([sel, key]) => {
+      fracs = [];
+      ticks.innerHTML = SECTIONS.map(([sel, key], i) => {
         const sec = $(sel); if (!sec) return "";
         const top = sec.getBoundingClientRect().top + (smoother ? smoother.scrollTop() : scrollY) - 70;
         const f = Math.min(1, Math.max(0, top / max));
-        return `<button type="button" class="ruler__tick" style="top:${(f * 100).toFixed(2)}%" data-goto="${sel}"><span>${esc(t(key))}</span></button>`;
+        fracs.push(f);
+        return `<button type="button" class="ruler__tick" style="top:${(f * 100).toFixed(2)}%" data-goto="${sel}" aria-label="${esc(t(key))}"><i></i><span><b class="mono">${String(i + 1).padStart(2, "0")}</b>${esc(t(key))}</span></button>`;
       }).join("");
-      last = -1; update();
+      tot.textContent = "/" + String(fracs.length).padStart(2, "0");
+      toc.innerHTML = SECTIONS.map(([sel, key], i) => `<button type="button" data-goto="${sel}"><b class="mono">${String(i + 1).padStart(2, "0")}</b>${esc(t(key))}</button>`).join("");
+      active = -2; last = -1; update();
     };
     // drag / click on the track
     let dragging = false;
@@ -1147,7 +1219,7 @@
       if (e.key === "Home") { e.preventDefault(); go(0); }
       if (e.key === "End") { e.preventDefault(); go(1); }
     });
-    ticks.addEventListener("click", (e) => { const b = e.target.closest("[data-goto]"); if (b) scrollToId(b.dataset.goto); });
+    el.addEventListener("click", (e) => { const b = e.target.closest("[data-goto]"); if (b) scrollToId(b.dataset.goto); });
     if (hasGSAP) { gsap.ticker.add(update); ScrollTrigger.addEventListener("refresh", layout); }
     else window.addEventListener("scroll", update, { passive: true });
     window.GXRuler = { layout };
@@ -1162,6 +1234,7 @@
   bindOnce();
   bindRuler();
   mountTerrains();
+  bindExplore();
   const start = () => { buildAnimations(); moveTabInk(false); };
   // Start after globes.js has initialised WebGL (it runs right after this file), so shader compilation
   // never freezes the intro. SplitText's autoSplit re-measures lines once the web fonts finish loading.

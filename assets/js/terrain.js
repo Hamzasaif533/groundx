@@ -1,34 +1,40 @@
 /* ==========================================================================
-   GROUND X — wireframe terrain (Three.js)
-   Draws the real Shackleton Rim elevation grid (assets/data/terrain.js) as a
-   glowing wireframe, optionally switching to the team's slope-class map draped
-   over the same surface (both come from the same NASA Site04 5 m/px grid).
-   Usage: GX.mountTerrain(containerEl, { interactive, camera: "hero"|"footer" })
+   GROUND X — 3D terrain (Three.js)
+   Renders a real elevation grid (Shackleton Site04 or Haughton) as a
+   wireframe, as the team's slope-class map draped over the surface, or as
+   shaded relief. Interaction is drag-only: hold and move to rotate / tilt.
+   Usage: GX.mountTerrain(el, { dem, camera, surface, relief, exaggeration, zoom })
    ========================================================================== */
 (function () {
   "use strict";
   window.GX = window.GX || {};
-  const T = window.THREE, DEM = window.SHACKLETON_DEM;
-  if (!T || !DEM) { GX.mountTerrain = () => null; return; }
+  const T = window.THREE;
+  if (!T) { GX.mountTerrain = () => null; return; }
 
   const BG = 0x232322;
   const LOW = new T.Color(0x7d725f), MID = new T.Color(0xb3a68c), HIGH = new T.Color(0xd7ffc5);
   const canTexture = location.protocol !== "file:";
+  const AXIS_X = new T.Vector3(1, 0, 0);
+  const easeOut = (x) => 1 - Math.pow(1 - x, 3);
 
   function webgl() {
     try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; }
   }
 
   GX.mountTerrain = function (host, opts = {}) {
-    if (!host || !webgl()) return null;
-    const R = DEM.rows, C = DEM.cols, Z = DEM.z;
-    const SIZE = 16;                               // world units across (≈ km)
+    const DEM = opts.dem || window.SHACKLETON_DEM;
+    if (!host || !DEM || !webgl()) return null;
+    const R = DEM.rows, C = DEM.cols, Z = DEM.z, SC = DEM.scale || 1;
+    const val = (i, j) => { const v = Z[i * C + j]; return v == null ? null : v * SC; };
+    const SIZE = 16;
     const dx = SIZE / (C - 1), dz = (SIZE * R / C) / (R - 1);
-    const zMin = DEM.min, zMax = DEM.max, span = zMax - zMin;
+    let zMin = Infinity, zMax = -Infinity;
+    for (let k = 0; k < Z.length; k++) if (Z[k] != null) { const v = Z[k] * SC; if (v < zMin) zMin = v; if (v > zMax) zMax = v; }
+    const span = zMax - zMin || 1;
     const EXAG = opts.exaggeration || 1.1;
-    const hAt = (i, j) => ((Z[i * C + j] - zMin) / 1000) * EXAG;
+    const hAt = (i, j) => { const v = val(i, j); return v == null ? 0 : ((v - zMin) / 1000) * EXAG; };
     const colorAt = (i, j, out) => {
-      const t = (Z[i * C + j] - zMin) / span;
+      const t = (val(i, j) - zMin) / span;
       return t < 0.5 ? out.copy(LOW).lerp(MID, t / 0.5) : out.copy(MID).lerp(HIGH, (t - 0.5) / 0.5);
     };
     const X0 = -SIZE / 2, Z0 = -(dz * (R - 1)) / 2;
@@ -41,99 +47,96 @@
     host.appendChild(renderer.domElement);
 
     const scene = new T.Scene();
-    scene.fog = opts.camera === "footer" ? new T.Fog(BG, 14, 34) : new T.Fog(BG, 7, 22);
-    const camera = new T.PerspectiveCamera(opts.camera === "footer" ? 40 : 46, 1, 0.1, 100);
-
+    const isFooter = opts.camera === "footer";
+    scene.fog = isFooter ? new T.Fog(BG, 14, 34) : new T.Fog(BG, 18, 40);
+    const camera = new T.PerspectiveCamera(isFooter ? 40 : 38, 1, 0.1, 100);
     const world = new T.Group();
     scene.add(world);
 
-    /* --- wireframe: grid lines along both axes, coloured by height --- */
+    /* --- wireframe: grid lines coloured by height; gaps where there is no data --- */
     const STEP = opts.step || 2;
     const pos = [], col = [], c = new T.Color();
     const push = (i, j) => { pos.push(X0 + j * dx, hAt(i, j), Z0 + i * dz); colorAt(i, j, c); col.push(c.r, c.g, c.b); };
-    for (let i = 0; i < R; i += STEP) for (let j = 0; j + STEP < C; j += STEP) { push(i, j); push(i, j + STEP); }
-    for (let j = 0; j < C; j += STEP) for (let i = 0; i + STEP < R; i += STEP) { push(i, j); push(i + STEP, j); }
+    const seg = (i1, j1, i2, j2) => { if (val(i1, j1) == null || val(i2, j2) == null) return; push(i1, j1); push(i2, j2); };
+    for (let i = 0; i < R; i += STEP) for (let j = 0; j + STEP < C; j += STEP) seg(i, j, i, j + STEP);
+    for (let j = 0; j < C; j += STEP) for (let i = 0; i + STEP < R; i += STEP) seg(i, j, i + STEP, j);
     const lg = new T.BufferGeometry();
     lg.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
     lg.setAttribute("color", new T.Float32BufferAttribute(col, 3));
     const lineMat = new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.5, fog: true });
-    const wire = new T.LineSegments(lg, lineMat);
-    world.add(wire);
+    world.add(new T.LineSegments(lg, lineMat));
 
-    /* --- surface with the slope-class map (footer toggle) --- */
-    let surface = null;
+    /* --- surface geometry (shared by the slope-map and relief modes) --- */
+    const g = new T.PlaneGeometry(SIZE, dz * (R - 1), C - 1, R - 1);
+    g.rotateX(-Math.PI / 2);
+    const p = g.attributes.position;
+    for (let i = 0; i < R; i++) for (let j = 0; j < C; j++) p.setY(i * C + j, hAt(i, j));
+    if (Z.some((v) => v == null)) {           // drop triangles that touch "no data" cells
+      const idx = g.index.array, keep = [];
+      for (let k = 0; k < idx.length; k += 3) {
+        if (Z[idx[k]] != null && Z[idx[k + 1]] != null && Z[idx[k + 2]] != null) keep.push(idx[k], idx[k + 1], idx[k + 2]);
+      }
+      g.setIndex(keep);
+    }
+    g.computeVertexNormals();
+    const sun = new T.DirectionalLight(0xffffff, 1.5); sun.position.set(-6, 8, 4); scene.add(sun);
+    scene.add(new T.AmbientLight(0xffffff, 0.42));
+
+    const layers = {};
     if (opts.surface && canTexture) {
-      const g = new T.PlaneGeometry(SIZE, dz * (R - 1), C - 1, R - 1);
-      g.rotateX(-Math.PI / 2);
-      const p = g.attributes.position;
-      for (let i = 0; i < R; i++) for (let j = 0; j < C; j++) p.setY(i * C + j, hAt(i, j));
-      g.computeVertexNormals();
       const tex = new T.TextureLoader().load(opts.surface);
       tex.encoding = T.sRGBEncoding; tex.anisotropy = 8;
-      surface = new T.Mesh(g, new T.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0 }));
-      surface.visible = false;
-      world.add(surface);
-      const sun = new T.DirectionalLight(0xffffff, 1.6); sun.position.set(-6, 8, 4); scene.add(sun);
-      scene.add(new T.AmbientLight(0xffffff, 0.45));
+      layers.surface = new T.Mesh(g, new T.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0 }));
     }
+    if (opts.relief) layers.relief = new T.Mesh(g, new T.MeshLambertMaterial({ color: 0xbdb3a0, transparent: true, opacity: 0 }));
+    Object.values(layers).forEach((m) => { m.visible = false; world.add(m); });
 
-    world.position.y = -((0 - zMin) / 1000) * EXAG * 0.35;
+    world.position.y = -EXAG * (span / 1000) * 0.35;
 
-    /* --- camera presets --- */
     const presets = {
-      hero:   { pos: new T.Vector3(0, 4.6, 9.8), look: new T.Vector3(0, 0.4, -4) },
-      footer: { pos: new T.Vector3(0, 10.5, 15), look: new T.Vector3(0, -0.5, 0) }
+      footer: { pos: new T.Vector3(0, 10.5, 15), look: new T.Vector3(0, -0.5, 0) },
+      explore: { pos: new T.Vector3(0, 12.5, 19), look: new T.Vector3(0, -0.6, 0) }
     };
-    const P = presets[opts.camera] || presets.hero;
+    const P = presets[opts.camera] || presets.explore;
     camera.position.copy(P.pos);
 
     function resize() {
       const w = Math.max(1, host.clientWidth), h = Math.max(1, host.clientHeight);
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      // keep the whole width of the terrain in view on narrow screens
       camera.zoom = Math.min(1, (w / h) / 1.6) * (opts.zoom || 1);
       camera.updateProjectionMatrix();
     }
     new ResizeObserver(resize).observe(host);
     resize();
-
     try { renderer.compile(scene, camera); } catch (e) {}
 
-    /* --- interaction: drag to rotate (yaw) / tilt (pitch), with inertia + auto drift --- */
+    /* --- drag-only interaction: hold + move to rotate (yaw) and tilt (pitch), with inertia --- */
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let mx = 0, my = 0, ax = 0, ay = 0, visible = false, rise = reduced ? 1 : 0, riseTarget = reduced ? 1 : 0;
+    let visible = false, rise = reduced ? 1 : 0, riseTarget = reduced ? 1 : 0;
     let yaw = 0, yawVel = 0, pitch = 0, pitchTarget = 0, autoDir = 1, dragging = false, lastUser = -99;
-    window.addEventListener("pointermove", (e) => {
-      mx = e.clientX / window.innerWidth - 0.5;
-      my = e.clientY / window.innerHeight - 0.5;
-    }, { passive: true });
-    new IntersectionObserver((en) => {
-      visible = en[0].isIntersecting;
-      if (visible) riseTarget = 1;          // terrain "grows" the first time it is seen
-    }, { threshold: 0.05 }).observe(host);
-
-    if (opts.interactive !== false) {
-      const el = renderer.domElement;
-      el.classList.add("is-draggable");
-      el.setAttribute("data-cursor", "");
-      let lx = 0, ly = 0;
-      el.addEventListener("pointerdown", (e) => { dragging = true; lx = e.clientX; ly = e.clientY; yawVel = 0; el.setPointerCapture(e.pointerId); host.classList.add("is-dragging"); });
-      el.addEventListener("pointermove", (e) => {
-        if (!dragging) return;
-        const dxp = e.clientX - lx, dyp = e.clientY - ly; lx = e.clientX; ly = e.clientY;
-        yaw += dxp * 0.006; yawVel = dxp * 0.006;
-        pitchTarget = Math.max(-0.45, Math.min(0.55, pitchTarget + dyp * 0.004));
-        if (Math.abs(dxp) > 1) autoDir = dxp > 0 ? 1 : -1;
-        lastUser = clock.elapsedTime;
-      });
-      const end = () => { dragging = false; host.classList.remove("is-dragging"); };
-      el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
-    }
+    new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) riseTarget = 1; }, { threshold: 0.05 }).observe(host);
 
     const clock = new T.Clock();
+    const el = renderer.domElement;
+    el.classList.add("is-draggable");
+    el.setAttribute("data-cursor", "");
+    let lx = 0, ly = 0;
+    el.addEventListener("pointerdown", (e) => { dragging = true; lx = e.clientX; ly = e.clientY; yawVel = 0; el.setPointerCapture(e.pointerId); host.classList.add("is-dragging"); });
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dxp = e.clientX - lx, dyp = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+      yaw += dxp * 0.006; yawVel = dxp * 0.006;
+      pitchTarget = Math.max(-0.45, Math.min(0.55, pitchTarget + dyp * 0.004));
+      if (Math.abs(dxp) > 1) autoDir = dxp > 0 ? 1 : -1;
+      lastUser = clock.elapsedTime;
+    });
+    const end = () => { dragging = false; host.classList.remove("is-dragging"); };
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
+
     const v = new T.Vector3(), base = P.pos.clone().sub(P.look);
-    let mode = "wire", blend = 0;
+    let mode = "wire";
+    const blend = { wire: 1, surface: 0, relief: 0 };
     function frame() {
       requestAnimationFrame(frame);
       const dt = Math.min(clock.getDelta(), 0.05);
@@ -141,39 +144,27 @@
       const t = clock.elapsedTime;
       rise += (riseTarget - rise) * (reduced ? 1 : dt * 1.4);
       world.scale.y = 0.02 + 0.98 * easeOut(rise);
-      ax += (mx - ax) * 0.04; ay += (my - ay) * 0.04;
       if (!dragging && !reduced) {
-        yaw += yawVel; yawVel *= 0.95;                         // inertia
-        if (t - lastUser > 2.5) yaw += autoDir * dt * 0.07;    // gentle auto drift in the last dragged direction
-        if (t - lastUser > 6) pitchTarget += (Math.sin(t * 0.11) * 0.12 - pitchTarget) * dt * 0.3; // slow "fly-over" bob
+        yaw += yawVel; yawVel *= 0.95;
+        if (t - lastUser > 2.5) yaw += autoDir * dt * 0.07;
       }
       pitch += (pitchTarget - pitch) * 0.08;
-      world.rotation.y = yaw + ax * 0.25;
-      v.copy(base).applyAxisAngle(AXIS_X, -pitch);              // tilt the camera around the look point
+      world.rotation.y = yaw;
+      v.copy(base).applyAxisAngle(AXIS_X, -pitch);
       camera.position.copy(P.look).add(v);
-      camera.position.x += ax * 1.2; camera.position.y -= ay * 0.9;
       camera.lookAt(P.look);
-      const target = mode === "surface" ? 1 : 0;               // cross-fade wire <-> slope surface
-      blend += (target - blend) * Math.min(1, dt * 4);
-      lineMat.opacity = 0.5 * (1 - blend) + 0.14 * blend;
-      if (surface) { surface.visible = blend > 0.01; surface.material.opacity = blend; }
+      const k = Math.min(1, dt * 4);
+      Object.keys(blend).forEach((m) => { blend[m] += ((mode === m ? 1 : 0) - blend[m]) * k; });
+      lineMat.opacity = 0.5 * blend.wire + 0.14 * (1 - blend.wire);
+      Object.entries(layers).forEach(([m, mesh]) => { mesh.visible = blend[m] > 0.01; mesh.material.opacity = blend[m]; });
       renderer.render(scene, camera);
     }
-    const AXIS_X = new T.Vector3(1, 0, 0);
-    const easeOut = (x) => 1 - Math.pow(1 - x, 3);
     frame();
 
     return {
-      setMode(m) { mode = m === "surface" && surface ? "surface" : "wire"; },
-      /* direction buttons: spin left/right, tilt up/down */
-      nudge(dir) {
-        lastUser = clock.elapsedTime;
-        if (dir === "left")  { yawVel = -0.06; autoDir = -1; }
-        if (dir === "right") { yawVel = 0.06; autoDir = 1; }
-        if (dir === "up")    pitchTarget = Math.min(0.55, pitchTarget + 0.18);
-        if (dir === "down")  pitchTarget = Math.max(-0.45, pitchTarget - 0.18);
-      },
-      hasSurface: !!surface
+      setMode(m) { mode = (m === "wire" || layers[m]) ? m : "wire"; },
+      get mode() { return mode; },
+      hasSurface: !!layers.surface
     };
   };
 })();

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=Michroma&family=Barlow+Condensed:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=17">
+  <link rel="stylesheet" href="assets/css/style.css?v=19">
   <script>
     /* Apply the saved language before first paint (avoids a flash of the wrong direction). */
     (function () {
@@ -37,6 +37,7 @@
       <a href="#how" data-i18n="nav.how"></a>
       <a href="#sites" data-i18n="nav.sites"></a>
       <a href="#compare" data-i18n="nav.compare"></a>
+      <a href="#explore" data-i18n="nav.explore"></a>
       <a href="#analogs" data-i18n="nav.analogs"></a>
       <a href="#rovers" data-i18n="nav.rovers"></a>
       <a href="#evidence" data-i18n="nav.evidence"></a>
@@ -134,10 +135,30 @@
       <figure class="chart" id="profileChart"></figure>
     </section>
 
+    <!-- ============ 3D TERRAIN EXPLORER ============ -->
+    <section class="section explore" id="explore">
+      <header class="section__head">
+        <p class="kicker"><span class="mono">05</span><span data-i18n="explore.kicker"></span></p>
+        <h2 class="section__title" data-rich data-i18n="explore.title" data-split></h2>
+        <p class="section__lead" data-i18n="explore.lead"></p>
+      </header>
+      <div class="explore__ui">
+        <div class="seg" id="exploreSite" role="tablist"></div>
+        <div class="seg" id="exploreMode" role="tablist"></div>
+      </div>
+      <div class="explore__stage">
+        <div class="explore__view" data-x3d="shackleton"></div>
+        <div class="explore__view" data-x3d="haughton" hidden></div>
+        <dl class="explore__info" id="exploreInfo"></dl>
+        <div class="explore__legend" id="exploreLegend"></div>
+        <span class="explore__hint label"><i>⟲</i><span data-i18n="explore.drag"></span></span>
+      </div>
+    </section>
+
     <!-- ============ EARTH ANALOG LIBRARY ============ -->
     <section class="section analogs" id="analogs">
       <header class="section__head">
-        <p class="kicker"><span class="mono">05</span><span data-i18n="analogs.kicker"></span></p>
+        <p class="kicker"><span class="mono">06</span><span data-i18n="analogs.kicker"></span></p>
         <h2 class="section__title" data-rich data-i18n="analogs.title" data-split></h2>
         <p class="section__lead" data-i18n="analogs.lead"></p>
       </header>
@@ -147,7 +168,7 @@
     <!-- ============ ROVERS ============ -->
     <section class="section rovers" id="rovers">
       <header class="section__head">
-        <p class="kicker"><span class="mono">06</span><span data-i18n="nav.rovers"></span></p>
+        <p class="kicker"><span class="mono">07</span><span data-i18n="nav.rovers"></span></p>
         <h2 class="section__title" data-rich data-i18n="rovers.title" data-split></h2>
         <p class="section__lead" data-i18n="rovers.lead"></p>
       </header>
@@ -157,7 +178,7 @@
     <!-- ============ EVIDENCE ============ -->
     <section class="section evidence" id="evidence">
       <header class="section__head">
-        <p class="kicker"><span class="mono">07</span><span data-i18n="nav.evidence"></span></p>
+        <p class="kicker"><span class="mono">08</span><span data-i18n="nav.evidence"></span></p>
         <h2 class="section__title" data-rich data-i18n="evidence.title" data-split></h2>
         <p class="section__lead" data-i18n="evidence.lead"></p>
       </header>
@@ -169,7 +190,7 @@
     <section class="section method" id="method">
       <div class="method__grid">
         <div>
-          <p class="kicker"><span class="mono">08</span><span data-i18n="kicker.method"></span></p>
+          <p class="kicker"><span class="mono">09</span><span data-i18n="kicker.method"></span></p>
           <h2 class="section__title" data-rich data-i18n="method.title" data-split></h2>
           <ul class="method__list" id="methodList"></ul>
         </div>
@@ -199,13 +220,15 @@
     <p class="lightbox__cap"></p>
   </dialog>
 
-  <aside class="ruler glass" id="ruler">
+  <aside class="ruler" id="ruler">
+    <span class="ruler__num mono" aria-hidden="true"><b class="ruler__cur">00</b><span class="ruler__tot">/09</span></span>
     <div class="ruler__track" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <i class="ruler__rail" aria-hidden="true"></i>
       <i class="ruler__fill" aria-hidden="true"></i>
-      <i class="ruler__mark" aria-hidden="true"></i>
       <div class="ruler__ticks"></div>
+      <i class="ruler__mark" aria-hidden="true"></i>
     </div>
-    <span class="ruler__hint" data-i18n="ruler.hint"></span>
+    <nav class="ruler__toc" aria-label="Sections"></nav>
   </aside>
 
   <div class="cursor" aria-hidden="true"></div>
@@ -220,12 +243,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 
-  <script src="assets/data/profile.js?v=17"></script>
-  <script src="assets/data/terrain.js?v=17"></script>
-  <script src="assets/js/data.js?v=17"></script>
-  <script src="assets/js/i18n.js?v=17"></script>
-  <script src="assets/js/terrain.js?v=17"></script>
-  <script src="assets/js/app.js?v=17"></script>
-  <script src="assets/js/globes.js?v=17"></script>
+  <script src="assets/data/profile.js?v=19"></script>
+  <script src="assets/data/terrain.js?v=19"></script>
+  <script src="assets/data/haughton-dem.js?v=19"></script>
+  <script src="assets/js/data.js?v=19"></script>
+  <script src="assets/js/i18n.js?v=19"></script>
+  <script src="assets/js/terrain.js?v=19"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/globes.js?v=19"></script>
 </body>
 </html>
