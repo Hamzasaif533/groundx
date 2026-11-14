@@ -176,7 +176,8 @@
       camera.lookAt(P.look);
       const k = Math.min(1, dt * 4);
       Object.keys(blend).forEach((m) => { blend[m] += ((mode === m ? 1 : 0) - blend[m]) * k; });
-      lineMat.opacity = useWire ? 0.5 * blend.wire + 0.14 * (1 - blend.wire) : 0;
+      lineMat.opacity = useWire ? 0.5 * blend.wire + (opts.wireOverlay === false ? 0 : 0.14) * (1 - blend.wire) : 0;
+      wireMesh.visible = lineMat.opacity > 0.005;
       Object.entries(layers).forEach(([m, mesh]) => { mesh.visible = blend[m] > 0.01; mesh.material.opacity = blend[m]; });
       renderer.render(scene, camera);
     }

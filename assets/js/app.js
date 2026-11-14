@@ -111,17 +111,6 @@
       </li>`).join("");
   }
 
-  /* Hero site bar (like a tab strip along the bottom of the hero) */
-  function renderSitebar() {
-    const moon = GX.SITES.filter((s) => s.body === "moon"), mars = GX.SITES.filter((s) => s.body === "mars");
-    const s = moon[0], a = s.analogs[0];
-    $("#sitebar").innerHTML = `
-      <span class="sitebar__lab label">${esc(t("sitebar.label"))}:</span>
-      <a href="#compare" class="sitebar__item" data-site="${s.id}"><i class="globe tex-moon"></i>${esc(L(s.name))} <span class="mono">↔</span> ${esc(L(a.name))}</a>
-      <a href="#sites" class="sitebar__item" data-world-link="mars"><i class="globe tex-mars"></i>${esc(t("sitebar.mars"))} · <bdi dir="ltr">${mars.length}</bdi> ${esc(t("sitebar.sites"))}</a>
-      <a href="#analogs" class="sitebar__item is-soon"><i class="globe tex-earth"></i>${esc(t("analogs.short"))} · <bdi dir="ltr">${GX.ANALOG_LIBRARY.length}</bdi></a>`;
-  }
-
   /* World tab counters + headline stats come straight from the data */
   function renderCounts() {
     const n = (b) => GX.SITES.filter((s) => s.body === b).length;
@@ -593,7 +582,7 @@
     applyStatic();
     rollButtons();
     renderTctl();
-    renderMarquee(); renderSteps(); renderSitebar(); renderCounts(); renderSites(); renderCompare();
+    renderMarquee(); renderSteps(); renderCounts(); renderSites(); renderCompare();
     renderProfile(); renderExplore(false); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
     moveTabInk(false);
     if (window.GXRuler) window.GXRuler.layout();
@@ -877,7 +866,6 @@
         .from(".twins__link path", { strokeDashoffset: 400, autoAlpha: 0, duration: 1.4, ease: "power2.out" }, .6)
         .from(".twins__badge", { scale: 0, duration: .9, ease: "back.out(2)" }, .9)
         .from(".hero__title .pill", { scaleX: 0, transformOrigin: isAr ? "100% 50%" : "0% 50%", duration: 1.3, ease: "expo.inOut", stagger: .15 }, .5)
-        .from(".sitebar > *", { y: 40, autoAlpha: 0, stagger: .08, duration: 1, ease: "expo.out" }, .8)
         .from(".ruler", { autoAlpha: 0, x: isAr ? 20 : -20, duration: 1, ease: "expo.out" }, 1)
         .from(".twins__hint", { y: 16, autoAlpha: 0, duration: .9, ease: "expo.out" }, 1.4)
         .from(".hero__side", { clipPath: "inset(0 0 100% 0 round 14px)", duration: 1.2, ease: "expo.inOut" }, .25);
@@ -1075,11 +1063,11 @@
       drapes: { satellite: "assets/img/haughton-satellite.webp", slope: "assets/img/earth-slope.webp", roughness: "assets/img/earth-roughness-color.webp" },
       area: { en: "10 km analysis buffer (20 km across)", ar: "نطاق تحليل 10 كم (قطر 20 كم)" }, data: { en: "Team-processed DEM · 2 m", ar: "نموذج ارتفاع عالجه الفريق · 2 م" } }
   };
-  const MODES = ["satellite", "slope", "roughness", "elevation", "relief"];
+  const MODES = ["satellite", "slope", "roughness", "elevation", "wire"];
   const x3d = {};
   state.explore = "shackleton"; state.exploreMode = "slope";
   const exploreName = (id) => id === "haughton" ? L(GX.SITES[0].analogs[0].name) : L(GX.SITES[0].name);
-  const modesFor = (id) => MODES.filter((m) => m === "elevation" || m === "relief" || (location.protocol !== "file:" && EXPLORE[id].drapes[m]));
+  const modesFor = (id) => MODES.filter((m) => m === "elevation" || m === "wire" || (location.protocol !== "file:" && EXPLORE[id].drapes[m]));
 
   /* sliding highlight behind the active button of a segmented control */
   const INK = {};
@@ -1121,7 +1109,7 @@
   function mountExplore(id) {
     if (x3d[id] || !GX.mountTerrain) return;
     const c = EXPLORE[id], el = $(`[data-x3d="${id}"]`);
-    x3d[id] = GX.mountTerrain(el, { dem: c.dem(), camera: "explore", drapes: c.drapes, elevation: true, relief: true, wire: false, exaggeration: c.exaggeration, mode: state.exploreMode });
+    x3d[id] = GX.mountTerrain(el, { dem: c.dem(), camera: "explore", drapes: c.drapes, elevation: true, wire: true, wireOverlay: false, exaggeration: c.exaggeration, mode: state.exploreMode });
   }
   function setExplore(site, mode) {
     if (site && site !== state.explore) {
@@ -1157,7 +1145,7 @@
     const io = new IntersectionObserver((en) => {
       if (!en[0].isIntersecting) return;
       io.disconnect();
-      mount("footer", ft, { camera: "footer", surface: slope, zoom: 1.05 });
+      mount("footer", ft, { camera: "footer", drapes: { slope, roughness: "assets/img/moon-roughness-color.webp" }, elevation: true, zoom: 1.05 });
       if (terrains.footer && terrains.footer.api.hasSurface) restartCycle();
     }, { rootMargin: "900px 0px" });
     io.observe(ft);
@@ -1170,7 +1158,8 @@
     if (REDUCED) return;
     cycleTimer = setInterval(() => {
       const tr = terrains.footer; if (!tr) return;
-      setTerrainMode("footer", tr.mode === "wire" ? "surface" : "wire", true);
+      const looks = ["wire"].concat(tr.api.modes || []);       // wireframe → slope → roughness → elevation → …
+      setTerrainMode("footer", looks[(looks.indexOf(tr.mode) + 1) % looks.length], true);
     }, 2000);
   }
   function setTerrainMode(id, m, auto) {
