@@ -197,10 +197,11 @@ GX.SITES = [
         map: "moonSlopeLayout"
       },
       roughness: {
-        headline: "1.06", headlineLabel: K.meanRough,
-        facts: [{ k: K.mean, v: "1.0552" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "29.1604" }],
+        headline: "5.06", headlineLabel: K.meanRough,
+        facts: [{ k: K.mean, v: "5.0552" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "29.1604" }, { k: K.sd, v: "2.7205" }],
+        evidence: { en: "QGIS statistics report (Shackleton_Roughness)", ar: "تقرير إحصاءات QGIS (Shackleton_Roughness)" },
         method: { en: "QGIS terrain roughness analysis", ar: "تحليل خشونة التضاريس باستخدام QGIS" },
-        note: { en: "Preliminary; units and comparability to be verified.", ar: "أولي؛ الوحدات وقابلية المقارنة قيد التحقق." },
+        note: { en: "Preliminary; units and comparability to be verified. Mean taken from the QGIS statistics report (corrects 1.0552 in the Site info sheet).", ar: "أولي؛ الوحدات وقابلية المقارنة قيد التحقق. المتوسط مأخوذ من تقرير إحصاءات QGIS (تصحيحًا للقيمة 1.0552 في ورقة معلومات الموقع)." },
         map: "moonRough"
       },
       geology: {
@@ -211,7 +212,7 @@ GX.SITES = [
     },
     profile: true,
     analogs: [HAUGHTON, null],
-    bars: { slopeMean: 20.66, flatShare: 18.81, roughMean: 1.0552, roughMax: 29.1604 }
+    bars: { slopeMean: 20.66, flatShare: 18.81, roughMean: 5.0552, roughMax: 29.1604 }
   },
 
   marsSite({
