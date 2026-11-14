@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GROUND X — 3D terrain (Three.js)
+   GROUND X, 3D terrain (Three.js)
    Renders a real elevation grid (Shackleton Site04 or Haughton) as a
    wireframe, as the team's slope-class map draped over the surface, or as
    shaded relief. Interaction is drag-only: hold and move to rotate / tilt.

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GROUND X — app
+   GROUND X, app
    Renders all content from data.js / i18n.js and drives GSAP animations.
    ========================================================================== */
 (function () {
@@ -91,7 +91,7 @@
     $("#langToggle").setAttribute("aria-label", t("switchTo"));
     $("#themeToggle").setAttribute("aria-label", t(document.documentElement.dataset.theme === "light" ? "theme.toDark" : "theme.toLight"));
     $("#lightbox [data-close]").setAttribute("aria-label", t("common.close"));
-    document.title = state.lang === "ar" ? "Ground X — توائم كوكبية" : "Ground X — Planetary Twins";
+    document.title = state.lang === "ar" ? "Ground X · توائم كوكبية" : "Ground X · Planetary Twins";
   }
 
   function renderMarquee() {
@@ -186,7 +186,7 @@
   function renderCompare() {
     const s = site();
     const a = s.analogs[state.analog];
-    const W = s.body; // "moon" | "mars" — colours the site side
+    const W = s.body; // "moon" | "mars", colours the site side
     const siteSwitch = `
       <div class="site-switch" role="tablist" aria-label="${esc(t("nav.sites"))}">
         ${["moon", "mars"].map((b) => `
@@ -277,7 +277,7 @@
         </div>`;
     }).join("");
 
-    // number bars — only when both sides have comparable numbers
+    // number bars, only when both sides have comparable numbers
     let barsBlock = "";
     if (s.bars && a.bars) {
       const BARS = [["slopeMean", "bar.slopeMean", 2, false], ["flatShare", "bar.flatShare", 2, false], ["roughMean", "bar.roughMean", 4, true], ["roughMax", "bar.roughMax", 4, true]];
@@ -295,7 +295,7 @@
       }).join("") + `</div>`;
     }
 
-    // map viewer — only when both sides have rendered maps
+    // map viewer, only when both sides have rendered maps
     let mapsBlock = "";
     if (s.maps && s.maps.slope && a.maps && a.maps.slope) {
       const layerImg = (o, layer) => layer === "photo" ? o.photo : o.maps[layer];
@@ -303,7 +303,7 @@
         <figure class="map" data-world="${world}">
           ${["photo", "slope", "roughness"].map((ly) => {
             const k = layerImg(o, ly);
-            return k ? `<img src="${img(k).src}" alt="${esc(L(o.name))} — ${esc(t("layer." + ly))}" data-layer="${ly}" data-key="${k}" class="${ly === state.layer ? "is-on" : ""}" loading="lazy">` : "";
+            return k ? `<img src="${img(k).src}" alt="${esc(L(o.name))}, ${esc(t("layer." + ly))}" data-layer="${ly}" data-key="${k}" class="${ly === state.layer ? "is-on" : ""}" loading="lazy">` : "";
           }).join("")}
           <button type="button" data-zoom-map aria-label="${esc(t("compare.viewMap"))}" data-cursor></button>
           <figcaption><span>${esc(L(o.name))}</span>${o.area ? `<span>${esc(L(o.area))}</span>` : ""}</figcaption>
@@ -321,7 +321,7 @@
         <div class="maps">${mapFig(s, W)}${mapFig(a, "earth")}</div>`;
     }
 
-    // verdict — whatever the team has written so far; missing parts show as pending
+    // verdict, whatever the team has written so far; missing parts show as pending
     const v = (key, txt) => `<article><h4><i></i>${esc(t(key))}</h4><p>${txt ? esc(L(txt)) : `<span class="tag tag--pend">${esc(t("common.pending"))}</span>`}</p></article>`;
 
     $("#compareRoot").innerHTML = switcher + `
@@ -894,7 +894,7 @@
         .from(".twins__hint", { y: 16, autoAlpha: 0, duration: .9, ease: "expo.out" }, 1.4)
         .from(".hero__side", { clipPath: "inset(0 0 100% 0 round 14px)", duration: 1.2, ease: "expo.inOut" }, .25);
 
-      // techy "decode" effect on small caps labels (Latin only — Arabic letters must stay joined)
+      // techy "decode" effect on small caps labels (Latin only, Arabic letters must stay joined)
       const scramble = (el, delay = 0) => {
         if (isAr || !window.ScrambleTextPlugin || !el || !el.dataset.i18n) return;
         const txt = t(el.dataset.i18n);
@@ -947,7 +947,7 @@
       gsap.ticker.add(marqueeTick);
 
       /* --- section titles & leads --- */
-      // Titles are split into words lazily (just before they scroll into view) — splitting them all
+      // Titles are split into words lazily (just before they scroll into view), splitting them all
       // up front forces many page re-layouts and made the first frame very slow.
       $$(".section__title[data-split]").forEach((el) => {
         gsap.set(el, { autoAlpha: 0 });
@@ -1193,7 +1193,7 @@
     if (!auto && id === "footer") restartCycle();
   }
 
-  /* Fixed side ruler — an interactive scrubber showing page progress.
+  /* Fixed side ruler, an interactive scrubber showing page progress.
      Click anywhere on it to glide there, drag to scrub, hover a mark to see the section, arrow keys work too. */
   function bindRuler() {
     const el = $("#ruler");

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GROUND X — 3D globes for the hero (Three.js)
+   GROUND X, 3D globes for the hero (Three.js)
    Each sphere follows the size/position of its .orb element, so layout and
    GSAP animations (entrance, float, scroll) stay in CSS/app.js.
    Drag a planet to spin it (with inertia); it keeps slowly rotating on its own.

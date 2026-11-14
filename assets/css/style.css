@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GROUND X — styles
+   GROUND X, styles
    Warm charcoal + khaki/mint survey-instrument look (inspired by geospace.hr),
    GSAP motion. Logical properties throughout so the same rules work in LTR
    (English) and RTL (Arabic).
@@ -572,7 +572,7 @@ html:not(.has-cursor) .cursor, html:not(.has-cursor) .cursor-ring { display: non
 }
 
 /* ==========================================================================
-   SURVEY LAYER — inspired by geospace.hr
+   SURVEY LAYER, inspired by geospace.hr
    Wide display type, khaki + mint two-tone headings, image pills in the
    headline, real-terrain wireframes, instrument-style labels and ruler.
    (Placed last so it overrides the base rules; carries its own breakpoints.)
@@ -765,7 +765,7 @@ html[dir="rtl"] .ruler__lab { font-family: var(--font); letter-spacing: 0; }
 }
 
 /* ==========================================================================
-   GLASS LAYER — frosted panels over slow ambient light, interactive controls,
+   GLASS LAYER, frosted panels over slow ambient light, interactive controls,
    ruler scrubber, elevation profile and micro-interactions.
    ========================================================================== */
 :root {
@@ -993,7 +993,7 @@ html[dir="rtl"] .analog__body h3 { font-family: var(--font); text-transform: non
 /* ==========================================================================
    PERFORMANCE: frosted blur only on the fixed nav and the lightbox.
    (backdrop-filter on panels inside scrolling content must re-blur every
-   frame while scrolling — the main cause of dropped frames.) Panels keep
+   frame while scrolling, the main cause of dropped frames.) Panels keep
    the glass look with translucent gradients + highlights instead.
    ========================================================================== */
 .glass, .chart, .seg, .world-tabs, .sitebar, .ruler, .orb__tag, .twins__badge, .site-card__code,
@@ -1018,7 +1018,7 @@ html[dir="rtl"] .analog__body h3 { font-family: var(--font); text-transform: non
 .ruler__hint { font-size: 9.5px; line-height: 1.3; letter-spacing: .1em; }
 
 /* ==========================================================================
-   SIDE PANEL v3 — slim glowing rail, section dots, contents on hover
+   SIDE PANEL v3, slim glowing rail, section dots, contents on hover
    ========================================================================== */
 .ruler { width: auto; inset-inline-start: 24px; padding: 0; background: none; border: 0; box-shadow: none; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .ruler__num { font-size: 11px; color: var(--dim); letter-spacing: .04em; direction: ltr; }
@@ -1094,7 +1094,7 @@ html[dir="rtl"] .ruler__toc { transform: translate(8px, -50%); }
 .ruler:hover .ruler__tick span { display: none; }
 
 /* ==========================================================================
-   SIDE RAIL v4 — quiet instrument ruler (no pop-ups)
+   SIDE RAIL v4, quiet instrument ruler (no pop-ups)
    ========================================================================== */
 .ruler { inset-inline-start: 26px; gap: 0; }
 .ruler__num, .ruler__toc { display: none !important; }
@@ -1135,7 +1135,7 @@ html[dir="rtl"] .explore__legend .grad { transform: scaleX(-1); }
 @media (max-width: 860px) { .explore__ui { gap: 8px; } #exploreMode button, #exploreSite button { padding: 8px 12px; font-size: 12.5px; } }
 
 /* ==========================================================================
-   LIGHT THEME — warm paper, ink text, deeper green accent
+   LIGHT THEME, warm paper, ink text, deeper green accent
    ========================================================================== */
 html[data-theme="light"] {
   color-scheme: light;

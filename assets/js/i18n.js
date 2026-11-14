@@ -1,4 +1,4 @@
-/* UI strings — every key exists in both languages. Digits stay Western (0-9). */
+/* UI strings, every key exists in both languages. Digits stay Western (0-9). */
 window.GX = window.GX || {};
 
 GX.STR = {
@@ -42,7 +42,7 @@ GX.STR = {
     "gallery.all": "All",
 
     "hero.title": "Every world {moon}|has a [[twin]]|{earth} on [[Earth]].",
-    "hero.lead": "We match sites on the Moon and Mars with geologically similar places on Earth — two Earth twins for every site — compare them criterion by criterion, and pick the rovers built for that ground.",
+    "hero.lead": "We match sites on the Moon and Mars with geologically similar places on Earth (two Earth twins for every site), compare them criterion by criterion, and pick the rovers built for that ground.",
     "hero.cta1": "See the first comparison",
     "hero.cta2": "How it works",
     "hero.moon": "Moon",
@@ -82,7 +82,7 @@ GX.STR = {
     "compare.title": "Side by side. [[Criterion by criterion.]]",
     "compare.lead": "Each criterion opens to show the values, the method, the status and the map behind it.",
     "compare.twin": "Twin",
-    "compare.pendingTwin": "Second Earth twin — research in progress",
+    "compare.pendingTwin": "Second Earth twin, research in progress",
     "compare.pendingTwinD": "This slot is reserved for the second Earth analog of this site.",
     "compare.similarity": "Similarity",
     "compare.difference": "Difference",
@@ -97,7 +97,7 @@ GX.STR = {
     "compare.viewMap": "View map",
     "compare.byNumbers": "By the numbers",
     "compare.mapsTitle": "Same legend, two worlds",
-    "compare.mapsLead": "Maps rendered directly from the team's slope and roughness rasters. Areas differ in size — compare patterns, not pixels.",
+    "compare.mapsLead": "Maps rendered directly from the team's slope and roughness rasters. Areas differ in size, compare patterns, not pixels.",
     "compare.verdict": "Verdict",
     "compare.similar": "Main similarity",
     "compare.different": "Main difference",
@@ -120,7 +120,7 @@ GX.STR = {
     "bar.flatShare": "Area with slope < 10° (%)",
     "bar.roughMean": "Mean roughness",
     "bar.roughMax": "Maximum roughness",
-    "bar.prelim": "preliminary — comparability to be verified",
+    "bar.prelim": "preliminary, comparability to be verified",
 
     "layer.photo": "Photo",
     "layer.slope": "Slope",
@@ -144,17 +144,17 @@ GX.STR = {
     "rovers.tap": "Tap the rover",
     "rovers.testSite": "Earth testing site",
     "rovers.recommended": "Recommended vehicle",
-    "rovers.illustration": "Illustration — the vehicle has not been selected yet.",
+    "rovers.illustration": "Illustration, the vehicle has not been selected yet.",
     "rovers.why": "Why it fits",
     "rovers.whyPending": "The fit assessment will connect the vehicle's maximum operating slope and obstacle capability to the slope and roughness values above.",
     "rovers.context": "Terrain the rover must handle",
 
     "evidence.title": "Show your [[working]].",
-    "evidence.lead": "Maps and screenshots from the team's work in QGIS, NASA Moon Trek and Mars Trek, ArcticDEM and Google Earth Engine. Filter by place; tap any image to enlarge.",
+    "evidence.lead": "Maps and screenshots from the team's work in QGIS, NASA Moon Trek and Mars Trek, ArcticDEM and satellite terrain analysis. Filter by place; tap any image to enlarge.",
 
     "method.title": "Method & [[honesty notes]]",
     "method.items": [
-      "All values come from the research team's dataset and are shown exactly as supplied — nothing is recalculated.",
+      "All values come from the research team's dataset and are shown exactly as supplied, nothing is recalculated.",
       "Slope classes use the same colours on both worlds: green 0–10°, yellow >10–20°, red >20°.",
       "Roughness values: units and comparability between the Moon and Earth rasters are still being verified.",
       "Similarity and difference percentages stay \"Pending\" until a documented scoring method is in place.",
@@ -168,7 +168,7 @@ GX.STR = {
     "common.close": "Close",
     "common.notSupplied": "Not yet supplied",
 
-    "footer.line": "Ground X — comparing other worlds with their Earth twins.",
+    "footer.line": "Ground X: comparing other worlds with their Earth twins.",
     "footer.top": "Back to top ↑",
     "kicker.profile": "Elevation profile",
     "kicker.method": "Method",
@@ -226,7 +226,7 @@ GX.STR = {
     "gallery.all": "الكل",
 
     "hero.title": "لكل عالمٍ {moon}|[[توأمٌ]]|{earth} على [[الأرض]].",
-    "hero.lead": "نطابق مواقع على القمر والمريخ مع أماكن مشابهة جيولوجيًا على الأرض — توأمان أرضيان لكل موقع — ونقارنها معيارًا بمعيار، ثم نختار المركبات الجوّالة المصممة لتلك التضاريس.",
+    "hero.lead": "نطابق مواقع على القمر والمريخ مع أماكن مشابهة جيولوجيًا على الأرض (توأمان أرضيان لكل موقع)، ونقارنها معيارًا بمعيار، ثم نختار المركبات الجوّالة المصممة لتلك التضاريس.",
     "hero.cta1": "شاهد المقارنة الأولى",
     "hero.cta2": "كيف يعمل",
     "hero.moon": "القمر",
@@ -266,7 +266,7 @@ GX.STR = {
     "compare.title": "جنبًا إلى جنب. [[معيارًا بمعيار.]]",
     "compare.lead": "افتح كل معيار لترى القيم والمنهجية والحالة والخريطة الداعمة له.",
     "compare.twin": "التوأم",
-    "compare.pendingTwin": "التوأم الأرضي الثاني — البحث جارٍ",
+    "compare.pendingTwin": "التوأم الأرضي الثاني، البحث جارٍ",
     "compare.pendingTwinD": "هذه الخانة محجوزة للنظير الأرضي الثاني لهذا الموقع.",
     "compare.similarity": "نسبة التشابه",
     "compare.difference": "نسبة الاختلاف",
@@ -281,7 +281,7 @@ GX.STR = {
     "compare.viewMap": "عرض الخريطة",
     "compare.byNumbers": "بالأرقام",
     "compare.mapsTitle": "مفتاح واحد، عالمان",
-    "compare.mapsLead": "خرائط مستخرجة مباشرة من بيانات الانحدار والخشونة الخاصة بالفريق. تختلف المساحات في الحجم — قارن الأنماط لا البكسلات.",
+    "compare.mapsLead": "خرائط مستخرجة مباشرة من بيانات الانحدار والخشونة الخاصة بالفريق. تختلف المساحات في الحجم، قارن الأنماط لا البكسلات.",
     "compare.verdict": "الخلاصة",
     "compare.similar": "أوجه التشابه الرئيسية",
     "compare.different": "أوجه الاختلاف الرئيسية",
@@ -304,7 +304,7 @@ GX.STR = {
     "bar.flatShare": "المساحة بانحدار أقل من 10° (%)",
     "bar.roughMean": "متوسط الخشونة",
     "bar.roughMax": "أقصى خشونة",
-    "bar.prelim": "أولي — قابلية المقارنة قيد التحقق",
+    "bar.prelim": "أولي، قابلية المقارنة قيد التحقق",
 
     "layer.photo": "صورة",
     "layer.slope": "الانحدار",
@@ -328,17 +328,17 @@ GX.STR = {
     "rovers.tap": "اضغط على المركبة",
     "rovers.testSite": "موقع الاختبار على الأرض",
     "rovers.recommended": "المركبة المقترحة",
-    "rovers.illustration": "رسم توضيحي — لم يتم اختيار المركبة بعد.",
+    "rovers.illustration": "رسم توضيحي، لم يتم اختيار المركبة بعد.",
     "rovers.why": "سبب الملاءمة",
     "rovers.whyPending": "سيربط تقييم الملاءمة بين أقصى انحدار تشغيلي للمركبة وقدرتها على تجاوز العوائق، وبين قيم الانحدار والخشونة أعلاه.",
     "rovers.context": "التضاريس التي يجب أن تتعامل معها المركبة",
 
     "evidence.title": "أظهر [[خطوات عملك]].",
-    "evidence.lead": "خرائط ولقطات من عمل الفريق في QGIS وNASA Moon Trek وMars Trek وArcticDEM وGoogle Earth Engine. صنّفها حسب المكان؛ واضغط على أي صورة لتكبيرها.",
+    "evidence.lead": "خرائط ولقطات من عمل الفريق في QGIS وNASA Moon Trek وMars Trek وArcticDEM وتحليل التضاريس من الأقمار الصناعية. صنّفها حسب المكان؛ واضغط على أي صورة لتكبيرها.",
 
     "method.title": "المنهجية و[[ملاحظات الأمانة العلمية]]",
     "method.items": [
-      "جميع القيم مأخوذة من بيانات فريق البحث وتُعرض كما وردت تمامًا — دون إعادة حساب.",
+      "جميع القيم مأخوذة من بيانات فريق البحث وتُعرض كما وردت تمامًا، دون إعادة حساب.",
       "تستخدم فئات الانحدار الألوان نفسها في العالمين: الأخضر 0–10°، الأصفر >10–20°، الأحمر >20°.",
       "قيم الخشونة: ما زال التحقق جاريًا من الوحدات ومن قابلية المقارنة بين بيانات القمر والأرض.",
       "تبقى نسب التشابه والاختلاف \"قيد الانتظار\" حتى تُعتمد منهجية تقييم موثقة.",
@@ -352,7 +352,7 @@ GX.STR = {
     "common.close": "إغلاق",
     "common.notSupplied": "لم تُقدَّم بعد",
 
-    "footer.line": "Ground X — نقارن العوالم الأخرى بتوائمها على الأرض.",
+    "footer.line": "Ground X: نقارن العوالم الأخرى بتوائمها على الأرض.",
     "footer.top": "العودة للأعلى ↑",
     "kicker.profile": "مقطع الارتفاع",
     "kicker.method": "المنهجية",
