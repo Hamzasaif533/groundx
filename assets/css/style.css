@@ -1085,3 +1085,44 @@ html[dir="rtl"] .ruler__toc { transform: translate(8px, -50%); }
 .ruler__toc button.is-active { color: var(--earth); }
 .ruler__toc button.is-active b { color: var(--earth); }
 .ruler:hover .ruler__tick span { display: none; }
+
+/* ==========================================================================
+   SIDE RAIL v4 — quiet instrument ruler (no pop-ups)
+   ========================================================================== */
+.ruler { inset-inline-start: 26px; gap: 0; }
+.ruler__num, .ruler__toc { display: none !important; }
+.ruler__track { width: 26px; height: min(42vh, 320px); }
+.ruler__rail { inset-inline-start: 6px; width: 1px; background: rgba(196, 194, 184, .22); }
+/* faint minor ticks like a measuring scale */
+.ruler__track::after { content: ""; position: absolute; top: 0; bottom: 0; inset-inline-start: 2px; width: 4px; background: repeating-linear-gradient(to bottom, rgba(196, 194, 184, .22) 0 1px, transparent 1px 10px); pointer-events: none; }
+.ruler__fill { inset-inline-start: 6px; width: 1px; background: var(--earth); box-shadow: 0 0 8px rgba(215, 255, 197, .5); }
+/* section ticks: longer dashes */
+.ruler__tick { width: 26px; height: 12px; margin-top: -6px; }
+.ruler__tick i, .ruler__tick span { display: none !important; }
+.ruler__tick::after { content: ""; position: absolute; top: 50%; inset-inline-start: 0; width: 13px; height: 1px; background: rgba(196, 194, 184, .5); transition: background .3s, width .4s var(--ease); }
+.ruler__tick.is-passed::after { background: rgba(215, 255, 197, .55); }
+.ruler__tick.is-active::after, .ruler__tick:hover::after { background: var(--earth); width: 18px; }
+/* marker: a short mint bar with the current section number */
+.ruler__mark { inset-inline-start: 0; width: 20px; height: 2px; margin-top: -1px; border-radius: 2px; background: var(--earth); box-shadow: 0 0 10px rgba(215, 255, 197, .6); }
+.ruler:hover .ruler__mark, .ruler.is-dragging .ruler__mark { box-shadow: 0 0 14px rgba(215, 255, 197, .85); }
+.ruler__cur { position: absolute; inset-inline-start: 26px; top: 50%; transform: translateY(-50%); font-size: 10.5px; font-weight: 500; color: var(--earth); letter-spacing: .04em; direction: ltr; }
+.ruler:hover .ruler__rail { background: rgba(196, 194, 184, .4); }
+
+/* ==========================================================================
+   SEGMENTED CONTROLS WITH A SLIDING HIGHLIGHT (3D explorer)
+   ========================================================================== */
+#exploreSite, #exploreMode { position: relative; }
+#exploreSite button, #exploreMode button { position: relative; z-index: 1; background: transparent !important; transition: color .4s var(--ease); }
+#exploreSite button.is-active, #exploreMode button.is-active { color: #232322; }
+.seg__ink { position: absolute; left: 0; top: 0; z-index: 0; border-radius: 999px; background: var(--text); pointer-events: none; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .6); }
+#exploreMode .seg__ink { background: var(--earth); }
+.explore__legend .grad { display: inline-block; width: 90px; height: 8px; border-radius: 999px; border: 0; }
+.explore__legend .grad--roughness { background: linear-gradient(90deg, #2b2a28, #6e6454, #bfb29a, #d7ffc5, #faffF5); }
+.explore__legend .grad--elevation { background: linear-gradient(90deg, #183456, #246876, #769668, #c8aa68, #de8250, #f8f0e4); }
+html[dir="rtl"] .explore__legend .grad { transform: scaleX(-1); }
+
+/* rail only on wide screens; explorer buttons wrap instead of overflowing */
+@media (max-width: 1279px) { .ruler { display: none !important; } }
+#exploreSite, #exploreMode { flex-wrap: wrap; border-radius: 22px; }
+#exploreSite button, #exploreMode button { white-space: nowrap; }
+@media (max-width: 860px) { .explore__ui { gap: 8px; } #exploreMode button, #exploreSite button { padding: 8px 12px; font-size: 12.5px; } }

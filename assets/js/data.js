@@ -320,6 +320,7 @@ GX.SOURCES = [
   { label: { en: "Frigeri et al. (2018) The ScanMars radar onboard AMADEE-18 analog mission to Mars. EPSC2018-300", ar: "Frigeri وآخرون (2018): رادار ScanMars على متن مهمة AMADEE-18. EPSC2018-300" }, url: "https://meetingorganizer.copernicus.org/EPSC2018/EPSC2018-300-1.pdf" },
   { label: { en: "Sejkora, Sams & Groemer (2018) Geodata workflow for the AMADEE-18 Mars analog mission. EPSC2018-442", ar: "Sejkora وSams وGroemer (2018): سير عمل البيانات الجغرافية لمهمة AMADEE-18. EPSC2018-442" }, url: "https://meetingorganizer.copernicus.org/EPSC2018/EPSC2018-442.pdf" },
   { label: { en: "Google Earth Engine — Oman terrain analysis", ar: "Google Earth Engine — تحليل تضاريس عُمان" }, url: "https://earthengine.google.com/" },
+  { label: { en: "Sentinel-2 cloudless 2016 by EOX IT Services (CC BY 4.0), contains modified Copernicus Sentinel data — Haughton satellite layer", ar: "Sentinel-2 cloudless 2016 من EOX ‏(CC BY 4.0)، يتضمن بيانات Copernicus Sentinel معدّلة — طبقة القمر الصناعي لهوتون" }, url: "https://s2maps.eu" },
   { label: { en: "3D globe textures: Solar System Scope (CC BY 4.0), based on NASA data", ar: "خامات الكرات ثلاثية الأبعاد: Solar System Scope ‏(CC BY 4.0)، مبنية على بيانات ناسا" }, url: "https://www.solarsystemscope.com/textures/" },
   { label: { en: "Earth DEM original source — pending verification", ar: "المصدر الأصلي لنموذج ارتفاع الأرض — قيد التحقق" }, url: null }
 ];

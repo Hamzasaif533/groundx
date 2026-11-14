@@ -594,7 +594,7 @@
     rollButtons();
     renderTctl();
     renderMarquee(); renderSteps(); renderSitebar(); renderCounts(); renderSites(); renderCompare();
-    renderProfile(); renderExplore(); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
+    renderProfile(); renderExplore(false); renderAnalogs(); renderRover(); renderGallery(); renderMethod();
     moveTabInk(false);
     if (window.GXRuler) window.GXRuler.layout();
   }
@@ -737,7 +737,7 @@
     dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
 
     $("#langToggle").addEventListener("click", () => setLang(state.lang === "en" ? "ar" : "en"));
-    window.addEventListener("resize", () => moveTabInk(false));
+    window.addEventListener("resize", () => { moveTabInk(false); inkTo($("#exploreSite"), false); inkTo($("#exploreMode"), false); });
 
     // nav: background after scroll, hide on scroll down
     let last = 0;
@@ -996,12 +996,11 @@
       gsap.timeline({ scrollTrigger: { trigger: ".footer", start: "top 92%" } })
         .from(fchars, { yPercent: 105, duration: 1.2, ease: "expo.out", stagger: { each: .06, from: "start" } })
         .from(".footer__x .fx", { yPercent: 105, duration: 1.2, ease: "expo.out" }, fchars.length * .06);
-      // the X spins once each time the pointer enters it
+      // the X lifts like the other letters
       const fxEl = $(".footer__x .fx");
       fxEl.addEventListener("pointerenter", () => {
         fxEl.classList.add("is-hot");
         gsap.to(fxEl, { yPercent: -14, duration: .35, ease: "power3.out", overwrite: "auto" });
-        gsap.to(fxEl, { rotation: "+=360", duration: .9, ease: "power3.inOut" });
       });
       fxEl.addEventListener("pointerleave", () => {
         fxEl.classList.remove("is-hot");
@@ -1069,32 +1068,60 @@
   // Shackleton: 16 world units ≈ 16 km, so ×1.1 is (almost) true scale.
   // Haughton: 16 units = 20 km, so a height factor of 8 shows as ×10 vertical exaggeration.
   const EXPLORE = {
-    shackleton: { site: "shackleton", dem: () => window.SHACKLETON_DEM, surface: "assets/img/moon-slope.webp", exaggeration: 1.1, exag: "×1.1",
-      area: { en: "Site04 tile ≈ 16 × 16 km", ar: "مربع Site04 ≈ 16 × 16 كم" }, data: { en: "NASA Site04 DEM · LRO LOLA · 5 m/px", ar: "نموذج ناسا Site04 · LRO LOLA · 5 م/بكسل" }, tex: "moon" },
-    haughton: { site: "haughton", dem: () => window.HAUGHTON_DEM, surface: "assets/img/earth-slope.webp", exaggeration: 8, exag: "×10",
-      area: { en: "10 km analysis buffer (20 km across)", ar: "نطاق تحليل 10 كم (قطر 20 كم)" }, data: { en: "Team-processed DEM · 2 m", ar: "نموذج ارتفاع عالجه الفريق · 2 م" }, tex: "earth" }
+    shackleton: { dem: () => window.SHACKLETON_DEM, exaggeration: 1.1, exag: "×1.1", tex: "moon",
+      drapes: { slope: "assets/img/moon-slope.webp", roughness: "assets/img/moon-roughness-color.webp" },
+      area: { en: "Site04 tile ≈ 16 × 16 km", ar: "مربع Site04 ≈ 16 × 16 كم" }, data: { en: "NASA Site04 DEM · LRO LOLA · 5 m/px", ar: "نموذج ناسا Site04 · LRO LOLA · 5 م/بكسل" } },
+    haughton: { dem: () => window.HAUGHTON_DEM, exaggeration: 8, exag: "×10", tex: "earth",
+      drapes: { satellite: "assets/img/haughton-satellite.webp", slope: "assets/img/earth-slope.webp", roughness: "assets/img/earth-roughness-color.webp" },
+      area: { en: "10 km analysis buffer (20 km across)", ar: "نطاق تحليل 10 كم (قطر 20 كم)" }, data: { en: "Team-processed DEM · 2 m", ar: "نموذج ارتفاع عالجه الفريق · 2 م" } }
   };
+  const MODES = ["satellite", "slope", "roughness", "elevation", "relief"];
   const x3d = {};
-  state.explore = "shackleton"; state.exploreMode = "wire";
+  state.explore = "shackleton"; state.exploreMode = "slope";
   const exploreName = (id) => id === "haughton" ? L(GX.SITES[0].analogs[0].name) : L(GX.SITES[0].name);
-  function renderExplore() {
+  const modesFor = (id) => MODES.filter((m) => m === "elevation" || m === "relief" || (location.protocol !== "file:" && EXPLORE[id].drapes[m]));
+
+  /* sliding highlight behind the active button of a segmented control */
+  const INK = {};
+  function inkTo(seg, animate = true) {
+    if (!seg) return;
+    let ink = seg.querySelector(".seg__ink");
+    if (!ink) { ink = document.createElement("i"); ink.className = "seg__ink"; ink.setAttribute("aria-hidden", "true"); seg.prepend(ink); }
+    const act = seg.querySelector("button.is-active");
+    if (!act) return;
+    const to = { x: act.offsetLeft, y: act.offsetTop, width: act.offsetWidth, height: act.offsetHeight };
+    const from = INK[seg.id];
+    if (hasGSAP && animate && from && !REDUCED) gsap.fromTo(ink, from, { ...to, duration: .6, ease: "expo.out", overwrite: true });
+    else if (hasGSAP) gsap.set(ink, to);
+    else Object.assign(ink.style, { transform: `translate(${to.x}px,${to.y}px)`, width: to.width + "px", height: to.height + "px" });
+    INK[seg.id] = to;
+  }
+
+  function renderExplore(animate) {
     const box = $("#exploreSite"); if (!box) return;
+    const modes = modesFor(state.explore);
+    if (!modes.includes(state.exploreMode)) state.exploreMode = modes.includes("slope") ? "slope" : modes[0];
     box.innerHTML = Object.keys(EXPLORE).map((id) => `<button type="button" role="tab" data-xsite="${id}" class="${id === state.explore ? "is-active" : ""}" aria-selected="${id === state.explore}"><i class="globe tex-${EXPLORE[id].tex}"></i>${esc(exploreName(id))}</button>`).join("");
-    const canSlope = location.protocol !== "file:";
-    $("#exploreMode").innerHTML = ["wire", "slope", "relief"].filter((m) => m !== "slope" || canSlope).map((m) => `<button type="button" role="tab" data-xmode="${m}" class="${m === state.exploreMode ? "is-active" : ""}" aria-selected="${m === state.exploreMode}">${esc(t("explore." + m))}</button>`).join("");
+    $("#exploreMode").innerHTML = modes.map((m) => `<button type="button" role="tab" data-xmode="${m}" class="${m === state.exploreMode ? "is-active" : ""}" aria-selected="${m === state.exploreMode}">${esc(t("explore." + m))}</button>`).join("");
     const c = EXPLORE[state.explore];
     $("#exploreInfo").innerHTML = `
       <div><dt>${esc(t("explore.area"))}</dt><dd>${esc(L(c.area))}</dd></div>
       <div><dt>${esc(t("explore.data"))}</dt><dd>${esc(L(c.data))}</dd></div>
       <div><dt>${esc(t("explore.exag"))}</dt><dd>${num(c.exag)}</dd></div>`;
-    $("#exploreLegend").innerHTML = state.exploreMode === "slope"
-      ? `<span><i style="background:var(--s-flat)"></i>${num(t("legend.flat"))}</span><span><i style="background:var(--s-mid)"></i>${num(t("legend.mid"))}</span><span><i style="background:var(--s-steep)"></i>${num(t("legend.steep"))}</span>` : "";
+    const grad = (from, to, lab) => `<span><span class="grad grad--${state.exploreMode}"></span>${esc(lab)}</span>`;
+    const legend = {
+      slope: `<span><i style="background:var(--s-flat)"></i>${num(t("legend.flat"))}</span><span><i style="background:var(--s-mid)"></i>${num(t("legend.mid"))}</span><span><i style="background:var(--s-steep)"></i>${num(t("legend.steep"))}</span>`,
+      roughness: grad(0, 1, t("legend.rough")),
+      elevation: grad(0, 1, t("explore.lowHigh")),
+      satellite: `<span>${esc(t("explore.satCredit"))}</span>`
+    }[state.exploreMode] || "";
+    $("#exploreLegend").innerHTML = legend;
+    requestAnimationFrame(() => { inkTo(box, animate); inkTo($("#exploreMode"), animate); });
   }
   function mountExplore(id) {
     if (x3d[id] || !GX.mountTerrain) return;
     const c = EXPLORE[id], el = $(`[data-x3d="${id}"]`);
-    x3d[id] = GX.mountTerrain(el, { dem: c.dem(), camera: "explore", surface: c.surface, relief: true, exaggeration: c.exaggeration });
-    if (x3d[id]) x3d[id].setMode(state.exploreMode === "slope" ? "surface" : state.exploreMode);
+    x3d[id] = GX.mountTerrain(el, { dem: c.dem(), camera: "explore", drapes: c.drapes, elevation: true, relief: true, wire: false, exaggeration: c.exaggeration, mode: state.exploreMode });
   }
   function setExplore(site, mode) {
     if (site && site !== state.explore) {
@@ -1104,8 +1131,8 @@
       if (ANIM) gsap.fromTo(`[data-x3d="${site}"]`, { autoAlpha: 0, scale: .96 }, { autoAlpha: 1, scale: 1, duration: .8, ease: "expo.out" });
     }
     if (mode) state.exploreMode = mode;
-    Object.values(x3d).forEach((api) => api && api.setMode(state.exploreMode === "slope" ? "surface" : state.exploreMode));
-    renderExplore();
+    renderExplore(true);
+    Object.values(x3d).forEach((api) => api && api.setMode(state.exploreMode));
   }
   function bindExplore() {
     const sec = $("#explore"); if (!sec) return;
@@ -1161,7 +1188,7 @@
     const track = $(".ruler__track", el);
     const mark = $(".ruler__mark", el), fill = $(".ruler__fill", el), ticks = $(".ruler__ticks", el);
     const SECTIONS = [["#how", "nav.how"], ["#sites", "nav.sites"], ["#compare", "nav.compare"], ["#profile", "kicker.profile"], ["#explore", "explore.kicker"], ["#analogs", "nav.analogs"], ["#rovers", "nav.rovers"], ["#evidence", "nav.evidence"], ["#method", "kicker.method"]];
-    const cur = $(".ruler__cur", el), tot = $(".ruler__tot", el), toc = $(".ruler__toc", el);
+    const cur = $(".ruler__cur", el);
     let fracs = [], active = -2;
     const maxScroll = () => Math.max(1, (window.ScrollTrigger ? ScrollTrigger.maxScroll(window) : document.documentElement.scrollHeight - innerHeight));
     const progress = () => smoother ? smoother.progress : Math.min(1, Math.max(0, scrollY / maxScroll()));
@@ -1182,7 +1209,6 @@
       if (a !== active) {
         active = a;
         $$(".ruler__tick", ticks).forEach((b, i) => { b.classList.toggle("is-passed", i < a); b.classList.toggle("is-active", i === a); });
-        $$("button", toc).forEach((b, i) => b.classList.toggle("is-active", i === a));
         cur.textContent = String(Math.max(0, a + 1)).padStart(2, "0");
       }
     };
@@ -1197,10 +1223,9 @@
         const top = sec.getBoundingClientRect().top + (smoother ? smoother.scrollTop() : scrollY) - 70;
         const f = Math.min(1, Math.max(0, top / max));
         fracs.push(f);
-        return `<button type="button" class="ruler__tick" style="top:${(f * 100).toFixed(2)}%" data-goto="${sel}" aria-label="${esc(t(key))}"><i></i><span><b class="mono">${String(i + 1).padStart(2, "0")}</b>${esc(t(key))}</span></button>`;
+        return `<button type="button" class="ruler__tick" style="top:${(f * 100).toFixed(2)}%" data-goto="${sel}" aria-label="${esc(t(key))}" title="${esc(t(key))}"></button>`;
       }).join("");
-      tot.textContent = "/" + String(fracs.length).padStart(2, "0");
-      toc.innerHTML = SECTIONS.map(([sel, key], i) => `<button type="button" data-goto="${sel}"><b class="mono">${String(i + 1).padStart(2, "0")}</b>${esc(t(key))}</button>`).join("");
+
       active = -2; last = -1; update();
     };
     // drag / click on the track

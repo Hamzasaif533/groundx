@@ -3,7 +3,7 @@
    Renders a real elevation grid (Shackleton Site04 or Haughton) as a
    wireframe, as the team's slope-class map draped over the surface, or as
    shaded relief. Interaction is drag-only: hold and move to rotate / tilt.
-   Usage: GX.mountTerrain(el, { dem, camera, surface, relief, exaggeration, zoom })
+   Usage: GX.mountTerrain(el, { dem, camera, drapes: {name: imageUrl}, relief, elevation, wire, exaggeration, zoom })
    ========================================================================== */
 (function () {
   "use strict";
@@ -64,7 +64,9 @@
     lg.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
     lg.setAttribute("color", new T.Float32BufferAttribute(col, 3));
     const lineMat = new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.5, fog: true });
-    world.add(new T.LineSegments(lg, lineMat));
+    const wireMesh = new T.LineSegments(lg, lineMat);
+    const useWire = opts.wire !== false;
+    if (useWire) world.add(wireMesh);
 
     /* --- surface geometry (shared by the slope-map and relief modes) --- */
     const g = new T.PlaneGeometry(SIZE, dz * (R - 1), C - 1, R - 1);
@@ -83,10 +85,28 @@
     scene.add(new T.AmbientLight(0xffffff, 0.42));
 
     const layers = {};
-    if (opts.surface && canTexture) {
-      const tex = new T.TextureLoader().load(opts.surface);
+    const drapes = Object.assign({}, opts.drapes || {});
+    if (opts.surface) drapes.slope = opts.surface;            // older option name
+    if (canTexture) Object.entries(drapes).forEach(([name, url]) => {
+      const tex = new T.TextureLoader().load(url);
       tex.encoding = T.sRGBEncoding; tex.anisotropy = 8;
-      layers.surface = new T.Mesh(g, new T.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0 }));
+      layers[name] = new T.Mesh(g, new T.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0 }));
+    });
+    if (opts.elevation) {                                        // hypsometric colours generated from the grid itself
+      const cv = document.createElement("canvas"); cv.width = C; cv.height = R;
+      const cx = cv.getContext("2d"), im = cx.createImageData(C, R);
+      const stops = [[0, [24, 52, 86]], [.22, [36, 104, 118]], [.45, [118, 150, 104]], [.65, [200, 170, 104]], [.85, [222, 130, 80]], [1, [248, 240, 228]]];
+      for (let i = 0; i < R; i++) for (let j = 0; j < C; j++) {
+        const o = (i * C + j) * 4, v = val(i, j);
+        if (v == null) { im.data[o + 3] = 0; continue; }
+        const tt = (v - zMin) / span; let k = 1; while (k < stops.length - 1 && stops[k][0] < tt) k++;
+        const [a0, c0] = stops[k - 1], [a1, c1] = stops[k], f = (tt - a0) / (a1 - a0 || 1);
+        for (let q = 0; q < 3; q++) im.data[o + q] = c0[q] + (c1[q] - c0[q]) * f;
+        im.data[o + 3] = 255;
+      }
+      cx.putImageData(im, 0, 0);
+      const tex = new T.CanvasTexture(cv); tex.encoding = T.sRGBEncoding; tex.flipY = true;
+      layers.elevation = new T.Mesh(g, new T.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0 }));
     }
     if (opts.relief) layers.relief = new T.Mesh(g, new T.MeshLambertMaterial({ color: 0xbdb3a0, transparent: true, opacity: 0 }));
     Object.values(layers).forEach((m) => { m.visible = false; world.add(m); });
@@ -135,8 +155,9 @@
     el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
 
     const v = new T.Vector3(), base = P.pos.clone().sub(P.look);
-    let mode = "wire";
-    const blend = { wire: 1, surface: 0, relief: 0 };
+    let mode = opts.mode || (useWire ? "wire" : Object.keys(layers)[0]);
+    const blend = { wire: mode === "wire" ? 1 : 0 };
+    Object.keys(layers).forEach((m) => { blend[m] = m === mode ? 1 : 0; });
     function frame() {
       requestAnimationFrame(frame);
       const dt = Math.min(clock.getDelta(), 0.05);
@@ -155,16 +176,17 @@
       camera.lookAt(P.look);
       const k = Math.min(1, dt * 4);
       Object.keys(blend).forEach((m) => { blend[m] += ((mode === m ? 1 : 0) - blend[m]) * k; });
-      lineMat.opacity = 0.5 * blend.wire + 0.14 * (1 - blend.wire);
+      lineMat.opacity = useWire ? 0.5 * blend.wire + 0.14 * (1 - blend.wire) : 0;
       Object.entries(layers).forEach(([m, mesh]) => { mesh.visible = blend[m] > 0.01; mesh.material.opacity = blend[m]; });
       renderer.render(scene, camera);
     }
     frame();
 
     return {
-      setMode(m) { mode = (m === "wire" || layers[m]) ? m : "wire"; },
+      setMode(m) { if (m === "surface") m = "slope"; if ((m === "wire" && useWire) || layers[m]) mode = m; },
       get mode() { return mode; },
-      hasSurface: !!layers.surface
+      modes: Object.keys(layers),
+      hasSurface: !!layers.slope
     };
   };
 })();
