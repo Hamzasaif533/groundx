@@ -27,11 +27,14 @@ GX.IMG = {
   earthSlope: { src: "assets/img/earth-slope.webp", caption: { en: "Haughton Crater slope classes inside the 10 km analysis buffer. Green 0–10°, yellow >10–20°, red >20°.", ar: "فئات الانحدار لفوهة هوتون داخل نطاق التحليل (10 كم). الأخضر 0–10°، الأصفر >10–20°، الأحمر >20°." } },
   earthSlopeLayout: { src: "assets/img/earth-slope-layout.webp", caption: { en: "Team slope map: Haughton Crater, Slope Analysis (Earth analog), QGIS.", ar: "خريطة الانحدار للفريق: فوهة هوتون، تحليل الانحدار (نظير أرضي)، QGIS." } },
   earthRough: { src: "assets/img/earth-roughness.webp", caption: { en: "Haughton Crater terrain roughness inside the 10 km buffer. Brighter = rougher.", ar: "خشونة التضاريس لفوهة هوتون داخل نطاق 10 كم. الأفتح = الأكثر خشونة." } },
-  vallesPhoto: { src: "assets/img/mars/valles-marineris.webp", caption: { en: "Valles Marineris, NASA Mars Trek.", ar: "فاليس مارينيريس، NASA Mars Trek." } },
-  syrtisPhoto: { src: "assets/img/mars/syrtis-major.webp", caption: { en: "Syrtis Major, NASA Mars Trek.", ar: "سيرتس ميجور، NASA Mars Trek." } },
-  aoniaPhoto: { src: "assets/img/mars/aonia-terra.webp", caption: { en: "Aonia Terra, NASA Mars Trek.", ar: "أونيا تيرا، NASA Mars Trek." } },
-  jezeroPhoto: { src: "assets/img/mars/jezero.webp", caption: { en: "Jezero Crater, NASA Mars Trek.", ar: "فوهة جيزيرو، NASA Mars Trek." } },
-  samailPhoto: { src: "assets/img/oman/samail-crop.webp", caption: { en: "Samail Ophiolite analysis area (similarity layer).", ar: "منطقة تحليل أفيوليت سمائل (طبقة التشابه)." } },
+  vallesPhoto: { src: "assets/img/mars/valles-nasa.webp", caption: { en: "Valles Marineris, Viking Orbiter mosaic (NASA/JPL-Caltech/USGS, PIA00422).", ar: "فاليس مارينيريس، فسيفساء من المركبة المدارية فايكنغ (NASA/JPL-Caltech/USGS، PIA00422)." } },
+  syrtisPhoto: { src: "assets/img/mars/syrtis-nasa.webp", caption: { en: "Syrtis Major Planum in false colour, THEMIS on Mars Odyssey (NASA/JPL-Caltech/ASU, PIA20984).", ar: "سهل سيرتس ميجور بألوان زائفة، جهاز THEMIS على المركبة مارس أوديسي (NASA/JPL-Caltech/ASU، PIA20984)." } },
+  aoniaPhoto: { src: "assets/img/mars/aonia-nasa.webp", caption: { en: "Dune fields in Aonia Planum and Aonia Terra, THEMIS on Mars Odyssey (NASA/JPL/ASU, PIA13839).", ar: "حقول كثبان في أونيا بلانوم وأونيا تيرا، جهاز THEMIS على المركبة مارس أوديسي (NASA/JPL/ASU، PIA13839)." } },
+  jezeroPhoto: { src: "assets/img/mars/jezero-nasa.webp", caption: { en: "Jezero Crater delta, Mars 2020 landing site, CTX and CRISM on MRO (NASA/JPL-Caltech/MSSS/JHU-APL, PIA23239).", ar: "دلتا فوهة جيزيرو، موقع هبوط مهمة مارس 2020، من جهازي CTX وCRISM على المركبة MRO (NASA/JPL-Caltech/MSSS/JHU-APL، PIA23239)." } },
+  samailPhoto: { src: "assets/img/oman/samail-nasa.webp", caption: { en: "Samail Ophiolite, Earth's crust exposed in Oman, EO-1 ALI, 6 March 2012 (NASA Earth Observatory).", ar: "أفيوليت سمائل، قشرة الأرض مكشوفة في عُمان، القمر EO-1 بجهاز ALI، 6 مارس 2012 (مرصد الأرض التابع لناسا)." } },
+  samailMap: { src: "assets/img/oman/samail-crop.webp", caption: { en: "Samail Ophiolite analysis area (similarity layer).", ar: "منطقة تحليل أفيوليت سمائل (طبقة التشابه)." } },
+  sharqiyaPhoto: { src: "assets/img/oman/sharqiya-nasa.webp", caption: { en: "Al Sharqiya (Wahiba) Sands from Space Shuttle Discovery, STS-85, August 1997 (NASA JSC, STS085-501-14).", ar: "رمال الشرقية (وهيبة) من مكوك الفضاء ديسكفري، المهمة STS-85، أغسطس 1997 (مركز جونسون التابع لناسا، STS085-501-14)." } },
+  hajarPhoto: { src: "assets/img/oman/hajar-iss053.webp", caption: { en: "Western Al Hajar Mountains from the International Space Station, 1 December 2017. The view includes Nizwa (near Wadi Ghul) and Nakhl (near Wadi Mistal). NASA JSC, ISS053-E-302321.", ar: "غرب جبال الحجر من محطة الفضاء الدولية، 1 ديسمبر 2017. يشمل المشهد نزوى (قرب وادي غول) ونخل (قرب وادي مستل). مركز جونسون التابع لناسا، ISS053-E-302321." } },
   amadeePhoto: { src: "assets/img/oman/amadee-crop.webp", caption: { en: "AMADEE-18 'Kepler' station area, Dhofar: analysis view.", ar: "منطقة محطة «كبلر» لمهمة AMADEE-18، ظفار: عرض التحليل." } }
 };
 
@@ -135,7 +138,7 @@ const SAMAIL = omanAnalog({
   name: { en: "Samail Ophiolite", ar: "أفيوليت سمائل" },
   location: { en: "Al Hajar Mountains, Oman", ar: "جبال الحجر، عُمان" },
   type: { en: "Ophiolite (exposed oceanic crust and mantle rocks)", ar: "أفيوليت (صخور قشرة محيطية ووشاح مكشوفة)" },
-  photo: "samailPhoto",
+  photo: "samailPhoto", photoSource: "https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569",
   resolution: { en: "Satellite analysis area", ar: "منطقة تحليل من الأقمار الصناعية" },
   criteria: Object.assign(geeCriteria(GX.GEE_STATS.samail), {
     geology: {
@@ -162,14 +165,14 @@ const AMADEE = omanAnalog({
   })
 });
 
-const named = (id, name, location, type, terrain) => omanAnalog({ id, name, location, type, photo: null, criteria: { terrain: { display: terrain } }, comparison: { similarity: null, difference: null, similar: null, different: null, conclusion: PAIRING_NOTE } });
-const WADI_GHUL = named("wadi-ghul", { en: "Wadi Ghul", ar: "وادي غول" }, { en: "Al Hamra, Oman", ar: "ولاية الحمراء، عُمان" }, { en: "Large, deep wadi", ar: "وادٍ كبير وعميق" }, { en: "Large wadi / canyon", ar: "وادٍ كبير / أخدود" });
-const SHARQIYA = named("sharqiya", { en: "Al Sharqiya Sands", ar: "رمال الشرقية" }, { en: "Ash Sharqiyah, Oman", ar: "محافظة الشرقية، عُمان" }, { en: "Sand sea", ar: "بحر رمال" }, { en: "Sand fields and dunes", ar: "حقول رمال وكثبان رملية" });
-const MISTAL = named("mistal-huqf", { en: "Wadi Mistal & the Huqf area", ar: "وادي مستل ومنطقة حقف" }, { en: "Oman", ar: "عُمان" }, { en: "Dry wadi and basin", ar: "وادٍ وحوض جافان" }, { en: "Dry lake / basin setting", ar: "بيئة بحيرة / حوض جاف" });
+const named = (id, name, location, type, terrain, photo, photoSource) => omanAnalog({ id, name, location, type, photo, photoSource, criteria: { terrain: { display: terrain } }, comparison: { similarity: null, difference: null, similar: null, different: null, conclusion: PAIRING_NOTE } });
+const WADI_GHUL = named("wadi-ghul", { en: "Wadi Ghul", ar: "وادي غول" }, { en: "Al Hamra, Oman", ar: "ولاية الحمراء، عُمان" }, { en: "Large, deep wadi", ar: "وادٍ كبير وعميق" }, { en: "Large wadi / canyon", ar: "وادٍ كبير / أخدود" }, "hajarPhoto", "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=ISS053&roll=E&frame=302321");
+const SHARQIYA = named("sharqiya", { en: "Al Sharqiya Sands", ar: "رمال الشرقية" }, { en: "Ash Sharqiyah, Oman", ar: "محافظة الشرقية، عُمان" }, { en: "Sand sea", ar: "بحر رمال" }, { en: "Sand fields and dunes", ar: "حقول رمال وكثبان رملية" }, "sharqiyaPhoto", "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=STS085&roll=501&frame=14");
+const MISTAL = named("mistal-huqf", { en: "Wadi Mistal & the Huqf area", ar: "وادي مستل ومنطقة حقف" }, { en: "Oman", ar: "عُمان" }, { en: "Dry wadi and basin", ar: "وادٍ وحوض جافان" }, { en: "Dry lake / basin setting", ar: "بيئة بحيرة / حوض جاف" }, "hajarPhoto", "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=ISS053&roll=E&frame=302321");
 
 /* ---------- Moon & Mars sites ---------- */
 const marsSite = (o) => Object.assign({
-  body: "mars", dataset: { en: "NASA Mars Trek imagery", ar: "صور NASA Mars Trek" }, resolution: null, status: "preliminary",
+  body: "mars", dataset: { en: "NASA Mars Trek and NASA/JPL imagery", ar: "صور NASA Mars Trek وناسا/JPL" }, resolution: null, status: "preliminary",
   photoSource: "https://trek.nasa.gov/mars/", area: null, maps: {}, bars: null, profile: false
 }, o);
 
@@ -207,7 +210,7 @@ GX.SITES = [
       geology: {
         display: { en: "Lunar impact-related materials", ar: "مواد قمرية مرتبطة بالاصطدام" },
         detail: { en: "The study region is associated with lunar impact processes. Surface materials may include regolith and fragmented rocky material. Detailed local material properties require further scientific verification.", ar: "ترتبط منطقة الدراسة بعمليات الاصطدام القمرية. قد تشمل مواد السطح الثرى القمري (الريغوليث) ومواد صخرية مفتتة. تتطلب الخصائص التفصيلية للمواد المحلية مزيدًا من التحقق العلمي." },
-        reference: null
+        reference: "https://doi.org/10.1016/j.asr.2020.05.035"
       }
     },
     profile: true,
@@ -219,7 +222,7 @@ GX.SITES = [
     id: "valles-marineris", code: "R-01",
     name: { en: "Valles Marineris", ar: "فاليس مارينيريس" },
     location: { en: "Equatorial canyon system, Mars", ar: "منظومة أخاديد استوائية، المريخ" },
-    photo: "vallesPhoto",
+    photo: "vallesPhoto", photoSource: "https://images.nasa.gov/details/PIA00422",
     criteria: { terrain: { display: { en: "Giant canyon / valley system", ar: "أخدود أو وادٍ ضخم" }, detail: { en: "A huge canyon system. Its proposed twin in Oman: the large wadis, for example Wadi Ghul in Al Hamra.", ar: "منظومة أخاديد ضخمة. نظيرها المقترح في عُمان: الأودية الكبيرة، مثل وادي غول في ولاية الحمراء." }, note: PAIRING_NOTE } },
     analogs: [WADI_GHUL, null]
   }),
@@ -227,7 +230,7 @@ GX.SITES = [
     id: "syrtis-major", code: "R-02",
     name: { en: "Syrtis Major", ar: "سيرتس ميجور" },
     location: { en: "Volcanic plain, Mars", ar: "سهل بركاني، المريخ" },
-    photo: "syrtisPhoto",
+    photo: "syrtisPhoto", photoSource: "https://science.nasa.gov/photojournal/syrtis-major-planum-false-color-4",
     criteria: { geology: { display: { en: "Basaltic and volcanic rocks", ar: "صخور بازلتية وبركانية" }, detail: { en: "Dark basaltic, volcanic terrain. Its proposed twin in Oman: the ophiolite rocks of the Al Hajar Mountains (Samail Ophiolite), which the team has analysed.", ar: "تضاريس بازلتية بركانية داكنة. نظيرها المقترح في عُمان: صخور الأفيوليت في جبال الحجر (أفيوليت سمائل)، التي حللها الفريق." }, note: PAIRING_NOTE } },
     analogs: [SAMAIL, null]
   }),
@@ -235,7 +238,7 @@ GX.SITES = [
     id: "aonia-terra", code: "R-03",
     name: { en: "Aonia Terra", ar: "أونيا تيرا" },
     location: { en: "Southern highlands, Mars", ar: "المرتفعات الجنوبية، المريخ" },
-    photo: "aoniaPhoto",
+    photo: "aoniaPhoto", photoSource: "https://science.nasa.gov/photojournal/dune-fields-in-aonia-planum-and-aonia-terra",
     criteria: { terrain: { display: { en: "Sand fields and dunes", ar: "حقول رمال وكثبان رملية" }, detail: { en: "Sand fields and dune terrain. Its proposed twin in Oman: Al Sharqiya Sands.", ar: "حقول رمال وتضاريس كثبان. نظيرها المقترح في عُمان: رمال الشرقية." }, note: PAIRING_NOTE } },
     analogs: [SHARQIYA, null]
   }),
@@ -243,7 +246,7 @@ GX.SITES = [
     id: "jezero", code: "R-04",
     name: { en: "Jezero Crater", ar: "فوهة جيزيرو" },
     location: { en: "Ancient lake crater, Mars", ar: "فوهة بحيرة قديمة، المريخ" },
-    photo: "jezeroPhoto",
+    photo: "jezeroPhoto", photoSource: "https://science.nasa.gov/photojournal/jezero-crater-mars-2020s-landing-site",
     criteria: { terrain: { display: { en: "Dry lake basin", ar: "بحيرة مائية جافة" }, detail: { en: "A dried-up lake basin. Its proposed twin in Oman: Wadi Mistal and the Huqf area.", ar: "حوض بحيرة جاف. نظيرها المقترح في عُمان: وادي مستل ومنطقة حقف." }, note: PAIRING_NOTE } },
     analogs: [MISTAL, null]
   })
@@ -299,14 +302,26 @@ GX.EVIDENCE = [
   { src: "assets/img/haughton-relief.webp", group: "canada", caption: { en: "Haughton Crater shaded relief.", ar: "تظليل تضاريس فوهة هوتون." } },
   { src: "assets/img/earth-arcticdem.webp", group: "canada", caption: { en: "ArcticDEM Explorer: 2 m mosaic tile over Haughton (75.37° N, 89.68° W).", ar: "ArcticDEM Explorer: مربع فسيفسائي بدقة 2 م فوق هوتون (75.37° ش، 89.68° غ)." } },
   { src: "assets/img/earth-arcticdem-2.webp", group: "canada", caption: { en: "ArcticDEM Explorer: point elevation check at the Haughton centre.", ar: "ArcticDEM Explorer: التحقق من الارتفاع عند مركز هوتون." } },
+  { src: "assets/img/haughton/k10-haughton-1.webp", group: "canada", caption: { en: "NASA Ames K-10 rover field test at Haughton Crater, Haughton-Mars Project, 2007 (NASA/Matt Deans, ARC-2007-ACD07-0170-001).", ar: "اختبار ميداني للمركبة K-10 من مركز أميس التابع لناسا في فوهة هوتون، مشروع هوتون-المريخ، 2007 (NASA/Matt Deans، ARC-2007-ACD07-0170-001)." } },
+  { src: "assets/img/haughton/k10-haughton-2.webp", group: "canada", caption: { en: "NASA K-10 rover surveying terrain at Haughton Crater, 2007 (NASA/Matt Deans, ARC-2007-ACD07-0170-002).", ar: "المركبة K-10 التابعة لناسا تمسح التضاريس في فوهة هوتون، 2007 (NASA/Matt Deans، ARC-2007-ACD07-0170-002)." } },
   { src: "assets/img/earth-qgis-buffer.webp", group: "canada", caption: { en: "QGIS: 10 km analysis buffer around the Haughton centre.", ar: "QGIS: نطاق تحليل 10 كم حول مركز هوتون." } },
-  { src: "assets/img/mars/valles-marineris.webp", group: "mars", caption: { en: "Valles Marineris, NASA Mars Trek.", ar: "فاليس مارينيريس، NASA Mars Trek." } },
-  { src: "assets/img/mars/syrtis-major.webp", group: "mars", caption: { en: "Syrtis Major, NASA Mars Trek.", ar: "سيرتس ميجور، NASA Mars Trek." } },
-  { src: "assets/img/mars/aonia-terra.webp", group: "mars", caption: { en: "Aonia Terra, NASA Mars Trek.", ar: "أونيا تيرا، NASA Mars Trek." } },
-  { src: "assets/img/mars/jezero.webp", group: "mars", caption: { en: "Jezero Crater, NASA Mars Trek.", ar: "فوهة جيزيرو، NASA Mars Trek." } },
+  { src: "assets/img/mars/valles-nasa.webp", group: "mars", caption: "vallesPhoto" },
+  { src: "assets/img/mars/jezero-nasa.webp", group: "mars", caption: "jezeroPhoto" },
+  { src: "assets/img/mars/syrtis-nasa.webp", group: "mars", caption: "syrtisPhoto" },
+  { src: "assets/img/mars/aonia-nasa.webp", group: "mars", caption: "aoniaPhoto" },
+  { src: "assets/img/mars/valles-marineris.webp", group: "mars", caption: { en: "Team view: Valles Marineris in NASA Mars Trek.", ar: "عرض الفريق: فاليس مارينيريس في NASA Mars Trek." } },
+  { src: "assets/img/mars/syrtis-major.webp", group: "mars", caption: { en: "Team view: Syrtis Major in NASA Mars Trek.", ar: "عرض الفريق: سيرتس ميجور في NASA Mars Trek." } },
+  { src: "assets/img/mars/aonia-terra.webp", group: "mars", caption: { en: "Team view: Aonia Terra in NASA Mars Trek.", ar: "عرض الفريق: أونيا تيرا في NASA Mars Trek." } },
+  { src: "assets/img/mars/jezero.webp", group: "mars", caption: { en: "Team view: Jezero Crater in NASA Mars Trek.", ar: "عرض الفريق: فوهة جيزيرو في NASA Mars Trek." } },
+  { src: "assets/img/oman/samail-nasa.webp", group: "oman", caption: "samailPhoto" },
+  { src: "assets/img/oman/sharqiya-nasa.webp", group: "oman", caption: "sharqiyaPhoto" },
+  { src: "assets/img/oman/hajar-iss053.webp", group: "oman", caption: "hajarPhoto" },
+  { src: "assets/img/oman/samail-crop.webp", group: "oman", caption: "samailMap" },
   { src: "assets/img/oman/samail-gee.webp", group: "oman", caption: { en: "Samail analysis: slope, roughness (TRI), mafic index and similarity layers.", ar: "تحليل سمائل: طبقات الانحدار والخشونة (TRI) والمؤشر المافي والتشابه." } },
   { src: "assets/img/oman/amadee-gee.webp", group: "oman", caption: { en: "AMADEE-18 area: candidate zones and similarity export.", ar: "منطقة AMADEE-18: المناطق المرشحة وتصدير طبقة التشابه." } }
 ];
+
+GX.EVIDENCE.forEach((e) => { if (typeof e.caption === "string") e.caption = GX.IMG[e.caption].caption; });
 
 GX.SOURCES = [
   { label: { en: "NASA PGDA, Site04 high-resolution lunar south pole topography", ar: "ناسا PGDA، تضاريس عالية الدقة للقطب الجنوبي للقمر (Site04)" }, url: "https://pgda.gsfc.nasa.gov/products/78" },
@@ -321,5 +336,9 @@ GX.SOURCES = [
   { label: { en: "Sejkora, Sams & Groemer (2018) Geodata workflow for the AMADEE-18 Mars analog mission. EPSC2018-442", ar: "Sejkora وSams وGroemer (2018): سير عمل البيانات الجغرافية لمهمة AMADEE-18. EPSC2018-442" }, url: "https://meetingorganizer.copernicus.org/EPSC2018/EPSC2018-442.pdf" },
   { label: { en: "Sentinel-2 cloudless 2016 by EOX IT Services (CC BY 4.0), contains modified Copernicus Sentinel data, Haughton satellite layer", ar: "Sentinel-2 cloudless 2016 من EOX ‏(CC BY 4.0)، يتضمن بيانات Copernicus Sentinel معدّلة، طبقة القمر الصناعي لهوتون" }, url: "https://s2maps.eu" },
   { label: { en: "3D globe textures: Solar System Scope (CC BY 4.0), based on NASA data", ar: "خامات الكرات ثلاثية الأبعاد: Solar System Scope ‏(CC BY 4.0)، مبنية على بيانات ناسا" }, url: "https://www.solarsystemscope.com/textures/" },
-  { label: { en: "Earth DEM original source, pending verification", ar: "المصدر الأصلي لنموذج ارتفاع الأرض، قيد التحقق" }, url: null }
+  { label: { en: "Haughton elevation model: ArcticDEM mosaic v4.1, 2 m, tile 29_29_2_2 (Polar Geospatial Center, NSF/NGA)", ar: "نموذج ارتفاع هوتون: فسيفساء ArcticDEM الإصدار 4.1، بدقة 2 م، المربع 29_29_2_2 (مركز البيانات الجغرافية القطبية، NSF/NGA)" }, url: "https://www.pgc.umn.edu/data/arcticdem/" },
+  { label: { en: "NASA/JPL Photojournal: Valles Marineris (PIA00422), Jezero Crater (PIA23239), Syrtis Major Planum (PIA20984), Aonia Terra dunes (PIA13839)", ar: "أرشيف صور ناسا/JPL: فاليس مارينيريس (PIA00422)، فوهة جيزيرو (PIA23239)، سهل سيرتس ميجور (PIA20984)، كثبان أونيا تيرا (PIA13839)" }, url: "https://science.nasa.gov/photojournal/" },
+  { label: { en: "NASA Earth Observatory: Earth's Crust Exposed in Oman (EO-1 ALI, 2012)", ar: "مرصد الأرض التابع لناسا: قشرة الأرض مكشوفة في عُمان (EO-1 ALI، 2012)" }, url: "https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569" },
+  { label: { en: "NASA JSC Gateway to Astronaut Photography of Earth: STS085-501-14 (Wahiba Sands) and ISS053-E-302321 (Al Hajar Mountains)", ar: "بوابة ناسا لصور رواد الفضاء للأرض (مركز جونسون): STS085-501-14 (رمال وهيبة) وISS053-E-302321 (جبال الحجر)" }, url: "https://eol.jsc.nasa.gov/" },
+  { label: { en: "NASA Image and Video Library: K-10 rover at Haughton Crater, Haughton-Mars Project 2007 (NASA Ames)", ar: "مكتبة ناسا للصور والفيديو: المركبة K-10 في فوهة هوتون، مشروع هوتون-المريخ 2007 (مركز أميس)" }, url: "https://images.nasa.gov/details/ARC-2007-ACD07-0170-001" }
 ];

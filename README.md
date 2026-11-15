@@ -193,9 +193,13 @@ After editing a CSS or JS file, increase the `?v=` number on its link in `index.
 |---|---|
 | [NASA PGDA, Site04](https://pgda.gsfc.nasa.gov/products/78) · LRO LOLA | Shackleton elevation, slope and roughness |
 | [NASA SVS](https://svs.gsfc.nasa.gov/4716) | Shackleton imagery |
-| [NASA Mars Trek](https://trek.nasa.gov/mars/) | Mars site imagery |
+| [NASA Mars Trek](https://trek.nasa.gov/mars/) | Team views of the Mars sites |
+| [NASA/JPL Photojournal](https://science.nasa.gov/photojournal/) · PIA00422, PIA23239, PIA20984, PIA13839 | Valles Marineris, Jezero, Syrtis Major and Aonia Terra photos |
+| [NASA Earth Observatory](https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569) (EO-1 ALI, 2012) | Samail Ophiolite photo |
+| [NASA JSC astronaut photography](https://eol.jsc.nasa.gov/) · STS085-501-14, ISS053-E-302321 | Al Sharqiya Sands and Al Hajar Mountains photos |
+| [NASA Ames, K-10 rover at Haughton](https://images.nasa.gov/details/ARC-2007-ACD07-0170-001) (2007) | Rover field-test evidence |
 | [Landsat 8 (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Haughton_Crater_-Landsat_8(48010457521).png) | Haughton photo |
-| [ArcticDEM Explorer](https://www.pgc.umn.edu/data/arcticdem/) | Haughton site checks |
+| [ArcticDEM mosaic v4.1, 2 m](https://www.pgc.umn.edu/data/arcticdem/) (Polar Geospatial Center) | Haughton elevation model and site checks |
 | [Sentinel-2 cloudless 2016 by EOX](https://s2maps.eu) (CC BY 4.0, modified Copernicus Sentinel data) | Haughton 3D satellite layer |
 | [Solar System Scope](https://www.solarsystemscope.com/textures/) (CC BY 4.0) | 3D planet textures |
 | Gawronska et al. (2020), *Advances in Space Research* 66 | Lunar south pole geology |
