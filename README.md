@@ -33,7 +33,7 @@ Space agencies test rovers, spacesuits and procedures in places on Earth that be
 3. **Compare them criterion by criterion:** terrain, slope, roughness, elevation, geology, rock size and density, and temperature, each with its values, method and evidence.
 4. **See a terrain similarity index** (0 to 100) calculated from slope, flat-ground share, roughness and relief.
 5. **Explore the real terrain in 3D** and walk along the elevation profile.
-6. **Match the rover:** NASA VIPER for the Moon, NASA Perseverance for Mars, with official specifications and a slope-based fit check.
+6. **Match the rover:** three NASA rovers (Space Exploration Vehicle, Curiosity, Perseverance) shown as real 3D models from NASA, with official specifications and a slope-based fit check.
 
 > **Data honesty is a core rule.** Team numbers are shown exactly as supplied. Numbers computed by Ground X (Mars from NASA MOLA, Oman from NASA SRTM, both on a matched 463 m grid) say so in their method, and every value links to its source.
 
@@ -41,15 +41,17 @@ Space agencies test rovers, spacesuits and procedures in places on Earth that be
 
 ## 🛰️ Sites in the atlas
 
-| | Site | Earth twin | Similarity | Rover |
+| | Site | Earth twin (found by terrain search) | Similarity | Rover |
 |:-:|---|---|:-:|---|
-| 🌕 | **Shackleton Rim**, lunar south pole | **Haughton Crater**, Devon Island, Canada | 34% | NASA VIPER |
-| 🔴 | **Valles Marineris** | **Wadi Ghul**, Al Hajar Mountains, Oman | 35% | NASA Perseverance |
-| 🔴 | **Syrtis Major** | **Samail Ophiolite**, Al Hajar Mountains, Oman | 40% | NASA Perseverance |
-| 🔴 | **Aonia Terra** | **Al Sharqiya Sands**, Oman | 64% | NASA Perseverance |
-| 🔴 | **Jezero Crater** | **Wadi Mistal**, Al Hajar Mountains, Oman | 34% | NASA Perseverance |
+| 🌕 | **Shackleton Rim**, lunar south pole | **Jebel Akhdar, north flank**, Al Awabi, Oman | 81% | NASA Space Exploration Vehicle |
+| 🔴 | **Valles Marineris** | **Jebel Kawr canyons**, Bahla, Oman | 88% | NASA Curiosity |
+| 🔴 | **Syrtis Major** | **Batinah gravel plain**, As Suwaiq, Oman | 97% | NASA Perseverance |
+| 🔴 | **Aonia Terra** | **Al Sharqiya Sands**, Al Mudhaibi, Oman | 95% | NASA Perseverance |
+| 🔴 | **Jezero Crater** | **Adam basin**, Ad Dakhiliyah, Oman | 93% | NASA Perseverance |
 
-Also in the analog library: **AMADEE-18 "Kepler" station**, Dhofar, Oman, the site of a 2018 Mars analog mission.
+**How the twins were found:** for every site, Ground X searched the whole of Oman (NASA SRTM elevation) for the area of the *same size* whose slope, flat-ground share, roughness and relief best match the site (NASA MOLA for Mars, NASA LOLA for the Moon), all on the same 424 m grid. Each candidate was then checked against Sentinel-2 imagery so the twin is also the right kind of ground (canyons for Valles, sand for Aonia, mafic gravel for Syrtis, a wadi-fed basin for Jezero).
+
+Also in the analog library: the team's **Haughton Crater** study (Canada, a NASA rover test site), the **Samail Ophiolite** and the **AMADEE-18 "Kepler" station** in Dhofar.
 
 ---
 
@@ -200,7 +202,8 @@ After editing a CSS or JS file, increase the `?v=` number on its link in `index.
 | [NASA Earth Observatory](https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569) (EO-1 ALI, 2012) | Samail Ophiolite photo |
 | [NASA JSC astronaut photography](https://eol.jsc.nasa.gov/) · STS085-501-14, ISS053-E-302321 | Al Sharqiya Sands and Al Hajar Mountains photos |
 | [NASA MGS MOLA DEM, 463 m](https://astrogeology.usgs.gov/search/map/mars_mgs_mola_dem_463m) · [NASA SRTM](https://www.earthdata.nasa.gov/data/instruments/srtm) | Matched slope, roughness and elevation for Mars sites and Oman twins |
-| [NASA VIPER](https://science.nasa.gov/mission/viper/) · [Perseverance](https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/) | Rover specifications and photos |
+| [NASA 3D Resources](https://github.com/nasa/NASA-3D-Resources) · [Curiosity 3D model](https://science.nasa.gov/resource/curiosity-rover-3d-model/) | Rover 3D models (compressed for the web) |
+| [SEV fact sheet](https://www.nasa.gov/wp-content/uploads/2015/08/464826main_sev_factsheet_508.pdf) · [Curiosity](https://science.nasa.gov/mission/msl-curiosity/) · [Perseverance](https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/) | Rover specifications |
 | [NASA Ames, K-10 rover at Haughton](https://images.nasa.gov/details/ARC-2007-ACD07-0170-001) (2007) | Rover field-test evidence |
 | [Landsat 8 (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Haughton_Crater_-Landsat_8(48010457521).png) | Haughton photo |
 | [ArcticDEM mosaic v4.1, 2 m](https://www.pgc.umn.edu/data/arcticdem/) (Polar Geospatial Center) | Haughton elevation model and site checks |

@@ -21,7 +21,7 @@
     siteId: GX.SITES[0].id,
     analog: 0,
     layer: "slope",
-    roverOpen: false
+    rover: null
   };
   let ctxCompare = null; // gsap.context for the comparison block only
   let ctx = null; // gsap.context for everything that is rebuilt on language change
@@ -47,29 +47,6 @@
       '<svg viewBox="0 0 64 64" stroke="#ff7a45"><rect x="14" y="22" width="34" height="14" rx="3"/><path d="M40 22V12h8M44 12v-4"/><circle cx="16" cy="46" r="6"/><circle cx="32" cy="46" r="6"/><circle cx="48" cy="46" r="6"/><path d="M16 36v4M32 36v4M48 36v4"/></svg>'
     ]
   };
-
-  const ROVER_SVG = `
-  <svg viewBox="0 0 520 320" aria-hidden="true">
-    <path class="ground" d="M0 292 C 120 282, 200 300, 290 290 S 450 280, 520 292"/>
-    <g class="rover-body">
-      <g class="rover-mast">
-        <rect x="330" y="40" width="8" height="78" rx="3" fill="#2a2e37"/>
-        <rect x="306" y="22" width="58" height="26" rx="6" fill="#f4f1e8"/>
-        <circle cx="322" cy="35" r="7" fill="#232322"/><circle cx="346" cy="35" r="7" fill="#232322"/>
-        <circle cx="322" cy="35" r="2.5" fill="#d7ffc5"/><circle cx="346" cy="35" r="2.5" fill="#d7ffc5"/>
-      </g>
-      <rect x="150" y="96" width="150" height="10" rx="3" fill="#d7ffc5" opacity=".9"/>
-      <rect x="110" y="112" width="250" height="78" rx="14" fill="#1a1d24" stroke="#f4f1e8" stroke-opacity=".35" stroke-width="2"/>
-      <rect x="128" y="128" width="96" height="44" rx="6" fill="#232322" stroke="#bfb29a" stroke-opacity=".5"/>
-      <path d="M134 160 l14-14 l12 10 l18-20 l20 24" fill="none" stroke="#bfb29a" stroke-width="2"/>
-      <rect x="240" y="128" width="100" height="10" rx="3" fill="#2a2e37"/><rect x="240" y="146" width="70" height="10" rx="3" fill="#2a2e37"/>
-      <text x="240" y="178" fill="#6d6f6b" font-family="JetBrains Mono, monospace" font-size="13">GX-R?</text>
-      <path d="M140 190 L 108 238 L 70 254 M108 238 L150 254 M330 190 L 370 232 L 420 254 M370 232 L 330 254 M235 190 L 235 254" fill="none" stroke="#f4f1e8" stroke-opacity=".6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      <g class="wheels">
-        ${[70, 150, 235, 330, 420].map((x) => `<g class="wheel" transform="translate(${x} 262)"><circle r="30" fill="#1b1b1a" stroke="#f4f1e8" stroke-opacity=".75" stroke-width="5"/><circle r="9" fill="#d7ffc5"/><path d="M0-30V30M-30 0H30M-21-21 21 21M21-21-21 21" stroke="#f4f1e8" stroke-opacity=".25" stroke-width="3"/></g>`).join("")}
-      </g>
-    </g>
-  </svg>`;
 
   /* ================================================================ RENDER */
   /* Light markup for headings:  [[word]] -> highlighted, {moon|earth|mars} -> image pill, | -> line break (wide screens) */
@@ -474,44 +451,96 @@
   }
 
   /* ---------- rovers ---------- */
-  function renderRover() {
-    const s = site(), a = s.analogs.find(Boolean);
-    const rv = GX.ROVERS[s.rover];
-    const fit = GX.roverFit(s, rv);
-    const photo = img(rv.image);
+  /* Three NASA rovers, one real 3D model on screen at a time.
+     <model-viewer> is loaded only when the section gets close, and it stops rendering while off screen. */
+  const MV_SRC = "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
+  let mvRequested = false, mvVisible = false;
+  function loadModelViewer() {
+    if (mvRequested) return; mvRequested = true;
+    window.ModelViewerElement = Object.assign(window.ModelViewerElement || {}, {
+      meshoptDecoderLocation: "https://cdn.jsdelivr.net/npm/meshoptimizer@0.21.0/meshopt_decoder.js"
+    });
+    const sc = document.createElement("script"); sc.type = "module"; sc.src = MV_SRC; document.head.appendChild(sc);
+  }
+  function roverStage() {
+    let stage = $("#roverStage");
+    if (stage) return stage;
     $("#roverRoot").innerHTML = `
-      <div class="rover-stage">
-        <button class="rover-btn" type="button" aria-expanded="${state.roverOpen}" aria-controls="roverSpecs" data-cursor>
-          ${ROVER_SVG}
-          <span class="rover-btn__hint">${esc(t("rovers.tap"))}</span>
-        </button>
-        <div class="rover-info">
-          <span class="tag">${esc(L(fit.level))}</span>
-          <h3 style="margin-top:16px">${esc(t("rovers.recommended"))}: <span style="color:var(--accent)">${esc(L(rv.name))}</span></h3>
-          <p class="loc">${esc(L(rv.full))} · ${esc(L(rv.status))}</p>
-          <p class="loc">${esc(t("rovers.testSite"))}: <b style="color:var(--text)">${esc(L(a.name))}</b> · ${esc(L(s.name))}</p>
-          <p style="margin:26px 0 0;color:var(--muted);font-size:14px">${esc(t("rovers.context"))}</p>
-          <div class="rover-context">
-            <div><small>${esc(t("bar.slopeMean"))} · ${esc(L(s.name))}</small><b>${num(s.criteria.slope.headline)}</b></div>
-            <div><small>${esc(t("bar.flatShare"))}</small><b>${num(fmt(s.bars.flatShare, 2) + "%")}</b></div>
-            <div><small>${esc(t("rovers.limit"))}</small><b>${num(rv.maxSlope + "°")}</b></div>
-          </div>
+      <div class="rv">
+        <div class="rv__stage" id="roverStage">
+          <model-viewer id="roverModel" camera-controls disable-zoom touch-action="pan-y" interaction-prompt="none"
+            ${REDUCED ? "" : `auto-rotate auto-rotate-delay="0" rotation-per-second="14deg"`}
+            shadow-intensity="0.9" shadow-softness="0.8" exposure="1.05" environment-image="neutral"
+            camera-orbit="35deg 72deg auto" field-of-view="28deg" loading="lazy" reveal="auto"></model-viewer>
+          <div class="rv__load"><i></i></div>
+          <p class="rv__hint label"></p>
+          <p class="rv__credit mono"></p>
         </div>
-      </div>
-      <div class="rover-specs" id="roverSpecs">
-        <div class="rover-specs__inner">
-          <ul class="facts spec-table">
-            ${rv.specs.map((sp) => `<li><span>${esc(L(sp.k))}</span><b>${num(L(sp.v))}</b></li>`).join("")}
-            <li><span>${esc(t("rovers.official"))}</span><b><a href="${rv.url}" target="_blank" rel="noopener">NASA ↗</a></b></li>
-          </ul>
-          <div class="why">
-            <h4>${esc(t("rovers.why"))}</h4>
-            <p>${esc(L(fit.text))}</p>
-            ${s.roverNote ? `<p>${esc(L(s.roverNote))}</p>` : ""}
-            <button class="thumb" type="button" data-zoom="${rv.image}" data-cursor><img src="${photo.src}" alt="${esc(L(rv.name))}" loading="lazy"><span>${esc(t("rovers.photo"))} ↗</span></button>
-          </div>
+        <div class="rv__side">
+          <div class="rv__tabs seg" role="tablist" id="roverTabs"></div>
+          <div class="rv__info" id="roverInfo"></div>
         </div>
       </div>`;
+    stage = $("#roverStage");
+    const mv = $("#roverModel");
+    mv.addEventListener("progress", (e) => { const p = e.detail.totalProgress; stage.style.setProperty("--p", p); stage.classList.toggle("is-loading", p < 1); });
+    mv.addEventListener("load", () => stage.classList.remove("is-loading"));
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((ents) => ents.forEach((en) => {
+        mvVisible = en.isIntersecting;
+        if (mvVisible) { loadModelViewer(); setRoverModel(); }
+      }), { rootMargin: "500px 0px" }).observe(stage);
+    } else { mvVisible = true; loadModelViewer(); }
+    return stage;
+  }
+  function setRoverModel() {
+    const mv = $("#roverModel"); if (!mv || !mvVisible) return;
+    const rv = GX.ROVERS[state.rover];
+    if (mv.getAttribute("src") !== rv.model) {
+      $("#roverStage").classList.add("is-loading");
+      mv.setAttribute("src", rv.model);
+      mv.setAttribute("alt", L(rv.name));
+    }
+  }
+  function renderRover() {
+    const s = site();
+    if (!state.rover || !GX.ROVERS[state.rover]) state.rover = s.rover;
+    roverStage();
+    const id = state.rover, rv = GX.ROVERS[id];
+    // the site this rover is assessed against: the selected site if it is recommended there, else its first site
+    const cs = s.rover === id ? s : GX.SITES.find((x) => x.rover === id) || s;
+    const a = cs.analogs[0], fit = GX.roverFit(cs, rv);
+    const sitesFor = GX.SITES.filter((x) => x.rover === id);
+    $("#roverTabs").innerHTML = Object.entries(GX.ROVERS).map(([k, r]) => `
+      <button type="button" role="tab" data-rover="${k}" class="${k === id ? "is-active" : ""}" aria-selected="${k === id}">
+        <i class="globe tex-${r.world}"></i>${esc(r.short)}${k === s.rover ? `<small class="rv__rec">★</small>` : ""}</button>`).join("");
+    $("#roverStage .rv__hint").textContent = t("rovers.drag");
+    $("#roverStage .rv__credit").textContent = t("rovers.modelCredit");
+    $("#roverInfo").innerHTML = `
+      <span class="tag">${esc(L(fit.level))} · ${esc(L(cs.name))}</span>
+      <h3>${esc(L(rv.name))}</h3>
+      <p class="loc">${esc(L(rv.full))} · ${esc(L(rv.status))}</p>
+      <div class="rv__for"><small>${esc(t("rovers.recommendedFor"))}</small>
+        ${sitesFor.map((x) => `<button type="button" class="chip${x.id === cs.id ? " is-on" : ""}" data-site="${x.id}" data-stay><i class="globe tex-${x.body}"></i>${esc(L(x.name))}</button>`).join("")}</div>
+      <p class="loc">${esc(t("rovers.testSite"))}: <b style="color:var(--text)">${esc(L(a.name))}</b> · ${num(a.comparison.similarity + "%")} ${esc(t("compare.similarity"))}</p>
+      <div class="rover-context">
+        <div><small>${esc(t("bar.slopeMean"))} · ${esc(L(cs.name))}</small><b>${num(fmt(cs.bars.slopeMean, 2) + "°")}</b></div>
+        <div><small>${esc(t("bar.flatShare"))}</small><b>${num(fmt(cs.bars.flatShare, 2) + "%")}</b></div>
+        <div><small>${esc(t("rovers.limit"))}</small><b>${rv.maxSlope != null ? num(rv.maxSlope + "°") : "n/a"}</b></div>
+      </div>
+      <div class="why"><h4>${esc(t("rovers.why"))}</h4><p>${esc(L(fit.text))}</p>${cs.roverNote ? `<p>${esc(L(cs.roverNote))}</p>` : ""}</div>
+      <ul class="facts spec-table">
+        ${rv.specs.map((sp) => `<li><span>${esc(L(sp.k))}</span><b>${num(L(sp.v))}</b></li>`).join("")}
+        <li><span>${esc(t("rovers.official"))}</span><b><a href="${rv.url}" target="_blank" rel="noopener">NASA ↗</a></b></li>
+      </ul>`;
+    setRoverModel();
+    requestAnimationFrame(() => inkTo($("#roverTabs"), false));
+  }
+  function setRover(id) {
+    if (id === state.rover) return;
+    state.rover = id;
+    renderRover();
+    if (ANIM) gsap.from("#roverInfo > *", { y: 16, autoAlpha: 0, stagger: .04, duration: .5, ease: "expo.out" });
   }
 
   function renderGallery() {
@@ -629,24 +658,6 @@
     renderLegend();
   }
 
-  function toggleRover() {
-    state.roverOpen = !state.roverOpen;
-    const btn = $(".rover-btn"), specs = $("#roverSpecs");
-    btn.setAttribute("aria-expanded", state.roverOpen);
-    if (!ANIM) { specs.style.height = state.roverOpen ? "auto" : "0"; return; }
-    const dir = state.lang === "ar" ? -1 : 1;
-    if (state.roverOpen) {
-      const tl = gsap.timeline({ onComplete: () => ScrollTrigger.refresh() });
-      tl.to(".rover-body", { x: 26 * dir, duration: .5, ease: "power2.inOut" })
-        .to(".wheel", { rotation: 140 * dir, transformOrigin: "50% 50%", duration: .5, ease: "power2.inOut" }, 0)
-        .to(".rover-body", { x: 0, duration: .7, ease: "elastic.out(1,.6)" })
-        .to(specs, { height: "auto", duration: .8, ease: "expo.out" }, .25)
-        .from(".rover-specs .spec-table li, .rover-specs .why", { y: 24, autoAlpha: 0, stagger: .05, duration: .6, ease: "expo.out" }, .4);
-    } else {
-      gsap.to(specs, { height: 0, duration: .5, ease: "expo.inOut", onComplete: () => ScrollTrigger.refresh() });
-    }
-  }
-
   function moveTabInk(animate = true) {
     const active = $(".world-tab.is-active"), ink = $(".world-tabs__ink");
     if (!active || !ink) return;
@@ -691,15 +702,16 @@
         state.siteId = sc.dataset.site; state.analog = 0;
         if (changed) {
           if (sc.hasAttribute("data-stay")) swapCompare(); else { renderCompare(); rebuildSoon(); }
-          renderRover(); // the recommended rover follows the selected site
-          if (state.roverOpen) $("#roverSpecs").style.height = "auto";
+          state.rover = site().rover; // the recommended rover follows the selected site
+          renderRover();
         }
         if (!sc.hasAttribute("data-stay")) scrollToId("#compare");
         return;
       }
       const wt = e.target.closest(".world-tab");
       if (wt) { setWorld(wt.dataset.world); return; }
-      if (e.target.closest(".rover-btn")) { toggleRover(); return; }
+      const rb = e.target.closest("[data-rover]");
+      if (rb) { setRover(rb.dataset.rover); return; }
       const a = e.target.closest('a[href^="#"]');
       if (a && a.getAttribute("href").length > 1) { e.preventDefault(); scrollToId(a.getAttribute("href")); return; }
     });
@@ -826,7 +838,6 @@
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
       try { const u = new URL(location.href); if (u.searchParams.has("lang")) { u.searchParams.set("lang", lang); history.replaceState(null, "", u); } } catch (e) {}
-      state.roverOpen = false;
       killAnimations(); // revert SplitText etc. BEFORE new text is written
       renderAll();
       buildAnimations();
@@ -979,12 +990,9 @@
         gsap.from("#profileChart .ghost", { autoAlpha: 0, duration: 1.6, ease: "power2.out", scrollTrigger: { trigger: "#profileChart", start: "top 80%" } });
       }
 
-      /* --- rover: floating idle + entrance --- */
-      gsap.from(".rover-btn", { x: isAr ? 200 : -200, autoAlpha: 0, duration: 1.6, ease: "expo.out", scrollTrigger: { trigger: "#roverRoot", start: "top 80%" } });
-      gsap.from(".wheel", { rotation: isAr ? 360 : -360, transformOrigin: "50% 50%", duration: 1.6, ease: "expo.out", scrollTrigger: { trigger: "#roverRoot", start: "top 80%" } });
-      gsap.to(".rover-body", { y: -6, duration: 1.8, ease: "sine.inOut", repeat: -1, yoyo: true });
-      gsap.to(".rover-mast", { rotation: 6, svgOrigin: "334 118", duration: 2.6, ease: "sine.inOut", repeat: -1, yoyo: true });
-      gsap.from(".rover-info > *", { y: 30, autoAlpha: 0, stagger: .07, duration: .9, ease: "expo.out", scrollTrigger: { trigger: ".rover-info", start: "top 85%" } });
+      /* --- rover: entrance --- */
+      gsap.from("#roverStage", { y: 50, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: "#roverRoot", start: "top 80%" } });
+      gsap.from(".rv__side > *", { y: 30, autoAlpha: 0, stagger: .08, duration: .9, ease: "expo.out", scrollTrigger: { trigger: "#roverRoot", start: "top 75%" } });
 
       /* --- gallery & method --- */
       gsap.from(".shot", { y: 60, autoAlpha: 0, stagger: .08, duration: 1, ease: "expo.out", scrollTrigger: { trigger: "#gallery", start: "top 85%" } });

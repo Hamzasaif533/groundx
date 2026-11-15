@@ -34,8 +34,12 @@ GX.IMG = {
   samailPhoto: { src: "assets/img/oman/samail-nasa.webp", caption: { en: "Samail Ophiolite, Earth's crust exposed in Oman, EO-1 ALI, 6 March 2012 (NASA Earth Observatory).", ar: "أفيوليت سمائل، قشرة الأرض مكشوفة في عُمان، القمر EO-1 بجهاز ALI، 6 مارس 2012 (مرصد الأرض التابع لناسا)." } },
   samailMap: { src: "assets/img/oman/samail-crop.webp", caption: { en: "Samail Ophiolite analysis area (similarity layer).", ar: "منطقة تحليل أفيوليت سمائل (طبقة التشابه)." } },
   sharqiyaPhoto: { src: "assets/img/oman/sharqiya-nasa.webp", caption: { en: "Al Sharqiya (Wahiba) Sands from Space Shuttle Discovery, STS-85, August 1997 (NASA JSC, STS085-501-14).", ar: "رمال الشرقية (وهيبة) من مكوك الفضاء ديسكفري، المهمة STS-85، أغسطس 1997 (مركز جونسون التابع لناسا، STS085-501-14)." } },
-  viperPhoto: { src: "assets/img/rovers/viper-nasa.webp", caption: { en: "VIPER mobility platform testing in the SLOPE lab, NASA Glenn Research Center, 2019 (NASA/GRC/Bridget Caswell, GRC-2019-C-09935).", ar: "اختبار منصة حركة VIPER في مختبر SLOPE، مركز غلين للأبحاث التابع لناسا، 2019 (NASA/GRC/Bridget Caswell، GRC-2019-C-09935)." } },
   perseverancePhoto: { src: "assets/img/rovers/perseverance-nasa.webp", caption: { en: "Perseverance's selfie with the Ingenuity helicopter in Jezero Crater, 6 April 2021 (NASA/JPL-Caltech/MSSS, PIA24542).", ar: "صورة ذاتية لبرسفيرانس مع المروحية إنجينيويتي في فوهة جيزيرو، 6 أبريل 2021 (NASA/JPL-Caltech/MSSS، PIA24542)." } },
+  akhdarPhoto: { src: "assets/img/oman/akhdar-s2.webp", caption: { en: "Jebel Akhdar north flank, the matched 16 km area. Sentinel-2 cloudless 2020 by EOX (CC BY 4.0, modified Copernicus Sentinel data).", ar: "السفح الشمالي للجبل الأخضر، المنطقة المطابقة بطول 16 كم. Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0، بيانات Copernicus Sentinel معدّلة)." } },
+  kawrPhoto: { src: "assets/img/oman/kawr-s2.webp", caption: { en: "Jebel Kawr canyons near Bahla, the matched 20 km area. Sentinel-2 cloudless 2020 by EOX (CC BY 4.0, modified Copernicus Sentinel data).", ar: "أخاديد جبل الكور قرب بهلاء، المنطقة المطابقة بطول 20 كم. Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0، بيانات Copernicus Sentinel معدّلة)." } },
+  batinahPhoto: { src: "assets/img/oman/batinah-s2.webp", caption: { en: "Batinah gravel plain near As Suwaiq, the matched 20 km area. Sentinel-2 cloudless 2020 by EOX (CC BY 4.0, modified Copernicus Sentinel data).", ar: "سهل الباطنة الحصوي قرب السويق، المنطقة المطابقة بطول 20 كم. Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0، بيانات Copernicus Sentinel معدّلة)." } },
+  adamPhoto: { src: "assets/img/oman/adam-s2.webp", caption: { en: "Adam basin, the matched 20 km area. Sentinel-2 cloudless 2020 by EOX (CC BY 4.0, modified Copernicus Sentinel data).", ar: "حوض أدم، المنطقة المطابقة بطول 20 كم. Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0، بيانات Copernicus Sentinel معدّلة)." } },
+  sharqiyaBox: { src: "assets/img/oman/sharqiya-box-s2.webp", caption: { en: "Al Sharqiya Sands near Al Mudhaibi, the matched 20 km area. Sentinel-2 cloudless 2020 by EOX (CC BY 4.0, modified Copernicus Sentinel data).", ar: "رمال الشرقية قرب المضيبي، المنطقة المطابقة بطول 20 كم. Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0، بيانات Copernicus Sentinel معدّلة)." } },
   hajarPhoto: { src: "assets/img/oman/hajar-iss053.webp", caption: { en: "Western Al Hajar Mountains from the International Space Station, 1 December 2017. The view includes Nizwa (near Wadi Ghul) and Nakhl (near Wadi Mistal). NASA JSC, ISS053-E-302321.", ar: "غرب جبال الحجر من محطة الفضاء الدولية، 1 ديسمبر 2017. يشمل المشهد نزوى (قرب وادي غول) ونخل (قرب وادي مستل). مركز جونسون التابع لناسا، ISS053-E-302321." } },
   amadeePhoto: { src: "assets/img/oman/amadee-crop.webp", caption: { en: "AMADEE-18 'Kepler' station area, Dhofar: analysis view.", ar: "منطقة محطة «كبلر» لمهمة AMADEE-18، ظفار: عرض التحليل." } }
 };
@@ -132,31 +136,36 @@ const HAUGHTON = {
   rovers: ["pending-1"]
 };
 
-/* ---------- Ground X terrain statistics on a matched 463 m grid ----------
-   Mars: NASA MGS MOLA global DEM (463 m/px). Oman: NASA SRTM elevation (AWS Terrain Tiles, ~35 m)
-   block-averaged to the same 463 m grid so both worlds are measured the same way.
+/* ---------- Ground X terrain statistics: equal footprints on a matched grid ----------
+   Every Moon/Mars site is compared with an Earth area of the SAME size, both on a 424 m grid:
+   Moon: NASA Site04 LOLA DEM resampled; Mars: NASA MGS MOLA DEM (463 m) resampled; Earth: NASA SRTM (AWS Terrain Tiles) averaged.
+   The Earth twins were chosen by searching Oman for the area whose terrain best matches each site.
    Slope: Horn method (degrees). Roughness: TRI, mean absolute height difference to the 8 neighbours (m).
    Relief: 95th minus 5th elevation percentile (m). */
 GX.DEM_STATS = {
-  valles:   { box: "8–12° S, 68–76° W", area: 110080, slope_mean: 5.84, slope_p50: 3.09, slope_p90: 16.46, slope_max: 47.53, flat10: 81.91, tri_mean: 37.92, tri_p90: 106.25, elev_min: -5306, elev_mean: -1494, elev_max: 5107, relief: 9415 },
-  syrtis:   { box: "7–10° N, 67–71° E", area: 41321, slope_mean: 1.10, slope_p50: 0.73, slope_p90: 1.89, slope_max: 26.46, flat10: 99.18, tri_mean: 7.08, tri_p90: 12.12, elev_min: 73, elev_mean: 1301, elev_max: 2018, relief: 1472 },
-  aonia:    { box: "56–60° S, 92–100° W", area: 59234, slope_mean: 1.52, slope_p50: 0.77, slope_p90: 2.87, slope_max: 23.78, flat10: 97.30, tri_mean: 7.60, tri_p90: 14.62, elev_min: -135, elev_mean: 1598, elev_max: 2724, relief: 1185 },
-  jezero:   { box: "18.00–18.85° N, 77.10–78.00° E", area: 2460, slope_mean: 2.66, slope_p50: 1.60, slope_p90: 6.34, slope_max: 22.74, flat10: 95.52, tri_mean: 17.03, tri_p90: 40.50, elev_min: -2888, elev_mean: -2332, elev_max: -1465, relief: 771 },
-  wadiGhul: { box: "23.10–23.30° N, 57.12–57.32° E", area: 403, slope_mean: 14.15, slope_p50: 12.27, slope_p90: 26.51, slope_max: 47.98, flat10: 35.71, tri_mean: 102.95, tri_p90: 192.87, elev_min: 646, elev_mean: 1511, elev_max: 2931, relief: 1708 },
-  sharqiya: { box: "21.60–22.20° N, 58.50–59.00° E", area: 3319, slope_mean: 1.25, slope_p50: 1.01, slope_p90: 2.66, slope_max: 4.90, flat10: 100.00, tri_mean: 12.39, tri_p90: 22.15, elev_min: 148, elev_mean: 240, elev_max: 371, relief: 164 },
-  mistal:   { box: "23.15–23.40° N, 57.62–57.87° E", area: 664, slope_mean: 13.18, slope_p50: 12.44, slope_p90: 27.66, slope_max: 41.45, flat10: 45.17, tri_mean: 100.46, tri_p90: 201.74, elev_min: 278, elev_mean: 924, elev_max: 2378, relief: 1499 },
-  samail:   { box: "22.85–23.10° N, 58.35–58.65° E", area: 789, slope_mean: 6.32, slope_p50: 5.49, slope_p90: 11.94, slope_max: 34.14, flat10: 82.15, tri_mean: 55.16, tri_p90: 94.75, elev_min: 319, elev_mean: 741, elev_max: 1508, relief: 706 }
+  shackleton: { box: "Site04 tile, 89.9° S", area: 233, slope_mean: 20.18, slope_p50: 19.31, slope_p90: 32.53, slope_max: 34.66, flat10: 21.68, tri_mean: 126.11, tri_p90: 207.87, elev_min: -2787, elev_mean: 267, elev_max: 1753, relief: 3966 },
+  akhdar:     { box: "23.14–23.28° N, 57.44–57.60° E", area: 246, slope_mean: 18.04, slope_p50: 17.25, slope_p90: 30.04, slope_max: 44.76, flat10: 21.69, tri_mean: 126.81, tri_p90: 204.79, elev_min: 533, elev_mean: 1304, elev_max: 2322, relief: 1461 },
+  valles:     { box: "10.93–11.26° S, 65.09–65.42° W", area: 380, slope_mean: 10.26, slope_p50: 1.53, slope_p90: 28.50, slope_max: 34.03, flat10: 61.91, tri_mean: 63.33, tri_p90: 178.48, elev_min: 1104, elev_mean: 4649, elev_max: 5346, relief: 3030 },
+  kawr:       { box: "23.03–23.20° N, 56.86–57.05° E", area: 380, slope_mean: 9.72, slope_p50: 5.78, slope_p90: 25.47, slope_max: 45.04, flat10: 61.20, tri_mean: 65.33, tri_p90: 168.94, elev_min: 504, elev_mean: 1069, elev_max: 2658, relief: 1895 },
+  syrtis:     { box: "11.15–11.48° N, 71.89–72.23° E", area: 389, slope_mean: 0.53, slope_p50: 0.43, slope_p90: 0.94, slope_max: 5.05, flat10: 100.00, tri_mean: 3.14, tri_p90: 5.57, elev_min: 992, elev_mean: 1085, elev_max: 1228, relief: 136 },
+  batinah:    { box: "23.69–23.86° N, 57.15–57.34° E", area: 372, slope_mean: 0.49, slope_p50: 0.42, slope_p90: 0.64, slope_max: 8.23, flat10: 100.00, tri_mean: 3.06, tri_p90: 4.01, elev_min: 6, elev_mean: 81, elev_max: 283, relief: 135 },
+  aonia:      { box: "52.08–52.41° S, 108.19–108.81° W", area: 380, slope_mean: 0.36, slope_p50: 0.27, slope_p90: 0.72, slope_max: 1.98, flat10: 100.00, tri_mean: 2.24, tri_p90: 4.35, elev_min: 1527, elev_mean: 1555, elev_max: 1638, relief: 70 },
+  sharqiya:   { box: "22.17–22.35° N, 58.36–58.55° E", area: 380, slope_mean: 0.35, slope_p50: 0.30, slope_p90: 0.44, slope_max: 4.23, flat10: 100.00, tri_mean: 2.23, tri_p90: 2.74, elev_min: 252, elev_mean: 311, elev_max: 370, relief: 85 },
+  jezero:     { box: "18.30–18.63° N, 77.33–77.68° E", area: 380, slope_mean: 1.69, slope_p50: 0.97, slope_p90: 4.05, slope_max: 15.93, flat10: 99.10, tri_mean: 9.89, tri_p90: 23.44, elev_min: -2681, elev_mean: -2525, elev_max: -2081, relief: 381 },
+  adam:       { box: "22.20–22.38° N, 57.38–57.57° E", area: 372, slope_mean: 1.78, slope_p50: 0.22, slope_p90: 6.96, slope_max: 27.58, flat10: 92.95, tri_mean: 11.18, tri_p90: 46.76, elev_min: 245, elev_mean: 311, elev_max: 990, relief: 364 }
 };
 
-const MOLA = { en: "NASA MGS MOLA DEM, 463 m/px", ar: "نموذج الارتفاع MOLA من ناسا، 463 م/بكسل" };
-const SRTM = { en: "NASA SRTM DEM (~35 m) resampled to 463 m", ar: "نموذج الارتفاع SRTM من ناسا (~35 م) معاد إلى 463 م" };
+const MOLA = { en: "NASA MGS MOLA DEM, resampled to 424 m", ar: "نموذج الارتفاع MOLA من ناسا، معاد إلى 424 م" };
+const SRTM = { en: "NASA SRTM DEM, averaged to 424 m", ar: "نموذج الارتفاع SRTM من ناسا، بمتوسط 424 م" };
+const LOLA = { en: "NASA Site04 LOLA DEM, resampled to 424 m", ar: "نموذج الارتفاع LOLA ‏(Site04) من ناسا، معاد إلى 424 م" };
 const GXM = (src) => ({ en: "Computed by Ground X from the " + src.en, ar: "حسبه فريق Ground X من " + src.ar });
-const MATCH_NOTE = { en: "Same 463 m grid and method on both worlds, so the numbers are directly comparable.", ar: "الشبكة نفسها (463 م) والطريقة نفسها على العالمين، لذا الأرقام قابلة للمقارنة مباشرة." };
+const MATCH_NOTE = { en: "Same footprint, same 424 m grid and same method on both worlds, so the numbers compare directly.", ar: "المساحة نفسها والشبكة نفسها (424 م) والطريقة نفسها على العالمين، لذا تُقارن الأرقام مباشرة." };
 const MOLA_URL = "https://astrogeology.usgs.gov/search/map/mars_mgs_mola_dem_463m";
 const SRTM_URL = "https://www.earthdata.nasa.gov/data/instruments/srtm";
 const QUAL = { en: "Qualitative, from orbital and field imagery", ar: "تقييم نوعي من صور المدار والصور الميدانية" };
 const f2 = (v, u = "") => Number(v).toFixed(2) + u;
 const m0 = (v) => Math.round(v).toLocaleString("en-US") + " m";
+const RELIEF = { en: "Relief (5th to 95th percentile)", ar: "التضاريس (من المئين 5 إلى 95)" };
 
 /* slope, roughness and elevation criteria from a GX.DEM_STATS entry */
 function demCriteria(st, src, url) {
@@ -174,15 +183,15 @@ function demCriteria(st, src, url) {
     },
     elevation: {
       headline: m0(st.elev_mean), headlineLabel: K.meanElev,
-      facts: [{ k: K.min, v: m0(st.elev_min) }, { k: K.mean, v: m0(st.elev_mean) }, { k: K.max, v: m0(st.elev_max) }, { k: { en: "Relief (5th to 95th percentile)", ar: "التضاريس (من المئين 5 إلى 95)" }, v: m0(st.relief) }],
+      facts: [{ k: K.min, v: m0(st.elev_min) }, { k: K.mean, v: m0(st.elev_mean) }, { k: K.max, v: m0(st.elev_max) }, { k: RELIEF, v: m0(st.relief) }],
       method, reference: url
     }
   };
 }
 const demBars = (st) => ({ slopeMean: st.slope_mean, flatShare: st.flat10, roughMean: st.tri_mean, relief: st.relief });
+const areaText = (st) => ({ en: st.area + " km² box, " + st.box, ar: "مربع " + st.area + " كم²، " + st.box });
 
-/* Ground X terrain similarity index: for each shared metric, 100 x smaller / larger, then the mean.
-   Geometry only (slope and roughness, plus relief where both sides have it). */
+/* Ground X terrain similarity index: for each shared metric, 100 x smaller / larger, then the mean. */
 GX.similarity = (a, b) => {
   const keys = ["slopeMean", "flatShare", "roughMean", "relief"].filter((k) => a[k] != null && b[k] != null);
   const parts = keys.map((k) => 100 * Math.min(a[k], b[k]) / Math.max(a[k], b[k]));
@@ -193,193 +202,131 @@ const TEMP_OMAN = { en: "Hot desert climate: summer days above 40 °C in the low
 const OMAN_CLIMATE = "https://climateknowledgeportal.worldbank.org/country/oman/climate-data-historical";
 const MARS_FACTS = "https://science.nasa.gov/mars/facts/";
 const JEZERO_MET = "https://doi.org/10.1038/s41561-022-01084-0";
+const EOX = "https://s2maps.eu";
 
 const omanAnalog = (o) => Object.assign({ country: { en: "Oman", ar: "عُمان" }, maps: {}, rovers: [] }, o);
+const twin = (key, o) => omanAnalog(Object.assign({ resolution: SRTM, area: areaText(GX.DEM_STATS[key]), bars: demBars(GX.DEM_STATS[key]) }, o,
+  { criteria: Object.assign(demCriteria(GX.DEM_STATS[key], SRTM, SRTM_URL), o.criteria) }));
+const Q = (display, detail, extra) => Object.assign({ display, detail, method: QUAL }, extra || {});
 
-const SAMAIL = omanAnalog({
-  id: "samail",
-  name: { en: "Samail Ophiolite", ar: "أفيوليت سمائل" },
-  location: { en: "Al Hajar Mountains, Oman", ar: "جبال الحجر، عُمان" },
-  coords: "23.0° N, 58.5° E",
-  type: { en: "Ophiolite (exposed oceanic crust and mantle rocks)", ar: "أفيوليت (صخور قشرة محيطية ووشاح مكشوفة)" },
-  photo: "samailPhoto", photoSource: "https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569",
-  resolution: { en: "Team satellite analysis · Ground X 463 m grid", ar: "تحليل الفريق بالأقمار الصناعية · شبكة Ground X بدقة 463 م" },
-  area: { en: "Team area + 789 km² matched box", ar: "منطقة الفريق + مربع مطابق 789 كم²" },
-  criteria: Object.assign(geeCriteria(GX.GEE_STATS.samail), {
-    terrain: {
-      display: { en: "Rugged ophiolite hills and wadis", ar: "تلال أفيوليتية وعرة وأودية" },
-      detail: { en: "Dark, deeply dissected hills of mantle and crustal rock cut by gravel wadis, seen in the NASA EO-1 image.", ar: "تلال داكنة شديدة التقطع من صخور الوشاح والقشرة تقطعها أودية حصوية، كما تظهر في صورة EO-1 من ناسا." },
-      evidence: { en: "NASA Earth Observatory, EO-1 ALI", ar: "مرصد الأرض التابع لناسا، EO-1 ALI" }
-    },
-    geology: {
-      display: { en: "Ophiolite rocks of the Al Hajar Mountains", ar: "صخور الأفيوليت في سلسلة جبال الحجر" },
-      detail: { en: "Mafic and ultramafic rocks and their alteration products (serpentine, carbonates) exposed in a semi-arid setting, studied as a Mars analog for minerals seen from Mars orbit (Leask et al., 2021).", ar: "صخور مافية وفوق مافية ونواتج تحولها (السربنتين والكربونات) مكشوفة في بيئة شبه جافة، تُدرس كنظير للمريخ للمعادن المرصودة من مداره (Leask وآخرون، 2021)." },
-      reference: "https://doi.org/10.1029/2021EA001637"
-    },
-    rockSize: {
-      display: { en: "Outcrops, blocks and wadi cobbles", ar: "نتوءات صخرية وكتل وحصى الأودية" },
-      detail: { en: "Fractured peridotite and gabbro outcrops shed metre-size blocks; wadi floors carry gravel and cobbles.", ar: "تتكسر نتوءات البيريدوتيت والجابرو إلى كتل بحجم المتر، وتحمل قيعان الأودية الحصى والجلاميد الصغيرة." },
-      method: QUAL
-    },
-    rockDensity: {
-      display: { en: "High on slopes, moderate in wadis", ar: "عالية على المنحدرات، متوسطة في الأودية" },
-      detail: { en: "Bare rock and scree cover most hillsides; flatter wadi floors are gravel-covered.", ar: "تغطي الصخور العارية والركام معظم السفوح، وتكسو الحصى قيعان الأودية الأكثر استواءً." },
-      method: QUAL
-    },
-    temperature: { display: { en: "Hot: summer highs above 40 °C", ar: "حار: نهار الصيف فوق 40 °م" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
-  }),
-  bars: demBars(GX.DEM_STATS.samail),
-  rovers: ["perseverance"]
-});
-SAMAIL.criteria.slope.note = { en: "Team values from satellite terrain analysis. The comparison bars use the matched 463 m grid.", ar: "قيم الفريق من تحليل التضاريس بالأقمار الصناعية. أشرطة المقارنة تستخدم الشبكة المطابقة 463 م." };
-
-const AMADEE = omanAnalog({
-  id: "amadee",
-  name: { en: "AMADEE-18 'Kepler' station", ar: "محطة «كبلر» لمهمة AMADEE-18" },
-  location: { en: "Dhofar desert, Oman", ar: "صحراء ظفار، عُمان" },
-  type: { en: "Site of the 2018 Mars analog mission (Austrian Space Forum with the Oman Astronomical Society)", ar: "موقع مهمة محاكاة المريخ عام 2018 (المنتدى الفضائي النمساوي بالشراكة مع الجمعية الفلكية العُمانية)" },
-  photo: "amadeePhoto",
-  criteria: Object.assign(geeCriteria(GX.GEE_STATS.amadee), {
-    terrain: {
-      display: { en: "Flat, open desert plain", ar: "سهل صحراوي مفتوح ومنبسط" },
-      detail: { en: "Used in February 2018 for a simulated human–robotic Mars mission with analog astronauts in spacesuit simulators.", ar: "استُخدم في فبراير 2018 لمحاكاة مهمة بشرية روبوتية إلى المريخ مع روّاد تناظريين يرتدون محاكيات بدلات فضائية." },
-      reference: "https://oewf.org/en/amadee-18/"
-    }
-  })
-});
-
-const twin = (o) => omanAnalog(o);
-const WADI_GHUL = twin({
-  id: "wadi-ghul",
-  name: { en: "Wadi Ghul", ar: "وادي غول" },
-  location: { en: "Al Hamra, Al Hajar Mountains, Oman", ar: "ولاية الحمراء، جبال الحجر، عُمان" },
-  coords: "23.2° N, 57.2° E",
-  type: { en: "Large, deep wadi (canyon) below Jebel Shams", ar: "وادٍ كبير وعميق (أخدود) أسفل جبل شمس" },
-  photo: "hajarPhoto", photoSource: "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=ISS053&roll=E&frame=302321",
-  resolution: SRTM, area: { en: "403 km² box", ar: "مربع 403 كم²" },
-  criteria: Object.assign(demCriteria(GX.DEM_STATS.wadiGhul, SRTM, SRTM_URL), {
-    terrain: {
-      display: { en: "Deep canyon cut into a mountain plateau", ar: "أخدود عميق محفور في هضبة جبلية" },
-      detail: { en: "Sheer walls drop from the Jebel Shams plateau (about 3,000 m, Oman's highest summit) into the wadi, the same wall-and-floor form as Valles Marineris at a much smaller scale.", ar: "تنحدر جدران شاهقة من هضبة جبل شمس (نحو 3,000 م، أعلى قمة في عُمان) إلى قاع الوادي، بالشكل نفسه من الجدران والقاع في فاليس مارينيريس ولكن بحجم أصغر بكثير." },
-      evidence: { en: "ISS astronaut photo ISS053-E-302321", ar: "صورة رواد محطة الفضاء ISS053-E-302321" }
-    },
-    geology: {
-      display: { en: "Layered limestone and dolomite cliffs", ar: "جروف من الحجر الجيري والدولوميت المتطبق" },
-      detail: { en: "The canyon exposes thick, layered carbonate rocks of the Hajar Supergroup, eroded by flash floods into steep walls and talus.", ar: "يكشف الأخدود صخورًا كربونية متطبقة سميكة من مجموعة الحجر العليا، نحتتها السيول إلى جدران شديدة الانحدار وركام." },
-      method: QUAL
-    },
-    rockSize: { display: { en: "Boulders and talus below the walls", ar: "جلاميد وركام أسفل الجدران" }, detail: { en: "Rockfall from the walls leaves boulder-strewn slopes; the wadi floor holds gravel and cobbles.", ar: "تخلّف الانهيارات الصخرية من الجدران منحدرات مليئة بالجلاميد، ويحمل قاع الوادي الحصى والجلاميد الصغيرة." }, method: QUAL },
-    rockDensity: { display: { en: "High", ar: "عالية" }, detail: { en: "Bare rock walls and talus dominate; little soil or sand.", ar: "تغلب الجدران الصخرية العارية والركام، مع القليل من التربة أو الرمل." }, method: QUAL },
-    temperature: { display: { en: "Hot floor, cool plateau", ar: "قاع حار وهضبة باردة" }, detail: { en: "Hot summers on the wadi floor; the plateau above 2,000 m is much cooler and can approach freezing in winter.", ar: "صيف حار في قاع الوادي، بينما الهضبة فوق 2,000 م أبرد بكثير وقد تقترب من التجمد شتاءً." }, reference: OMAN_CLIMATE }
-  }),
-  bars: demBars(GX.DEM_STATS.wadiGhul),
-  rovers: ["perseverance"]
-});
-
-const SHARQIYA = twin({
-  id: "sharqiya",
-  name: { en: "Al Sharqiya Sands", ar: "رمال الشرقية" },
-  location: { en: "Ash Sharqiyah, Oman", ar: "محافظة الشرقية، عُمان" },
-  coords: "21.9° N, 58.75° E",
-  type: { en: "Sand sea (formerly Wahiba Sands)", ar: "بحر رمال (رمال وهيبة سابقًا)" },
-  photo: "sharqiyaPhoto", photoSource: "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=STS085&roll=501&frame=14",
-  resolution: SRTM, area: { en: "3,319 km² box", ar: "مربع 3,319 كم²" },
-  criteria: Object.assign(demCriteria(GX.DEM_STATS.sharqiya, SRTM, SRTM_URL), {
-    terrain: {
-      display: { en: "Sand fields and long dune ridges", ar: "حقول رمال وسلاسل كثبان طويلة" },
-      detail: { en: "Long north–south dune ridges with smaller dunes between them, clearly lined up in the Space Shuttle photo.", ar: "سلاسل كثبان طويلة من الشمال إلى الجنوب تتخللها كثبان أصغر، تظهر مصطفة بوضوح في صورة مكوك الفضاء." },
-      evidence: { en: "Space Shuttle photo STS085-501-14", ar: "صورة مكوك الفضاء STS085-501-14" }
-    },
-    geology: { display: { en: "Wind-blown sand over older dune rock", ar: "رمال تذروها الرياح فوق صخور كثبان أقدم" }, detail: { en: "Loose sand of quartz and carbonate grains sits on older, cemented dune sandstone.", ar: "رمال سائبة من حبيبات الكوارتز والكربونات فوق حجر رملي كثيبي أقدم ومتماسك." }, method: QUAL },
-    rockSize: { display: { en: "Sand grains, almost no rocks", ar: "حبيبات رمل وتكاد تخلو من الصخور" }, detail: { en: "The surface is fine to medium sand; rocks appear only at the edges of the sand sea.", ar: "السطح رمل ناعم إلى متوسط، ولا تظهر الصخور إلا عند أطراف بحر الرمال." }, method: QUAL },
-    rockDensity: { display: { en: "Very low", ar: "منخفضة جدًا" }, detail: { en: "Soft sand, not rocks, is the hazard: wheels can sink and slip on dune flanks.", ar: "الخطر هو الرمل الناعم لا الصخور: قد تغوص العجلات وتنزلق على جوانب الكثبان." }, method: QUAL },
-    temperature: { display: { en: "Very hot summers, cool nights", ar: "صيف شديد الحرارة وليالٍ باردة" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
-  }),
-  bars: demBars(GX.DEM_STATS.sharqiya),
-  rovers: ["perseverance"]
-});
-
-const MISTAL = twin({
-  id: "mistal-huqf",
-  name: { en: "Wadi Mistal", ar: "وادي مستل" },
-  location: { en: "Nakhal, Al Hajar Mountains, Oman", ar: "ولاية نخل، جبال الحجر، عُمان" },
-  coords: "23.3° N, 57.75° E",
-  type: { en: "Mountain basin drained by a dry wadi", ar: "حوض جبلي يصرفه وادٍ جاف" },
-  photo: "hajarPhoto", photoSource: "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=ISS053&roll=E&frame=302321",
-  resolution: SRTM, area: { en: "664 km² box", ar: "مربع 664 كم²" },
-  criteria: Object.assign(demCriteria(GX.DEM_STATS.mistal, SRTM, SRTM_URL), {
-    terrain: {
-      display: { en: "Dry basin and wadi channels", ar: "حوض جاف وقنوات أودية" },
-      detail: { en: "A basin ringed by mountains where seasonal floods have laid down gravel fans, a small-scale version of a crater lake fed by river channels. The team's pairing also names the Huqf area; the measurements here cover Wadi Mistal.", ar: "حوض تحيط به الجبال رسّبت فيه السيول الموسمية مراوح حصوية، نسخة مصغرة من بحيرة فوهة تغذيها قنوات نهرية. يذكر اقتران الفريق منطقة حقف أيضًا، والقياسات هنا تخص وادي مستل." },
-      evidence: { en: "ISS astronaut photo ISS053-E-302321", ar: "صورة رواد محطة الفضاء ISS053-E-302321" }
-    },
-    geology: { display: { en: "Flood gravels in a carbonate mountain basin", ar: "حصى السيول في حوض جبلي كربوني" }, detail: { en: "Water-laid gravels and fans on the floor, limestone mountains around, the same 'water shaped this' story Perseverance is reading in Jezero's delta.", ar: "حصى وفيرة ومراوح رسبتها المياه في القاع وجبال جيرية حوله، القصة نفسها «الماء شكّل هذا» التي تقرؤها المركبة برسفيرانس في دلتا جيزيرو." }, method: QUAL },
-    rockSize: { display: { en: "Gravel to boulders", ar: "من الحصى إلى الجلاميد" }, detail: { en: "Rounded cobbles and boulders in the channels; finer gravel on the fans.", ar: "جلاميد وحصى مستديرة في القنوات، وحصى أنعم على المراوح." }, method: QUAL },
-    rockDensity: { display: { en: "Moderate to high", ar: "متوسطة إلى عالية" }, detail: { en: "Channels are rock-filled; terraces between them are smoother.", ar: "القنوات مليئة بالصخور، والمصاطب بينها أكثر نعومة." }, method: QUAL },
-    temperature: { display: { en: "Hot summers, mild winters", ar: "صيف حار وشتاء معتدل" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
-  }),
-  bars: demBars(GX.DEM_STATS.mistal),
-  rovers: ["perseverance"]
-});
-
-/* ---------- Earth analogs: Haughton (Moon twin) ---------- */
-Object.assign(HAUGHTON.criteria, {
-  elevation: {
-    headline: "207 m", headlineLabel: K.meanElev,
-    facts: [{ k: K.min, v: "61 m" }, { k: K.mean, v: "207 m" }, { k: K.max, v: "332 m" }, { k: { en: "Relief (5th to 95th percentile)", ar: "التضاريس (من المئين 5 إلى 95)" }, v: "175 m" }],
-    method: { en: "Computed by Ground X from the team's ArcticDEM grid", ar: "حسبه فريق Ground X من شبكة ArcticDEM الخاصة بالفريق" }
-  },
-  rockSize: {
-    display: { en: "Gravel and cobbles, scattered boulders", ar: "حصى وجلاميد صغيرة مع جلاميد متناثرة" },
-    detail: { en: "Frost-shattered breccia leaves a gravel and cobble cover with scattered larger blocks, as seen in NASA's K-10 rover field photos.", ar: "يتفتت البريشيا بفعل الصقيع إلى غطاء من الحصى والجلاميد الصغيرة مع كتل أكبر متناثرة، كما تظهر صور اختبار المركبة K-10 من ناسا." },
-    evidence: { en: "NASA Ames K-10 field photos, 2007", ar: "صور اختبار K-10 من مركز أميس، 2007" }, method: QUAL
-  },
-  rockDensity: {
-    display: { en: "Moderate", ar: "متوسطة" },
-    detail: { en: "Rock fragments cover most of the ground, but they are small enough for a test rover to drive over.", ar: "تغطي الشظايا الصخرية معظم الأرض، لكنها صغيرة بما يكفي لتعبرها مركبة اختبار." },
-    method: QUAL
-  },
-  temperature: {
-    display: { en: "Polar desert, about −16 °C yearly mean", ar: "صحراء قطبية، متوسط سنوي نحو −16 °م" },
-    detail: { en: "Annual mean about −16 °C; short summers of roughly 2 to 8 °C, when field tests take place.", ar: "المتوسط السنوي نحو −16 °م، وصيف قصير بين 2 و8 °م تقريبًا تُجرى فيه الاختبارات الميدانية." },
-    reference: "https://www.thecanadianencyclopedia.ca/en/article/devon-island"
+/* ---------- Earth twins (one per site, found by terrain search across Oman) ---------- */
+const AKHDAR = twin("akhdar", {
+  id: "akhdar", name: { en: "Jebel Akhdar, north flank", ar: "الجبل الأخضر، السفح الشمالي" },
+  location: { en: "Al Awabi, Al Hajar Mountains, Oman", ar: "ولاية العوابي، جبال الحجر، عُمان" }, coords: "23.21° N, 57.52° E",
+  type: { en: "Steep mountain flank cut by deep gorges", ar: "سفح جبلي شديد الانحدار تقطعه خوانق عميقة" },
+  photo: "akhdarPhoto", photoSource: EOX,
+  criteria: {
+    terrain: { display: { en: "Steep slopes and gorges", ar: "منحدرات شديدة وخوانق" }, detail: { en: "Walls drop from the Jebel Akhdar plateau toward Wadi Bani Kharus. Its slope mix is almost identical to Shackleton's: only 21.69% of the area is under 10° (Shackleton 21.68%).", ar: "تنحدر الجدران من هضبة الجبل الأخضر نحو وادي بني خروص. توزيع انحداراته يكاد يطابق شاكلتون: 21.69% فقط من المساحة أقل من 10° (شاكلتون 21.68%)." }, evidence: { en: "Sentinel-2 view and NASA SRTM terrain", ar: "صورة Sentinel-2 وتضاريس SRTM من ناسا" } },
+    geology: Q({ en: "Limestone and dolomite mountain", ar: "جبل من الحجر الجيري والدولوميت" }, { en: "Thick carbonate layers of the Jebel Akhdar dome, broken into cliffs and scree. Rock type differs from the Moon; the match is in shape and steepness.", ar: "طبقات كربونية سميكة في قبة الجبل الأخضر تتكسر إلى جروف وركام. نوع الصخر يختلف عن القمر، والتطابق في الشكل وشدة الانحدار." }),
+    rockSize: Q({ en: "Boulders and scree on the slopes", ar: "جلاميد وركام على المنحدرات" }, { en: "Rockfall leaves boulder fields below the cliffs, as on Shackleton's walls.", ar: "تخلّف الانهيارات الصخرية حقول جلاميد أسفل الجروف، كما على جدران شاكلتون." }),
+    rockDensity: Q({ en: "High on the walls", ar: "عالية على الجدران" }, { en: "Bare rock dominates the steep ground; soil only on terraces.", ar: "تغلب الصخور العارية على الأرض شديدة الانحدار، والتربة على المدرجات فقط." }),
+    temperature: { display: { en: "Cool heights, hot valleys", ar: "مرتفعات باردة وأودية حارة" }, detail: { en: "The plateau above 2,000 m can drop near freezing in winter; the valleys below are hot in summer.", ar: "قد تقترب الهضبة فوق 2,000 م من التجمد شتاءً، بينما الأودية أسفلها حارة صيفًا." }, reference: OMAN_CLIMATE }
   }
 });
-HAUGHTON.criteria.terrain.evidence = { en: "Team slope map and Landsat 8 image", ar: "خريطة الانحدار للفريق وصورة لاندسات 8" };
-HAUGHTON.rovers = ["viper"];
-HAUGHTON.comparison.similarity = GX.similarity({ slopeMean: 20.66, flatShare: 18.81, roughMean: 5.0552 }, HAUGHTON.bars);
-HAUGHTON.comparison.difference = 100 - HAUGHTON.comparison.similarity;
 
+const KAWR = twin("kawr", {
+  id: "kawr", name: { en: "Jebel Kawr canyons", ar: "أخاديد جبل الكور" },
+  location: { en: "Bahla, Ad Dakhiliyah, Oman", ar: "ولاية بهلاء، محافظة الداخلية، عُمان" }, coords: "23.11° N, 56.96° E",
+  type: { en: "Limestone massif with deep canyons and cliffs", ar: "كتلة جيرية ذات أخاديد عميقة وجروف" },
+  photo: "kawrPhoto", photoSource: EOX,
+  criteria: {
+    terrain: { display: { en: "Canyon walls above flat floors", ar: "جدران أخاديد فوق قيعان مستوية" }, detail: { en: "Cliffs rise from flat wadi floors, the same wall-and-floor mix as the Valles Marineris rim: 61.20% of the area is under 10° (Valles 61.91%).", ar: "ترتفع الجروف من قيعان أودية مستوية، بالمزيج نفسه من الجدران والقيعان في حافة فاليس مارينيريس: 61.20% من المساحة أقل من 10° (فاليس 61.91%)." }, evidence: { en: "Sentinel-2 view and NASA SRTM terrain", ar: "صورة Sentinel-2 وتضاريس SRTM من ناسا" } },
+    geology: Q({ en: "Massive limestone cut by canyons", ar: "حجر جيري ضخم تقطعه الأخاديد" }, { en: "Thick limestone layers exposed in sheer canyon walls, eroded by flash floods into talus slopes.", ar: "طبقات جيرية سميكة مكشوفة في جدران أخاديد شاهقة، نحتتها السيول إلى منحدرات ركامية." }),
+    rockSize: Q({ en: "Boulders below the walls", ar: "جلاميد أسفل الجدران" }, { en: "Rockfall and landslide blocks gather at the foot of the cliffs, as in Valles Marineris.", ar: "تتجمع كتل الانهيارات الصخرية والأرضية عند أسفل الجروف، كما في فاليس مارينيريس." }),
+    rockDensity: Q({ en: "High near walls, low on floors", ar: "عالية قرب الجدران، منخفضة في القيعان" }, { en: "Wadi floors are gravel; the walls and their aprons are rock-covered.", ar: "قيعان الأودية حصوية، والجدران وما حولها مغطاة بالصخور." }),
+    temperature: { display: { en: "Hot summers, mild winters", ar: "صيف حار وشتاء معتدل" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
+  }
+});
+
+const BATINAH = twin("batinah", {
+  id: "batinah", name: { en: "Batinah gravel plain", ar: "سهل الباطنة الحصوي" },
+  location: { en: "As Suwaiq, Al Batinah North, Oman", ar: "ولاية السويق، محافظة شمال الباطنة، عُمان" }, coords: "23.77° N, 57.25° E",
+  type: { en: "Dark plain built from Samail ophiolite debris", ar: "سهل داكن مكوّن من فتات أفيوليت سمائل" },
+  photo: "batinahPhoto", photoSource: EOX,
+  criteria: {
+    terrain: { display: { en: "Very gentle, wide plain", ar: "سهل واسع لطيف جدًا" }, detail: { en: "A broad plain sloping gently to the sea, as smooth as the Syrtis Major lava plains: mean slope 0.49° against 0.53°.", ar: "سهل عريض ينحدر بلطف نحو البحر، أملس مثل سهول حمم سيرتس ميجور: متوسط الانحدار 0.49° مقابل 0.53°." }, evidence: { en: "Sentinel-2 view and NASA SRTM terrain", ar: "صورة Sentinel-2 وتضاريس SRTM من ناسا" } },
+    geology: Q({ en: "Dark mafic gravel from the ophiolite", ar: "حصى مافي داكن من الأفيوليت" }, { en: "Gravel and fans washed down from the Samail ophiolite: dark gabbro and peridotite pebbles, mafic rock like Syrtis Major's basalt.", ar: "حصى ومراوح جرفتها السيول من أفيوليت سمائل: حصى داكنة من الجابرو والبيريدوتيت، صخر مافي يشبه بازلت سيرتس ميجور." }, { reference: "https://doi.org/10.1029/2021EA001637" }),
+    rockSize: Q({ en: "Pebbles and cobbles", ar: "حصى وجلاميد صغيرة" }, { en: "Wadi gravels from fist-size down to sand; few large boulders.", ar: "حصى أودية من حجم القبضة إلى الرمل، مع القليل من الجلاميد الكبيرة." }),
+    rockDensity: Q({ en: "Low to moderate", ar: "منخفضة إلى متوسطة" }, { en: "A smooth gravel surface that is easy to drive on.", ar: "سطح حصوي أملس سهل القيادة." }),
+    temperature: { display: { en: "Hot and humid summers", ar: "صيف حار ورطب" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
+  }
+});
+
+const SHARQIYA = twin("sharqiya", {
+  id: "sharqiya", name: { en: "Al Sharqiya Sands", ar: "رمال الشرقية" },
+  location: { en: "Al Mudhaibi, Ash Sharqiyah North, Oman", ar: "ولاية المضيبي، محافظة شمال الشرقية، عُمان" }, coords: "22.26° N, 58.46° E",
+  type: { en: "Sand sea (formerly Wahiba Sands)", ar: "بحر رمال (رمال وهيبة سابقًا)" },
+  photo: "sharqiyaPhoto", photoSource: "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=STS085&roll=501&frame=14",
+  criteria: {
+    terrain: { display: { en: "Sand fields and long dune ridges", ar: "حقول رمال وسلاسل كثبان طويلة" }, detail: { en: "The north-western sand sheet of Al Sharqiya: smooth sand that matches the Aonia Terra plains almost exactly (mean slope 0.35° against 0.36°).", ar: "الغطاء الرملي الشمالي الغربي لرمال الشرقية: رمل أملس يطابق سهول أونيا تيرا تقريبًا (متوسط الانحدار 0.35° مقابل 0.36°)." }, evidence: { en: "Space Shuttle photo STS085-501-14", ar: "صورة مكوك الفضاء STS085-501-14" } },
+    geology: Q({ en: "Wind-blown sand over older dune rock", ar: "رمال تذروها الرياح فوق صخور كثبان أقدم" }, { en: "Loose sand of quartz and carbonate grains sits on older, cemented dune sandstone.", ar: "رمال سائبة من حبيبات الكوارتز والكربونات فوق حجر رملي كثيبي أقدم ومتماسك." }),
+    rockSize: Q({ en: "Sand grains, almost no rocks", ar: "حبيبات رمل وتكاد تخلو من الصخور" }, { en: "The surface is fine to medium sand; rocks appear only at the edges of the sand sea.", ar: "السطح رمل ناعم إلى متوسط، ولا تظهر الصخور إلا عند أطراف بحر الرمال." }),
+    rockDensity: Q({ en: "Very low", ar: "منخفضة جدًا" }, { en: "Soft sand, not rocks, is the hazard: wheels can sink and slip on dune flanks.", ar: "الخطر هو الرمل الناعم لا الصخور: قد تغوص العجلات وتنزلق على جوانب الكثبان." }),
+    temperature: { display: { en: "Very hot summers, cool nights", ar: "صيف شديد الحرارة وليالٍ باردة" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
+  }
+});
+
+const ADAM = twin("adam", {
+  id: "adam", name: { en: "Adam basin", ar: "حوض أدم" },
+  location: { en: "Adam, Ad Dakhiliyah, Oman", ar: "ولاية أدم، محافظة الداخلية، عُمان" }, coords: "22.29° N, 57.48° E",
+  type: { en: "Wadi-fed gravel basin", ar: "حوض حصوي تغذيه الأودية" },
+  photo: "adamPhoto", photoSource: EOX,
+  criteria: {
+    terrain: { display: { en: "Flat basin crossed by channels", ar: "حوض مستوٍ تعبره القنوات" }, detail: { en: "A low basin south of Adam where wadis from the Al Hajar Mountains spread out in braided channels, like the rivers that once fed Jezero's lake.", ar: "حوض منخفض جنوب أدم تنتشر فيه الأودية القادمة من جبال الحجر في قنوات متشعبة، مثل الأنهار التي غذّت بحيرة جيزيرو يومًا." }, evidence: { en: "Sentinel-2 view and NASA SRTM terrain", ar: "صورة Sentinel-2 وتضاريس SRTM من ناسا" } },
+    geology: Q({ en: "Water-laid gravels and a carbonate ridge", ar: "حصى رسبتها المياه وسلسلة كربونية" }, { en: "Flood gravels and fans on the floor with an eroded limestone ridge, the same 'water shaped this' story Perseverance is reading in Jezero's delta.", ar: "حصى ومراوح السيول في القاع مع سلسلة جيرية متآكلة، القصة نفسها «الماء شكّل هذا» التي تقرؤها برسفيرانس في دلتا جيزيرو." }),
+    rockSize: Q({ en: "Gravel to cobbles", ar: "من الحصى إلى الجلاميد الصغيرة" }, { en: "Rounded gravel in the channels, larger blocks below the ridge.", ar: "حصى مستديرة في القنوات، وكتل أكبر أسفل السلسلة." }),
+    rockDensity: Q({ en: "Moderate", ar: "متوسطة" }, { en: "Gravel-covered plain with rocky patches, like Jezero's floor.", ar: "سهل مغطى بالحصى مع بقع صخرية، مثل قاع جيزيرو." }),
+    temperature: { display: { en: "Hot summers, mild winters", ar: "صيف حار وشتاء معتدل" }, detail: TEMP_OMAN, reference: OMAN_CLIMATE }
+  }
+});
+
+/* ---------- other Earth sites the team studied (shown in the analog library) ---------- */
+const SAMAIL = omanAnalog({
+  id: "samail", name: { en: "Samail Ophiolite", ar: "أفيوليت سمائل" },
+  location: { en: "Al Hajar Mountains, Oman", ar: "جبال الحجر، عُمان" },
+  type: { en: "Ophiolite (exposed oceanic crust and mantle rocks)", ar: "أفيوليت (صخور قشرة محيطية ووشاح مكشوفة)" },
+  photo: "samailPhoto", photoSource: "https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569",
+  criteria: geeCriteria(GX.GEE_STATS.samail)
+});
+const AMADEE = omanAnalog({
+  id: "amadee", name: { en: "AMADEE-18 'Kepler' station", ar: "محطة «كبلر» لمهمة AMADEE-18" },
+  location: { en: "Dhofar desert, Oman", ar: "صحراء ظفار، عُمان" },
+  type: { en: "Site of the 2018 Mars analog mission (Austrian Space Forum with the Oman Astronomical Society)", ar: "موقع مهمة محاكاة المريخ عام 2018 (المنتدى الفضائي النمساوي بالشراكة مع الجمعية الفلكية العُمانية)" },
+  photo: "amadeePhoto", criteria: geeCriteria(GX.GEE_STATS.amadee)
+});
+
+/* ---------- comparisons ---------- */
 const pairCmp = (siteKey, a, similar, different, conclusion) => {
-  a.comparison = { similar, different, conclusion };
-  a.comparison.similarity = GX.similarity(demBars(GX.DEM_STATS[siteKey]), a.bars);
+  a.comparison = { similar, different, conclusion, similarity: GX.similarity(demBars(GX.DEM_STATS[siteKey]), a.bars) };
   a.comparison.difference = 100 - a.comparison.similarity;
 };
-pairCmp("valles", WADI_GHUL,
-  { en: "Both are canyons with steep walls cut into a high plateau, with rockfall and talus below the cliffs.", ar: "كلاهما أخدود بجدران شديدة الانحدار محفور في هضبة مرتفعة، مع انهيارات صخرية وركام أسفل الجروف." },
-  { en: "Valles Marineris is about 9.4 km of relief across 110,000 km²; Wadi Ghul is about 1.7 km. Most of the Mars box is flat plateau and canyon floor (82% under 10°).", ar: "تبلغ تضاريس فاليس مارينيريس نحو 9.4 كم على مساحة 110,000 كم²، مقابل نحو 1.7 كم لوادي غول. معظم مربع المريخ هضبة وقاع مستويان (82% أقل من 10°)." },
-  { en: "A good analog for canyon-wall geology and rockfall hazards, not for scale.", ar: "نظير جيد لجيولوجيا جدران الأخاديد ومخاطر الانهيارات الصخرية، لا للحجم." });
-pairCmp("syrtis", SAMAIL,
-  { en: "Both expose dark mafic igneous rock (basalt on Mars, ophiolite on Earth) rich in the same mineral families.", ar: "كلاهما يكشف صخورًا نارية مافية داكنة (بازلت على المريخ وأفيوليت على الأرض) غنية بعائلات المعادن نفسها." },
-  { en: "Syrtis Major is a very gentle volcanic plain (99% under 10°); the Samail box is hilly, with about 8 times the roughness.", ar: "سيرتس ميجور سهل بركاني لطيف جدًا (99% أقل من 10°)، بينما مربع سمائل تلالي وخشونته نحو 8 أضعاف." },
-  { en: "A strong analog for rock chemistry and minerals; a weak one for terrain shape.", ar: "نظير قوي لكيمياء الصخور والمعادن، وضعيف لشكل التضاريس." });
+pairCmp("shackleton", AKHDAR,
+  { en: "Almost the same slope mix as Shackleton: 21.69% of the ground under 10°, mean slope 18.04° against 20.18°, and the same roughness (126.81 m against 126.11 m).", ar: "توزيع انحدار يكاد يطابق شاكلتون: 21.69% من الأرض أقل من 10°، ومتوسط الانحدار 18.04° مقابل 20.18°، والخشونة نفسها (126.81 م مقابل 126.11 م)." },
+  { en: "Shackleton's relief is about 4.0 km, Jebel Akhdar's about 1.5 km; the rock is limestone, not lunar regolith.", ar: "تضاريس شاكلتون نحو 4.0 كم وتضاريس الجبل الأخضر نحو 1.5 كم، والصخر جيري لا ثرى قمري." },
+  { en: "The best terrain match for Shackleton found in Oman: ideal for testing how a rover handles steep, rough crater-like slopes.", ar: "أفضل تطابق تضاريسي لشاكلتون وُجد في عُمان: مثالي لاختبار تعامل المركبة مع منحدرات وعرة شديدة تشبه الفوهات." });
+pairCmp("valles", KAWR,
+  { en: "Canyon walls above flat floors in both: 61.20% against 61.91% of the ground under 10°, roughness 65.33 m against 63.33 m.", ar: "جدران أخاديد فوق قيعان مستوية في كليهما: 61.20% مقابل 61.91% من الأرض أقل من 10°، والخشونة 65.33 م مقابل 63.33 م." },
+  { en: "The Valles box drops about 3.0 km, Jebel Kawr about 1.9 km.", ar: "ينخفض مربع فاليس نحو 3.0 كم، وجبل الكور نحو 1.9 كم." },
+  { en: "A strong analog for canyon terrain and rockfall hazards at the scale a rover would drive.", ar: "نظير قوي لتضاريس الأخاديد ومخاطر الانهيارات الصخرية بالحجم الذي تقود فيه المركبة." });
+pairCmp("syrtis", BATINAH,
+  { en: "Both are very smooth plains (100% under 10°) with the same relief (135 m against 136 m), made of dark mafic rock.", ar: "كلاهما سهل أملس جدًا (100% أقل من 10°) بالتضاريس نفسها (135 م مقابل 136 م)، ومكوّن من صخر مافي داكن." },
+  { en: "Syrtis Major is solid lava; the Batinah plain is loose gravel eroded from the ophiolite.", ar: "سيرتس ميجور حمم صلبة، أما سهل الباطنة فحصى سائب منحوت من الأفيوليت." },
+  { en: "A near-exact terrain twin with related rock chemistry: ideal for long-distance driving tests.", ar: "توأم تضاريسي شبه مطابق بكيمياء صخور متقاربة: مثالي لاختبارات القيادة لمسافات طويلة." });
 pairCmp("aonia", SHARQIYA,
-  { en: "Both are gentle surfaces where wind-blown sand gathers into dune fields (Mars 97%, Oman 100% under 10°).", ar: "كلاهما سطح لطيف تتجمع فيه الرمال المنقولة بالرياح في حقول كثبان (المريخ 97%، عُمان 100% أقل من 10°)." },
-  { en: "Aonia Terra is cratered highland with dunes in low areas; Al Sharqiya is a continuous sand sea.", ar: "أونيا تيرا مرتفعات مليئة بالفوهات مع كثبان في المناطق المنخفضة، أما رمال الشرقية فبحر رمال متصل." },
-  { en: "The closest terrain match in the atlas, ideal for testing rover driving on sand.", ar: "أقرب تطابق تضاريسي في الأطلس، ومثالي لاختبار قيادة المركبات على الرمال." });
-pairCmp("jezero", MISTAL,
-  { en: "Both are basins where water once flowed in through channels and left sediments on the floor.", ar: "كلاهما حوض دخلته المياه يومًا عبر قنوات وتركت رواسب في قاعه." },
-  { en: "Jezero's floor is smooth (96% under 10°); the Wadi Mistal box includes steep mountain walls, so it is about 6 times rougher.", ar: "قاع جيزيرو أملس (96% أقل من 10°)، بينما يشمل مربع وادي مستل جدرانًا جبلية شديدة الانحدار، لذا فهو أخشن بنحو 6 أضعاف." },
-  { en: "A good analog for water-laid sediments and channels; the flat basin floor is the part to test on.", ar: "نظير جيد للرواسب المائية والقنوات، والقاع المستوي هو الجزء المناسب للاختبار." });
+  { en: "Smooth, sandy plains on both: mean slope 0.35° against 0.36° and the same roughness (2.23 m against 2.24 m).", ar: "سهول رملية ملساء على الجانبين: متوسط الانحدار 0.35° مقابل 0.36° والخشونة نفسها (2.23 م مقابل 2.24 م)." },
+  { en: "Aonia Terra is far colder and its sand is dark basalt; Al Sharqiya's sand is pale quartz and carbonate.", ar: "أونيا تيرا أبرد بكثير ورمالها بازلتية داكنة، أما رمال الشرقية ففاتحة من الكوارتز والكربونات." },
+  { en: "An excellent analog for testing rover driving on sand.", ar: "نظير ممتاز لاختبار قيادة المركبات على الرمال." });
+pairCmp("jezero", ADAM,
+  { en: "Both are flat basins (99.10% and 92.95% under 10°) with the same relief (381 m against 364 m) and water-laid sediments.", ar: "كلاهما حوض مستوٍ (99.10% و92.95% أقل من 10°) بالتضاريس نفسها (381 م مقابل 364 م) ورواسب مائية." },
+  { en: "Jezero held a standing lake; the Adam basin is shaped by flash floods.", ar: "احتوت جيزيرو بحيرة دائمة، أما حوض أدم فشكّلته السيول." },
+  { en: "A strong analog for driving and sampling on a water-shaped basin floor.", ar: "نظير قوي للقيادة وأخذ العينات على قاع حوض شكّلته المياه." });
 
 /* ---------- Moon & Mars sites ---------- */
 const marsSite = (key, o) => Object.assign({
   body: "mars", dataset: { en: "NASA MGS MOLA DEM and NASA/JPL imagery", ar: "نموذج MOLA من ناسا وصور ناسا/JPL" },
-  resolution: "463 m/px", status: "final", maps: {}, profile: false, rover: "perseverance",
-  area: { en: GX.DEM_STATS[key].area.toLocaleString("en-US") + " km² box, " + GX.DEM_STATS[key].box, ar: "مربع " + GX.DEM_STATS[key].area.toLocaleString("en-US") + " كم²، " + GX.DEM_STATS[key].box },
-  bars: demBars(GX.DEM_STATS[key])
+  resolution: "424 m/px", status: "final", maps: {}, profile: false, rover: "perseverance",
+  area: areaText(GX.DEM_STATS[key]), bars: demBars(GX.DEM_STATS[key])
 }, o, { criteria: Object.assign(demCriteria(GX.DEM_STATS[key], MOLA, MOLA_URL), o.criteria) });
-
 const MARS_ROCK = (en, ar) => ({ display: en, detail: ar, method: QUAL });
 
 GX.SITES = [
@@ -389,7 +336,7 @@ GX.SITES = [
     location: { en: "Lunar South Pole", ar: "القطب الجنوبي للقمر" },
     coords: "89.9° S, 0° E",
     dataset: { en: "NASA Site04", ar: "ناسا Site04" },
-    resolution: "5 m/px", status: "final", rover: "viper",
+    resolution: "5 m/px", status: "final", rover: "sev",
     photo: "shackletonPhoto", photoSource: "https://svs.gsfc.nasa.gov/4716",
     area: { en: "Site04 tile ≈ 16 × 16 km", ar: "مربع Site04 ≈ 16 × 16 كم" },
     maps: { slope: "moonSlope", roughness: "moonRough", relief: "moonRelief" },
@@ -402,24 +349,18 @@ GX.SITES = [
       },
       slope: {
         headline: "20.66°", headlineLabel: K.meanSlope,
-        facts: [{ k: K.meanSlope, v: "20.6641°" }, { k: { en: "Maximum recorded slope", ar: "أقصى انحدار مسجّل" }, v: "69.6472°" }, { k: { en: "Area with slope < 10°", ar: "المساحة بانحدار أقل من 10°" }, v: "18.81%" }],
-        method: { en: "NASA slope raster analysed in QGIS", ar: "تحليل بيانات الانحدار من ناسا باستخدام QGIS" },
+        facts: [{ k: K.meanSlope, v: "20.6641°" }, { k: { en: "Maximum recorded slope", ar: "أقصى انحدار مسجّل" }, v: "69.6472°" }, { k: { en: "Area with slope < 10°", ar: "المساحة بانحدار أقل من 10°" }, v: "18.81%" }, { k: { en: "On the matched 424 m grid", ar: "على الشبكة المطابقة 424 م" }, v: "20.18° · 21.68%" }],
+        method: { en: "NASA slope raster analysed in QGIS (5 m)", ar: "تحليل بيانات الانحدار من ناسا باستخدام QGIS ‏(5 م)" },
         map: "moonSlopeLayout"
       },
       roughness: {
         headline: "5.06", headlineLabel: K.meanRough,
-        facts: [{ k: K.mean, v: "5.0552" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "29.1604" }, { k: K.sd, v: "2.7205" }],
+        facts: [{ k: K.mean, v: "5.0552" }, { k: { en: "Maximum recorded value", ar: "أقصى قيمة مسجّلة" }, v: "29.1604" }, { k: K.sd, v: "2.7205" }, { k: { en: "TRI on the matched 424 m grid", ar: "TRI على الشبكة المطابقة 424 م" }, v: "126.11 m" }],
         evidence: { en: "QGIS statistics report (Shackleton_Roughness)", ar: "تقرير إحصاءات QGIS (Shackleton_Roughness)" },
-        method: { en: "QGIS terrain roughness analysis", ar: "تحليل خشونة التضاريس باستخدام QGIS" },
-        note: { en: "Same QGIS roughness method as Haughton. Mean from the QGIS statistics report.", ar: "طريقة خشونة QGIS نفسها المستخدمة لهوتون. المتوسط من تقرير إحصاءات QGIS." },
+        method: { en: "QGIS terrain roughness analysis (5 m)", ar: "تحليل خشونة التضاريس باستخدام QGIS ‏(5 م)" },
         map: "moonRough"
       },
-      elevation: {
-        headline: "257 m", headlineLabel: K.meanElev,
-        facts: [{ k: K.min, v: "−2,842 m" }, { k: K.mean, v: "257 m" }, { k: K.max, v: "1,803 m" }, { k: { en: "Relief (5th to 95th percentile)", ar: "التضاريس (من المئين 5 إلى 95)" }, v: "4,004 m" }],
-        method: { en: "Computed by Ground X from the NASA Site04 LOLA DEM", ar: "حسبه فريق Ground X من نموذج الارتفاع LOLA (Site04) من ناسا" },
-        reference: "https://pgda.gsfc.nasa.gov/products/78"
-      },
+      elevation: Object.assign(demCriteria(GX.DEM_STATS.shackleton, LOLA, "https://pgda.gsfc.nasa.gov/products/78").elevation),
       geology: {
         display: { en: "Lunar impact-related materials", ar: "مواد قمرية مرتبطة بالاصطدام" },
         detail: { en: "The study region is associated with lunar impact processes. Surface materials include regolith and fragmented rocky material from the crater's formation.", ar: "ترتبط منطقة الدراسة بعمليات الاصطدام القمرية. تشمل مواد السطح الثرى القمري (الريغوليث) ومواد صخرية مفتتة من تكوّن الفوهة." },
@@ -442,52 +383,52 @@ GX.SITES = [
       }
     },
     profile: true,
-    analogs: [HAUGHTON],
-    bars: { slopeMean: 20.66, flatShare: 18.81, roughMean: 5.0552, roughMax: 29.1604 }
+    analogs: [AKHDAR],
+    bars: demBars(GX.DEM_STATS.shackleton)
   },
 
   marsSite("valles", {
-    id: "valles-marineris", code: "R-01",
+    id: "valles-marineris", code: "R-01", rover: "curiosity",
     name: { en: "Valles Marineris", ar: "فاليس مارينيريس" },
     location: { en: "Equatorial canyon system, Mars", ar: "منظومة أخاديد استوائية، المريخ" },
-    coords: "10° S, 72° W",
+    coords: "11.1° S, 65.3° W",
     photo: "vallesPhoto", photoSource: "https://images.nasa.gov/details/PIA00422",
     criteria: {
-      terrain: { display: { en: "Giant canyon / valley system", ar: "أخدود أو وادٍ ضخم" }, detail: { en: "More than 3,000 km long and up to about 8 km deep, the largest canyon system in the Solar System. The analysis box covers the Melas Chasma section.", ar: "يزيد طوله على 3,000 كم وعمقه يصل إلى نحو 8 كم، وهو أكبر منظومة أخاديد في المجموعة الشمسية. يغطي مربع التحليل قطاع ميلاس كازما." }, evidence: { en: "Viking Orbiter mosaic PIA00422", ar: "فسيفساء فايكنغ PIA00422" }, reference: "https://images.nasa.gov/details/PIA00422" },
+      terrain: { display: { en: "Giant canyon / valley system", ar: "أخدود أو وادٍ ضخم" }, detail: { en: "More than 3,000 km long and up to about 8 km deep. The comparison uses a 20 km box on the canyon edge, the scale a rover would explore.", ar: "يزيد طوله على 3,000 كم وعمقه يصل إلى نحو 8 كم. تستخدم المقارنة مربعًا بطول 20 كم على حافة الأخدود، وهو الحجم الذي تستكشفه المركبة." }, evidence: { en: "Viking Orbiter mosaic PIA00422", ar: "فسيفساء فايكنغ PIA00422" }, reference: "https://images.nasa.gov/details/PIA00422" },
       geology: { display: { en: "Layered volcanic rock and canyon sediments", ar: "صخور بركانية متطبقة ورواسب أخدودية" }, detail: { en: "The walls expose stacks of layered volcanic rock; the floor holds landslide deposits and layered sediments.", ar: "تكشف الجدران طبقات متراكمة من الصخور البركانية، ويحمل القاع رواسب انهيارات أرضية ورواسب متطبقة." }, method: QUAL, reference: "https://images.nasa.gov/details/PIA00422" },
       rockSize: MARS_ROCK({ en: "Boulders and landslide debris", ar: "جلاميد وحطام انهيارات أرضية" }, { en: "Giant landslides from the walls spread boulder-rich debris across the canyon floor.", ar: "تنشر الانهيارات الأرضية الضخمة من الجدران حطامًا غنيًا بالجلاميد على قاع الأخدود." }),
       rockDensity: MARS_ROCK({ en: "High near walls, lower on the floor", ar: "عالية قرب الجدران وأقل في القاع" }, { en: "Rock cover is highest at the foot of the walls and in landslide lobes.", ar: "يكون الغطاء الصخري أعلى عند أسفل الجدران وفي ألسنة الانهيارات." }),
       temperature: { display: { en: "Equatorial Mars: about −80 to 20 °C", ar: "المريخ الاستوائي: نحو −80 إلى 20 °م" }, detail: { en: "Near the equator, daytime ground can reach about 20 °C and nights fall below −80 °C.", ar: "قرب خط الاستواء قد تصل حرارة الأرض نهارًا إلى نحو 20 °م وتنخفض ليلًا إلى ما دون −80 °م." }, reference: MARS_FACTS }
     },
-    analogs: [WADI_GHUL]
+    analogs: [KAWR]
   }),
   marsSite("syrtis", {
     id: "syrtis-major", code: "R-02",
     name: { en: "Syrtis Major", ar: "سيرتس ميجور" },
     location: { en: "Volcanic plain, Mars", ar: "سهل بركاني، المريخ" },
-    coords: "8.5° N, 69° E",
+    coords: "11.3° N, 72.1° E",
     photo: "syrtisPhoto", photoSource: "https://science.nasa.gov/photojournal/syrtis-major-planum-false-color-4",
     criteria: {
       terrain: { display: { en: "Broad, gently sloping volcanic plain", ar: "سهل بركاني واسع لطيف الانحدار" }, detail: { en: "A low shield volcano province with wind streaks across dark lava plains (THEMIS false colour).", ar: "إقليم براكين درعية منخفضة تعبره خطوط رياح فوق سهول حمم داكنة (THEMIS بألوان زائفة)." }, evidence: { en: "THEMIS image PIA20984", ar: "صورة THEMIS ‏PIA20984" } },
-      geology: { display: { en: "Basaltic and volcanic rocks", ar: "صخور بازلتية وبركانية" }, detail: { en: "Dark basaltic lava plains. Its proposed twin in Oman: the ophiolite rocks of the Al Hajar Mountains (Samail Ophiolite), which the team has analysed.", ar: "سهول حمم بازلتية داكنة. نظيرها المقترح في عُمان: صخور الأفيوليت في جبال الحجر (أفيوليت سمائل)، التي حللها الفريق." }, reference: "https://science.nasa.gov/photojournal/syrtis-major-planum-false-color-4" },
+      geology: { display: { en: "Basaltic and volcanic rocks", ar: "صخور بازلتية وبركانية" }, detail: { en: "Dark basaltic lava plains, rich in the same mafic minerals found in Oman's ophiolite.", ar: "سهول حمم بازلتية داكنة، غنية بالمعادن المافية نفسها الموجودة في أفيوليت عُمان." }, reference: "https://science.nasa.gov/photojournal/syrtis-major-planum-false-color-4" },
       rockSize: MARS_ROCK({ en: "Lava blocks and dark sand", ar: "كتل حمم ورمال داكنة" }, { en: "Exposed lava surfaces with scattered blocks; dark basaltic sand collects in low spots.", ar: "أسطح حمم مكشوفة مع كتل متناثرة، وتتجمع الرمال البازلتية الداكنة في المواضع المنخفضة." }),
       rockDensity: MARS_ROCK({ en: "Low to moderate", ar: "منخفضة إلى متوسطة" }, { en: "Wind keeps much of the plain swept clean; rocks are scattered rather than packed.", ar: "تُبقي الرياح معظم السهل نظيفًا، والصخور متناثرة لا متراصة." }),
       temperature: { display: { en: "About −83 to −23 °C air", ar: "هواء نحو −83 إلى −23 °م" }, detail: { en: "Close to Jezero, where Perseverance measures air from about −83 °C before dawn to −23 °C in the afternoon.", ar: "قريب من جيزيرو حيث تقيس برسفيرانس حرارة الهواء من نحو −83 °م قبل الفجر إلى −23 °م بعد الظهر." }, reference: JEZERO_MET }
     },
-    analogs: [SAMAIL]
+    analogs: [BATINAH]
   }),
   marsSite("aonia", {
     id: "aonia-terra", code: "R-03",
     name: { en: "Aonia Terra", ar: "أونيا تيرا" },
     location: { en: "Southern highlands, Mars", ar: "المرتفعات الجنوبية، المريخ" },
-    coords: "58° S, 96° W",
+    coords: "52.2° S, 108.5° W",
     photo: "aoniaPhoto", photoSource: "https://science.nasa.gov/photojournal/dune-fields-in-aonia-planum-and-aonia-terra",
     criteria: {
-      terrain: { display: { en: "Sand fields and dunes", ar: "حقول رمال وكثبان رملية" }, detail: { en: "Ancient cratered highlands where sand dunes collect in low-lying areas (THEMIS, PIA13839).", ar: "مرتفعات قديمة مليئة بالفوهات تتجمع الكثبان الرملية في مناطقها المنخفضة (THEMIS، ‏PIA13839)." }, evidence: { en: "THEMIS image PIA13839", ar: "صورة THEMIS ‏PIA13839" } },
+      terrain: { display: { en: "Sand fields and dunes", ar: "حقول رمال وكثبان رملية" }, detail: { en: "Ancient cratered highlands where sand collects in low-lying plains (THEMIS, PIA13839).", ar: "مرتفعات قديمة مليئة بالفوهات تتجمع الرمال في سهولها المنخفضة (THEMIS، ‏PIA13839)." }, evidence: { en: "THEMIS image PIA13839", ar: "صورة THEMIS ‏PIA13839" } },
       geology: { display: { en: "Old highland crust with dark dune sand", ar: "قشرة مرتفعات قديمة مع رمال كثبان داكنة" }, detail: { en: "Heavily cratered ancient crust; the dunes are made of dark, wind-moved sand.", ar: "قشرة قديمة كثيرة الفوهات، والكثبان مكوّنة من رمال داكنة تحركها الرياح." }, reference: "https://science.nasa.gov/photojournal/dune-fields-in-aonia-planum-and-aonia-terra" },
       rockSize: MARS_ROCK({ en: "Sand in the dune fields, rocks on crater rims", ar: "رمل في حقول الكثبان وصخور على حواف الفوهات" }, { en: "Dune fields are rock-free sand; crater rims and ejecta carry blocks.", ar: "حقول الكثبان رمل خالٍ من الصخور، بينما تحمل حواف الفوهات ومقذوفاتها كتلًا صخرية." }),
       rockDensity: MARS_ROCK({ en: "Very low on dunes", ar: "منخفضة جدًا على الكثبان" }, { en: "As at Al Sharqiya, soft sand rather than rock is the driving hazard.", ar: "كما في رمال الشرقية، الخطر على القيادة هو الرمل الناعم لا الصخور." }),
-      temperature: { display: { en: "Colder than the equator, winter frost", ar: "أبرد من خط الاستواء، صقيع شتوي" }, detail: { en: "At about 58° S, winters are long and cold enough for seasonal frost; Mars averages about −65 °C.", ar: "عند نحو 58° جنوبًا يكون الشتاء طويلًا وباردًا بما يكفي لتكوّن صقيع موسمي، ومتوسط حرارة المريخ نحو −65 °م." }, reference: MARS_FACTS }
+      temperature: { display: { en: "Colder than the equator, winter frost", ar: "أبرد من خط الاستواء، صقيع شتوي" }, detail: { en: "At about 52° S, winters are long and cold enough for seasonal frost; Mars averages about −65 °C.", ar: "عند نحو 52° جنوبًا يكون الشتاء طويلًا وباردًا بما يكفي لتكوّن صقيع موسمي، ومتوسط حرارة المريخ نحو −65 °م." }, reference: MARS_FACTS }
     },
     analogs: [SHARQIYA]
   }),
@@ -495,7 +436,7 @@ GX.SITES = [
     id: "jezero", code: "R-04",
     name: { en: "Jezero Crater", ar: "فوهة جيزيرو" },
     location: { en: "Ancient lake crater, Mars", ar: "فوهة بحيرة قديمة، المريخ" },
-    coords: "18.4° N, 77.6° E",
+    coords: "18.4° N, 77.5° E",
     photo: "jezeroPhoto", photoSource: "https://science.nasa.gov/photojournal/jezero-crater-mars-2020s-landing-site",
     criteria: {
       terrain: { display: { en: "Dry lake basin with a river delta", ar: "حوض بحيرة جاف مع دلتا نهرية" }, detail: { en: "A 45 km crater that once held a lake; a river built the fan-shaped delta on its western side. Perseverance has explored it since 2021.", ar: "فوهة قطرها 45 كم احتوت بحيرة يومًا، وبنى نهرٌ الدلتا المروحية على جانبها الغربي. تستكشفها المركبة برسفيرانس منذ 2021." }, evidence: { en: "CTX and CRISM image PIA23239", ar: "صورة CTX وCRISM ‏PIA23239" } },
@@ -504,50 +445,70 @@ GX.SITES = [
       rockDensity: MARS_ROCK({ en: "Moderate", ar: "متوسطة" }, { en: "Rocky patches alternate with sandy, drivable ground.", ar: "تتناوب البقع الصخرية مع أرض رملية صالحة للقيادة." }),
       temperature: { display: { en: "About −83 to −23 °C air", ar: "هواء نحو −83 إلى −23 °م" }, detail: { en: "Measured by Perseverance's MEDA weather station: air from about −83 °C before dawn to −23 °C in the afternoon.", ar: "قاستها محطة الطقس MEDA على برسفيرانس: الهواء من نحو −83 °م قبل الفجر إلى −23 °م بعد الظهر." }, reference: JEZERO_MET }
     },
-    analogs: [MISTAL]
+    analogs: [ADAM]
   })
 ];
 
-/* site-specific rover notes that the slope numbers alone do not capture */
-GX.SITES.find((x) => x.id === "valles-marineris").roverNote = { en: "Canyon walls reach 47.5°, beyond the 30° driving limit: work the canyon floor and landslide deposits.", ar: "تصل جدران الأخدود إلى 47.5°، فوق حد القيادة 30°: يكون العمل على قاع الأخدود ورواسب الانهيارات." };
-GX.SITES.find((x) => x.id === "aonia-terra").roverNote = { en: "Slopes are gentle, but dune sand can trap wheels (as it did NASA's Spirit rover): test sand driving at Al Sharqiya first.", ar: "المنحدرات لطيفة، لكن رمال الكثبان قد تعلق بها العجلات (كما حدث لمركبة Spirit من ناسا): يجب اختبار القيادة على الرمال في رمال الشرقية أولًا." };
-GX.SITES.find((x) => x.id === "jezero").roverNote = { en: "Proven in practice: Perseverance has driven Jezero's floor and delta since 2021.", ar: "مثبتة عمليًا: تقود برسفيرانس على قاع جيزيرو ودلتاها منذ 2021." };
-GX.SITES.find((x) => x.id === "shackleton").roverNote = { en: "VIPER's mission targets the south pole region; Haughton offers gentler ground (74.59% under 10°) for test drives.", ar: "تستهدف مهمة VIPER منطقة القطب الجنوبي، وتوفر هوتون أرضًا ألطف (74.59% أقل من 10°) لتجارب القيادة." };
-GX.SITES.find((x) => x.id === "syrtis-major").roverNote = { en: "Wide, smooth lava plains suit long drives; Samail's rugged hills are the harder test.", ar: "تناسب سهول الحمم الواسعة الملساء القيادة لمسافات طويلة، وتلال سمائل الوعرة هي الاختبار الأصعب." };
+/* site-specific rover notes */
+const note = (id, en, ar) => { GX.SITES.find((x) => x.id === id).roverNote = { en, ar }; };
+note("shackleton", "The SEV's pivoting wheels allow crab-style driving on steep terrain; Jebel Akhdar's slopes are the place to rehearse it.", "تسمح عجلات SEV المحورية بالقيادة الجانبية على التضاريس الشديدة، ومنحدرات الجبل الأخضر هي المكان المناسب للتدرب على ذلك.");
+note("valles-marineris", "Curiosity has spent years climbing the layered slopes of Mount Sharp, the closest rover experience to Valles Marineris' canyon walls.", "قضت كيوريوسيتي سنوات تصعد منحدرات جبل شارب المتطبقة، وهي أقرب تجربة لمركبة إلى جدران أخاديد فاليس مارينيريس.");
+note("syrtis-major", "Wide, smooth plains suit long drives; the Batinah plain is the place to test range and navigation.", "تناسب السهول الواسعة الملساء القيادة لمسافات طويلة، وسهل الباطنة هو المكان المناسب لاختبار المدى والملاحة.");
+note("aonia-terra", "Slopes are gentle, but dune sand can trap wheels (as it did NASA's Spirit rover): test sand driving at Al Sharqiya first.", "المنحدرات لطيفة، لكن رمال الكثبان قد تعلق بها العجلات (كما حدث لمركبة Spirit من ناسا): يجب اختبار القيادة على الرمال في رمال الشرقية أولًا.");
+note("jezero", "Proven in practice: Perseverance has driven Jezero's floor and delta since 2021.", "مثبتة عمليًا: تقود برسفيرانس على قاع جيزيرو ودلتاها منذ 2021.");
 
-/* ---------- Earth analog library (every Earth site the team is working on) ---------- */
-const libStats = (a) => ({ slope: a.criteria.slope.headline, rough: a.criteria.roughness.headline, elev: a.criteria.elevation.headline });
+/* ---------- Earth analog library ---------- */
+const libStats = (a) => ({ slope: a.criteria.slope.headline, rough: a.criteria.roughness.headline, elev: a.criteria.elevation && a.criteria.elevation.headline });
+const TEAM = { en: "Team analysis", ar: "تحليل الفريق" };
 GX.ANALOG_LIBRARY = [
-  { analog: HAUGHTON, twinOf: "shackleton", stats: libStats(HAUGHTON), source: { en: "QGIS", ar: "QGIS" } },
-  { analog: SAMAIL, twinOf: "syrtis-major", stats: libStats(SAMAIL) },
-  { analog: WADI_GHUL, twinOf: "valles-marineris", stats: libStats(WADI_GHUL), source: { en: "SRTM", ar: "SRTM" } },
+  { analog: AKHDAR, twinOf: "shackleton", stats: libStats(AKHDAR), source: { en: "SRTM", ar: "SRTM" } },
+  { analog: KAWR, twinOf: "valles-marineris", stats: libStats(KAWR), source: { en: "SRTM", ar: "SRTM" } },
+  { analog: BATINAH, twinOf: "syrtis-major", stats: libStats(BATINAH), source: { en: "SRTM", ar: "SRTM" } },
   { analog: SHARQIYA, twinOf: "aonia-terra", stats: libStats(SHARQIYA), source: { en: "SRTM", ar: "SRTM" } },
-  { analog: MISTAL, twinOf: "jezero", stats: libStats(MISTAL), source: { en: "SRTM", ar: "SRTM" } },
+  { analog: ADAM, twinOf: "jezero", stats: libStats(ADAM), source: { en: "SRTM", ar: "SRTM" } },
+  { analog: HAUGHTON, twinOf: null, stats: libStats(HAUGHTON), source: { en: "QGIS", ar: "QGIS" }, tag: { en: "Team analysis · NASA rover test site", ar: "تحليل الفريق · موقع اختبار مركبات ناسا" } },
+  { analog: SAMAIL, twinOf: null, stats: libStats(SAMAIL), tag: TEAM },
   { analog: AMADEE, twinOf: null, stats: libStats(AMADEE), tag: { en: "Mars analog mission site", ar: "موقع مهمة محاكاة للمريخ" } }
 ];
 
-/* ---------- rovers (official NASA specifications) ---------- */
+/* ---------- rovers: official NASA specifications and NASA 3D models ---------- */
 GX.ROVERS = {
-  viper: {
-    name: { en: "NASA VIPER", ar: "VIPER من ناسا" },
-    full: { en: "Volatiles Investigating Polar Exploration Rover", ar: "مركبة استكشاف المواد المتطايرة القطبية" },
-    image: "viperPhoto", url: "https://science.nasa.gov/mission/viper/",
-    status: { en: "Built for the lunar south pole; delivery by Blue Origin's Blue Moon MK1 lander planned for 2027", ar: "صُممت للقطب الجنوبي للقمر، ومن المخطط إيصالها بمركبة الهبوط Blue Moon MK1 من Blue Origin عام 2027" },
-    maxSlope: 15,
+  sev: {
+    name: { en: "NASA Space Exploration Vehicle", ar: "مركبة استكشاف الفضاء من ناسا" }, short: "SEV",
+    full: { en: "Crewed pressurized rover for the Moon and Mars", ar: "مركبة مأهولة مضغوطة للقمر والمريخ" },
+    model: "assets/models/sev.glb", world: "moon", url: "https://www.nasa.gov/wp-content/uploads/2015/08/464826main_sev_factsheet_508.pdf",
+    status: { en: "NASA surface concept, field-tested on Earth (Desert RATS)", ar: "تصميم ناسا السطحي، اختُبر ميدانيًا على الأرض (Desert RATS)" },
+    maxSlope: null,
     specs: [
-      { k: { en: "Mass", ar: "الكتلة" }, v: "≈ 450 kg" },
-      { k: { en: "Size (L × W × H)", ar: "الأبعاد (طول × عرض × ارتفاع)" }, v: "1.7 × 1.7 × 2.5 m" },
-      { k: { en: "Wheels", ar: "العجلات" }, v: { en: "4, independently steered, 50 cm", ar: "أربع عجلات بتوجيه مستقل، قطرها 50 سم" } },
-      { k: { en: "Slope capability", ar: "القدرة على صعود المنحدرات" }, v: { en: "15° (NASA mobility tests)", ar: "15° (اختبارات ناسا للحركة)" } },
-      { k: { en: "Obstacle capability", ar: "القدرة على تجاوز العوائق" }, v: { en: "Active suspension lifts each wheel to climb out of soft soil", ar: "تعليق نشط يرفع كل عجلة للخروج من التربة الرخوة" } },
-      { k: { en: "Top speed", ar: "السرعة القصوى" }, v: "20 cm/s" },
-      { k: { en: "Power", ar: "الطاقة" }, v: { en: "Solar panels and batteries", ar: "ألواح شمسية وبطاريات" } }
+      { k: { en: "Mass", ar: "الكتلة" }, v: "≈ 3,000 kg" },
+      { k: { en: "Size (L × H)", ar: "الأبعاد (طول × ارتفاع)" }, v: "4.5 × 3 m" },
+      { k: { en: "Crew", ar: "الطاقم" }, v: { en: "2 (4 in an emergency)", ar: "2 (4 في الطوارئ)" } },
+      { k: { en: "Wheels", ar: "العجلات" }, v: { en: "Pivot 360° for crab-style driving, 99 cm", ar: "تدور 360° للقيادة الجانبية، 99 سم" } },
+      { k: { en: "Top speed", ar: "السرعة القصوى" }, v: "≈ 10 km/h" },
+      { k: { en: "Range (two SEVs)", ar: "المدى (مركبتان)" }, v: { en: "More than 200 km", ar: "أكثر من 200 كم" } },
+      { k: { en: "Shelter", ar: "الحماية" }, v: { en: "Radiation safe haven for up to 72 h", ar: "ملجأ من الإشعاع حتى 72 ساعة" } }
+    ]
+  },
+  curiosity: {
+    name: { en: "NASA Curiosity", ar: "كيوريوسيتي من ناسا" }, short: "Curiosity",
+    full: { en: "Mars Science Laboratory rover", ar: "مركبة مختبر علوم المريخ" },
+    model: "assets/models/curiosity.glb", world: "mars", url: "https://science.nasa.gov/mission/msl-curiosity/",
+    status: { en: "Exploring Gale Crater since August 2012", ar: "تستكشف فوهة غيل منذ أغسطس 2012" },
+    maxSlope: 30,
+    specs: [
+      { k: { en: "Mass", ar: "الكتلة" }, v: "899 kg" },
+      { k: { en: "Size (L × W × H)", ar: "الأبعاد (طول × عرض × ارتفاع)" }, v: "3 × 2.7 × 2.1 m" },
+      { k: { en: "Wheels", ar: "العجلات" }, v: { en: "6 aluminium wheels, 50 cm, rocker-bogie", ar: "ست عجلات ألومنيوم قطرها 50 سم، بتعليق روكر-بوجي" } },
+      { k: { en: "Slope capability", ar: "القدرة على صعود المنحدرات" }, v: { en: "Same rocker-bogie family as Perseverance; drivers avoid > 30°", ar: "عائلة روكر-بوجي نفسها في برسفيرانس، ويتجنب السائقون ما فوق 30°" } },
+      { k: { en: "Obstacle capability", ar: "القدرة على تجاوز العوائق" }, v: { en: "Rocks up to 75 cm", ar: "صخور حتى 75 سم" } },
+      { k: { en: "Top speed", ar: "السرعة القصوى" }, v: "4 cm/s" },
+      { k: { en: "Power", ar: "الطاقة" }, v: { en: "MMRTG nuclear generator", ar: "مولد نووي MMRTG" } }
     ]
   },
   perseverance: {
-    name: { en: "NASA Perseverance", ar: "برسفيرانس من ناسا" },
+    name: { en: "NASA Perseverance", ar: "برسفيرانس من ناسا" }, short: "Perseverance",
     full: { en: "Mars 2020 rover", ar: "مركبة مهمة مارس 2020" },
-    image: "perseverancePhoto", url: "https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/",
+    model: "assets/models/perseverance.glb", world: "mars", url: "https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/",
     status: { en: "Operating in Jezero Crater since February 2021", ar: "تعمل في فوهة جيزيرو منذ فبراير 2021" },
     maxSlope: 30,
     specs: [
@@ -564,14 +525,15 @@ GX.ROVERS = {
 
 /* Rover fit for a site, written from the numbers (site slope vs the rover's slope limit). */
 GX.roverFit = (s, rv) => {
-  const st = s.bars, lim = rv.maxSlope;
-  const mean = st.slopeMean, flat = st.flatShare;
+  const st = s.bars, lim = rv.maxSlope, mean = st.slopeMean, flat = st.flatShare;
+  if (lim == null) return {
+    level: { en: "Fit with route planning", ar: "ملاءمة مع تخطيط المسار" },
+    text: { en: `Mean slope ${mean.toFixed(2)}°; ${flat.toFixed(2)}% of the area is under 10°. NASA does not publish a slope limit for the SEV, so drives follow the gentler ground.`, ar: `متوسط الانحدار ${mean.toFixed(2)}°، و${flat.toFixed(2)}% من المنطقة أقل من 10°. لا تنشر ناسا حدًا للانحدار لمركبة SEV، لذا تتبع القيادة الأرض الألطف.` }
+  };
   const good = mean <= lim / 3, ok = mean <= lim;
   const level = good ? { en: "Good fit", ar: "ملاءمة جيدة" } : ok ? { en: "Fit with route planning", ar: "ملاءمة مع تخطيط المسار" } : { en: "Partial fit", ar: "ملاءمة جزئية" };
-  const en = `Mean slope ${mean.toFixed(2)}° against a ${lim}° limit; ${flat.toFixed(1)}% of the area is under 10°. ` +
-    (good ? "Most of the ground is well inside the rover's limits." : ok ? "Drivable, but steeper patches must be routed around." : "The mean slope is above the tested limit, so traverses must follow the gentler patches of the rim.");
-  const ar = `متوسط الانحدار ${mean.toFixed(2)}° مقابل حد ${lim}°، و${flat.toFixed(1)}% من المنطقة أقل من 10°. ` +
-    (good ? "معظم الأرض ضمن حدود المركبة بفارق كبير." : ok ? "صالحة للقيادة، لكن يجب الالتفاف حول البقع الأشد انحدارًا." : "متوسط الانحدار أعلى من الحد المختبَر، لذا يجب أن تتبع المسارات البقع الألطف من الحافة.");
+  const en = `Mean slope ${mean.toFixed(2)}° against a ${lim}° limit; ${flat.toFixed(2)}% of the area is under 10°. ` + (good ? "Most of the ground is well inside the rover's limits." : ok ? "Drivable, but steeper patches must be routed around." : "The mean slope is above the limit, so traverses must follow the gentler patches.");
+  const ar = `متوسط الانحدار ${mean.toFixed(2)}° مقابل حد ${lim}°، و${flat.toFixed(2)}% من المنطقة أقل من 10°. ` + (good ? "معظم الأرض ضمن حدود المركبة بفارق كبير." : ok ? "صالحة للقيادة، لكن يجب الالتفاف حول البقع الأشد انحدارًا." : "متوسط الانحدار أعلى من الحد، لذا يجب أن تتبع المسارات البقع الألطف.");
   return { level, text: { en, ar } };
 };
 
@@ -608,6 +570,11 @@ GX.EVIDENCE = [
   { src: "assets/img/mars/syrtis-major.webp", group: "mars", caption: { en: "Team view: Syrtis Major in NASA Mars Trek.", ar: "عرض الفريق: سيرتس ميجور في NASA Mars Trek." } },
   { src: "assets/img/mars/aonia-terra.webp", group: "mars", caption: { en: "Team view: Aonia Terra in NASA Mars Trek.", ar: "عرض الفريق: أونيا تيرا في NASA Mars Trek." } },
   { src: "assets/img/mars/jezero.webp", group: "mars", caption: { en: "Team view: Jezero Crater in NASA Mars Trek.", ar: "عرض الفريق: فوهة جيزيرو في NASA Mars Trek." } },
+  { src: "assets/img/oman/akhdar-s2.webp", group: "oman", caption: "akhdarPhoto" },
+  { src: "assets/img/oman/kawr-s2.webp", group: "oman", caption: "kawrPhoto" },
+  { src: "assets/img/oman/batinah-s2.webp", group: "oman", caption: "batinahPhoto" },
+  { src: "assets/img/oman/sharqiya-box-s2.webp", group: "oman", caption: "sharqiyaBox" },
+  { src: "assets/img/oman/adam-s2.webp", group: "oman", caption: "adamPhoto" },
   { src: "assets/img/oman/samail-nasa.webp", group: "oman", caption: "samailPhoto" },
   { src: "assets/img/oman/sharqiya-nasa.webp", group: "oman", caption: "sharqiyaPhoto" },
   { src: "assets/img/oman/hajar-iss053.webp", group: "oman", caption: "hajarPhoto" },
@@ -634,11 +601,14 @@ GX.SOURCES = [
   { label: { en: "Haughton elevation model: ArcticDEM mosaic v4.1, 2 m, tile 29_29_2_2 (Polar Geospatial Center, NSF/NGA)", ar: "نموذج ارتفاع هوتون: فسيفساء ArcticDEM الإصدار 4.1، بدقة 2 م، المربع 29_29_2_2 (مركز البيانات الجغرافية القطبية، NSF/NGA)" }, url: "https://www.pgc.umn.edu/data/arcticdem/" },
   { label: { en: "NASA/JPL Photojournal: Valles Marineris (PIA00422), Jezero Crater (PIA23239), Syrtis Major Planum (PIA20984), Aonia Terra dunes (PIA13839)", ar: "أرشيف صور ناسا/JPL: فاليس مارينيريس (PIA00422)، فوهة جيزيرو (PIA23239)، سهل سيرتس ميجور (PIA20984)، كثبان أونيا تيرا (PIA13839)" }, url: "https://science.nasa.gov/photojournal/" },
   { label: { en: "NASA Earth Observatory: Earth's Crust Exposed in Oman (EO-1 ALI, 2012)", ar: "مرصد الأرض التابع لناسا: قشرة الأرض مكشوفة في عُمان (EO-1 ALI، 2012)" }, url: "https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569" },
-  { label: { en: "NASA Image and Video Library: VIPER mobility testing (GRC-2019-C-09935) and Perseverance selfie (PIA24542)", ar: "مكتبة ناسا للصور والفيديو: اختبار حركة VIPER ‏(GRC-2019-C-09935) وصورة برسفيرانس الذاتية (PIA24542)" }, url: "https://images.nasa.gov/details/GRC-2019-C-09935" },
+  { label: { en: "NASA 3D Resources: Mars 2020 Perseverance and Space Exploration Vehicle models", ar: "موارد ناسا ثلاثية الأبعاد: نموذجا برسفيرانس ومركبة استكشاف الفضاء" }, url: "https://github.com/nasa/NASA-3D-Resources" },
+  { label: { en: "NASA Science: Curiosity rover 3D model (NASA/JPL-Caltech)", ar: "ناسا للعلوم: نموذج ثلاثي الأبعاد للمركبة كيوريوسيتي (NASA/JPL-Caltech)" }, url: "https://science.nasa.gov/resource/curiosity-rover-3d-model/" },
+  { label: { en: "NASA Facts: Space Exploration Vehicle Concept (FS-2011-08-045-JSC)", ar: "حقائق ناسا: تصميم مركبة استكشاف الفضاء (FS-2011-08-045-JSC)" }, url: "https://www.nasa.gov/wp-content/uploads/2015/08/464826main_sev_factsheet_508.pdf" },
+  { label: { en: "NASA Mars Science Laboratory (Curiosity) mission page", ar: "صفحة مهمة مختبر علوم المريخ (كيوريوسيتي) من ناسا" }, url: "https://science.nasa.gov/mission/msl-curiosity/" },
+  { label: { en: "Sentinel-2 cloudless 2020 by EOX (CC BY 4.0), views of the matched Oman areas", ar: "Sentinel-2 cloudless 2020 من EOX ‏(CC BY 4.0)، صور المناطق المطابقة في عُمان" }, url: "https://s2maps.eu" },
   { label: { en: "NASA JSC Gateway to Astronaut Photography of Earth: STS085-501-14 (Wahiba Sands) and ISS053-E-302321 (Al Hajar Mountains)", ar: "بوابة ناسا لصور رواد الفضاء للأرض (مركز جونسون): STS085-501-14 (رمال وهيبة) وISS053-E-302321 (جبال الحجر)" }, url: "https://eol.jsc.nasa.gov/" },
   { label: { en: "NASA MGS MOLA global DEM, 463 m/px (USGS Astrogeology), Mars slope, roughness and elevation", ar: "نموذج الارتفاع العالمي MOLA من ناسا، 463 م/بكسل (USGS Astrogeology)، لانحدار المريخ وخشونته وارتفاعه" }, url: "https://astrogeology.usgs.gov/search/map/mars_mgs_mola_dem_463m" },
-  { label: { en: "NASA Shuttle Radar Topography Mission (SRTM) via AWS Terrain Tiles, Oman slope, roughness and elevation", ar: "مهمة ناسا للمسح الراداري للتضاريس (SRTM) عبر AWS Terrain Tiles، لانحدار عُمان وخشونتها وارتفاعها" }, url: "https://www.earthdata.nasa.gov/data/instruments/srtm" },
-  { label: { en: "NASA VIPER mission page", ar: "صفحة مهمة VIPER من ناسا" }, url: "https://science.nasa.gov/mission/viper/" },
+  { label: { en: "NASA Shuttle Radar Topography Mission (SRTM) via AWS Terrain Tiles, used to search Oman for the best-matching twin areas", ar: "مهمة ناسا للمسح الراداري للتضاريس (SRTM) عبر AWS Terrain Tiles، لانحدار عُمان وخشونتها وارتفاعها" }, url: "https://www.earthdata.nasa.gov/data/instruments/srtm" },
   { label: { en: "NASA Mars 2020 Perseverance rover components and specifications", ar: "مكونات ومواصفات المركبة برسفيرانس (مارس 2020) من ناسا" }, url: "https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/" },
   { label: { en: "Rodriguez-Manfredi et al. (2023) The diverse meteorology of Jezero crater over the first 250 sols of Perseverance on Mars. Nature Geoscience 16", ar: "Rodriguez-Manfredi وآخرون (2023): تنوع الأرصاد الجوية في فوهة جيزيرو خلال أول 250 يومًا مريخيًا لبرسفيرانس. مجلة Nature Geoscience، المجلد 16" }, url: "https://doi.org/10.1038/s41561-022-01084-0" },
   { label: { en: "NASA Mars facts (temperature)", ar: "حقائق ناسا عن المريخ (درجة الحرارة)" }, url: "https://science.nasa.gov/mars/facts/" },

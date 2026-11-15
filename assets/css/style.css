@@ -1190,3 +1190,34 @@ html[data-theme="light"] .theme-btn .i-moon { transform: translateY(-120%) rotat
 .spec-table li b { text-align: end; white-space: normal; overflow-wrap: anywhere; font-family: var(--font); min-width: 0; flex: 1 1 auto; }
 .spec-table li span { flex: 0 1 auto; }
 @media (max-width: 1080px) { .rover-specs__inner { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- rovers v2: three NASA rovers, one real 3D model ---------- */
+.rv { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.rv__stage { position: sticky; top: 90px; aspect-ratio: 1 / 1; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  background: radial-gradient(70% 55% at 50% 62%, rgba(var(--accent-rgb), .10), transparent 70%), linear-gradient(180deg, var(--bg-2), var(--bg-3)); }
+.rv__stage model-viewer { width: 100%; height: 100%; display: block; background: transparent; --poster-color: transparent; --progress-bar-color: transparent; outline: none; }
+.rv__load { position: absolute; inset-inline: 24px; bottom: 54px; height: 2px; background: var(--line); border-radius: 2px; opacity: 0; transition: opacity .4s; }
+.rv__load i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--accent); border-radius: 2px; transition: width .2s; }
+.rv__stage.is-loading .rv__load { opacity: 1; }
+.rv__hint { position: absolute; inset-inline-start: 18px; bottom: 16px; margin: 0; color: var(--muted); font-size: 12.5px; pointer-events: none; }
+.rv__credit { position: absolute; inset-inline-end: 18px; bottom: 16px; margin: 0; color: var(--dim); font-size: 11.5px; pointer-events: none; }
+.rv__side { display: grid; gap: 18px; min-width: 0; }
+.rv__tabs { position: relative; justify-self: start; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.rv__tabs button { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.rv__tabs .globe { position: relative; width: 16px; height: 16px; flex: none; }
+.rv__tabs .seg__ink { position: absolute; top: 0; left: 0; border-radius: 999px; background: var(--text); z-index: 0; }
+.rv__tabs:has(.seg__ink) button.is-active { background: none; }
+.rv__rec { color: var(--accent); font-size: 12px; }
+.rv__tabs button.is-active .rv__rec { color: inherit; }
+.rv__info { display: grid; gap: 14px; min-width: 0; }
+.rv__info h3 { margin: 0; font-size: clamp(24px, 2.6vw, 38px); font-weight: 600; line-height: 1.1; }
+.rv__info .loc { margin: 0; color: var(--muted); }
+.rv__info .tag { justify-self: start; }
+.rv__info .rover-context { margin-top: 0; }
+.rv__for { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rv__for small { color: var(--dim); font-size: 12.5px; margin-inline-end: 4px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-2); color: var(--muted); font-size: 13.5px; transition: border-color .3s, color .3s; }
+.chip:hover { border-color: var(--line-2); color: var(--text); }
+.chip.is-on { border-color: rgba(var(--accent-rgb), .6); color: var(--text); }
+.chip .globe { position: relative; width: 14px; height: 14px; flex: none; }
+@media (max-width: 1080px) { .rv { grid-template-columns: minmax(0, 1fr); } .rv__stage { position: relative; top: 0; aspect-ratio: 4 / 3; } }
