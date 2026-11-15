@@ -219,7 +219,7 @@ After editing a CSS or JS file, increase the `?v=` number on its link in `index.
 
 Built for the **2026 NASA Space Apps Challenge**: *Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars*.
 
-The website code, the Oman terrain search and parts of the text, the demo video and the slides were produced with SI assistance (Claude by Anthropic) under the team's direction. The research idea, the site pairings and the team's QGIS and satellite analyses are the team's own. All data comes from the NASA and partner sources listed above.
+the demo video and the slides were produced with SI assistance (Claude by Anthropic) under the team's direction. The research idea, the site pairings and the team's QGIS and satellite analyses are the team's own. All data comes from the NASA and partner sources listed above.
 
 **Earth's limits:** no Earth twin reproduces lower gravity, the lunar vacuum, the thin Martian atmosphere or space radiation; the twins are analogs for terrain, surface and operations.
 
