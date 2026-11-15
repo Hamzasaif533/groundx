@@ -1087,7 +1087,7 @@
   const MODES = ["satellite", "slope", "roughness", "elevation", "wire"];
   const x3d = {};
   state.explore = "shackleton"; state.exploreMode = "slope";
-  const exploreName = (id) => id === "haughton" ? L(GX.SITES[0].analogs[0].name) : L(GX.SITES[0].name);
+  const exploreName = (id) => id === "haughton" ? (state.lang === "ar" ? "فوهة هوتون (دراسة الفريق)" : "Haughton Crater (team study)") : L(GX.SITES[0].name);
   const modesFor = (id) => MODES.filter((m) => m === "elevation" || m === "wire" || (location.protocol !== "file:" && EXPLORE[id].drapes[m]));
 
   /* sliding highlight behind the active button of a segmented control */

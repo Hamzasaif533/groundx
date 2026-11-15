@@ -60,7 +60,7 @@ GX.STR = {
     marquee: ["Slope", "Terrain roughness", "Rock size", "Rock density", "Terrain type", "Temperature", "Geology", "Rover mobility"],
 
     "how.title": "From another world to its [[Earth twin]].",
-    "how.lead": "Three steps turn raw elevation data into a judgement a rover team can use.",
+    "how.lead": "Four steps turn raw elevation data into a judgement a rover team can use.",
     "how.s1.t": "Choose a site",
     "how.s1.d": "A location on the Moon or Mars, analysed from NASA elevation and slope datasets.",
     "how.s2.t": "Find the Earth twin",
@@ -158,7 +158,9 @@ GX.STR = {
       "Team values (QGIS and satellite terrain analysis) are shown exactly as supplied; values computed by Ground X say so in their method.",
       "Slope classes use the same colours on both worlds: green 0–10°, yellow >10–20°, red >20°.",
       "Similarity index: for mean slope, area under 10°, roughness and relief, smaller ÷ larger × 100, then averaged. It measures terrain shape only.",
-      "Rock size and rock density are qualitative assessments from orbital and field imagery; temperatures come from NASA missions and published climate data."
+      "Rock size and rock density are qualitative assessments from orbital and field imagery; temperatures come from NASA missions and published climate data.",
+      "Earth's limits: no Earth twin reproduces the Moon's or Mars' lower gravity, the lunar vacuum, the thin Martian atmosphere or their radiation. Our twins are analogs for terrain, surface and operations, not for these conditions.",
+      "Use of Super Intelligence (SI): the website code, the terrain search and parts of the text were produced with SI assistance (Claude by Anthropic) under the team's direction. All data comes from the NASA and partner sources listed below."
     ],
     "sources.title": "Data sources",
 
@@ -254,7 +256,7 @@ GX.STR = {
     marquee: ["الانحدار", "خشونة التضاريس", "حجم الصخور", "كثافة الصخور", "نوع التضاريس", "درجة الحرارة", "الجيولوجيا", "حركة المركبات"],
 
     "how.title": "من عالمٍ آخر إلى [[توأمه الأرضي]].",
-    "how.lead": "خطوات بسيطة تحوّل بيانات الارتفاع الخام إلى حكم يمكن لفريق المركبات الاعتماد عليه.",
+    "how.lead": "أربع خطوات تحوّل بيانات الارتفاع الخام إلى حكم يستفيد منه فريق المركبات.",
     "how.s1.t": "اختر موقعًا",
     "how.s1.d": "موقع على القمر أو المريخ، يُحلَّل باستخدام بيانات الارتفاع والانحدار من ناسا.",
     "how.s2.t": "اعثر على التوأم الأرضي",
@@ -352,7 +354,9 @@ GX.STR = {
       "قيم الفريق (QGIS وتحليل التضاريس بالأقمار الصناعية) معروضة كما وردت تمامًا، والقيم التي حسبها فريق Ground X مذكورة في طريقتها.",
       "تستخدم فئات الانحدار الألوان نفسها على العالمين: الأخضر 0–10°، الأصفر >10–20°، الأحمر >20°.",
       "مؤشر التشابه: لمتوسط الانحدار والمساحة الأقل من 10° والخشونة والتضاريس، الأصغر ÷ الأكبر × 100، ثم المتوسط. يقيس شكل التضاريس فقط.",
-      "حجم الصخور وكثافتها تقييمات نوعية من صور المدار والصور الميدانية، ودرجات الحرارة من بعثات ناسا وبيانات المناخ المنشورة."
+      "حجم الصخور وكثافتها تقييمات نوعية من صور المدار والصور الميدانية، ودرجات الحرارة من بعثات ناسا وبيانات المناخ المنشورة.",
+      "حدود الأرض: لا يعيد أي توأم أرضي إنتاج الجاذبية الأقل على القمر أو المريخ، ولا فراغ القمر، ولا غلاف المريخ الرقيق، ولا الإشعاع فيهما. توائمنا نظائر للتضاريس والسطح والعمليات، لا لهذه الظروف.",
+      "استخدام الذكاء الفائق (SI): أُنتجت شيفرة الموقع والبحث في التضاريس وأجزاء من النصوص بمساعدة SI (‏Claude من Anthropic) بتوجيه من الفريق. جميع البيانات من مصادر ناسا والشركاء المذكورة أدناه."
     ],
     "sources.title": "مصادر البيانات",
 

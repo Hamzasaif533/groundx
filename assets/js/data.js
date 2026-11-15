@@ -334,7 +334,7 @@ GX.SITES = [
     id: "shackleton", body: "moon", code: "M-01",
     name: { en: "Shackleton Rim", ar: "حافة شاكلتون" },
     location: { en: "Lunar South Pole", ar: "القطب الجنوبي للقمر" },
-    coords: "89.9° S, 0° E",
+    coords: "89.67° S, 129.78° E",
     dataset: { en: "NASA Site04", ar: "ناسا Site04" },
     resolution: "5 m/px", status: "final", rover: "sev",
     photo: "shackletonPhoto", photoSource: "https://svs.gsfc.nasa.gov/4716",
@@ -343,8 +343,9 @@ GX.SITES = [
     criteria: {
       terrain: {
         display: { en: "Impact crater rim, irregular terrain", ar: "حافة فوهة صدمية، تضاريس غير منتظمة" },
-        detail: { en: "Shackleton Rim contains impact-related lunar landforms, steep crater slopes, and areas of uneven relief.", ar: "تضم حافة شاكلتون أشكالًا أرضية قمرية ناتجة عن الاصطدام، ومنحدرات فوهة شديدة، ومناطق ذات تضاريس غير مستوية." },
+        detail: { en: "Shackleton Rim contains impact-related lunar landforms, steep crater slopes, and areas of uneven relief. The crater is 21 km wide and 4.2 km deep, and two of NASA's 13 Artemis III candidate landing regions, Peak Near Shackleton and Connecting Ridge, sit on its rim: a candidate area for a permanent Moon base.", ar: "تضم حافة شاكلتون أشكالًا أرضية قمرية ناتجة عن الاصطدام، ومنحدرات فوهة شديدة، ومناطق ذات تضاريس غير مستوية. يبلغ عرض الفوهة 21 كم وعمقها 4.2 كم، وتقع على حافتها منطقتان من مناطق الهبوط الثلاث عشرة المرشحة لمهمة Artemis III من ناسا، هما Peak Near Shackleton وConnecting Ridge: منطقة مرشحة لقاعدة قمرية دائمة." },
         evidence: { en: "NASA Site04 elevation dataset", ar: "بيانات الارتفاع Site04 من ناسا" },
+        reference: "https://www.nasa.gov/news-release/nasa-identifies-candidate-regions-for-landing-next-americans-on-moon/",
         map: "moonRelief"
       },
       slope: {
@@ -378,8 +379,8 @@ GX.SITES = [
       },
       temperature: {
         display: { en: "About −50 °C on the rim, about −183 °C on the floor", ar: "نحو −50 °م على الحافة ونحو −183 °م في القاع" },
-        detail: { en: "Parts of the rim are sunlit most of the time; the floor never sees the Sun and stays near 90 K (about −183 °C), cold enough to trap water ice.", ar: "أجزاء من الحافة مضاءة بالشمس معظم الوقت، أما القاع فلا يرى الشمس أبدًا ويبقى قرب 90 كلفن (نحو −183 °م)، وهو برد كافٍ لحبس جليد الماء." },
-        reference: "https://en.wikipedia.org/wiki/Shackleton_(crater)"
+        detail: { en: "Sunlit rim sites are estimated at about −50 °C; the floor never sees the Sun and stays below about 90 K (about −183 °C), cold enough to trap water ice (Haruyama et al., 2008, Science).", ar: "تُقدَّر حرارة مواقع الحافة المضاءة بنحو −50 °م، أما القاع فلا يرى الشمس أبدًا ويبقى دون نحو 90 كلفن (نحو −183 °م)، وهو برد كافٍ لحبس جليد الماء (Haruyama وآخرون، 2008، Science)." },
+        reference: "https://doi.org/10.1126/science.1164020"
       }
     },
     profile: true,
@@ -394,11 +395,11 @@ GX.SITES = [
     coords: "11.1° S, 65.3° W",
     photo: "vallesPhoto", photoSource: "https://images.nasa.gov/details/PIA00422",
     criteria: {
-      terrain: { display: { en: "Giant canyon / valley system", ar: "أخدود أو وادٍ ضخم" }, detail: { en: "More than 3,000 km long and up to about 8 km deep. The comparison uses a 20 km box on the canyon edge, the scale a rover would explore.", ar: "يزيد طوله على 3,000 كم وعمقه يصل إلى نحو 8 كم. تستخدم المقارنة مربعًا بطول 20 كم على حافة الأخدود، وهو الحجم الذي تستكشفه المركبة." }, evidence: { en: "Viking Orbiter mosaic PIA00422", ar: "فسيفساء فايكنغ PIA00422" }, reference: "https://images.nasa.gov/details/PIA00422" },
+      terrain: { display: { en: "Giant canyon / valley system", ar: "أخدود أو وادٍ ضخم" }, detail: { en: "About 3,870 km long and up to 9.3 km deep (NASA). The comparison uses a 20 km box on the canyon edge, the scale a rover would explore.", ar: "طوله نحو 3,870 كم وعمقه يصل إلى 9.3 كم (ناسا). تستخدم المقارنة مربعًا بطول 20 كم على حافة الأخدود، وهو الحجم الذي تستكشفه المركبة." }, evidence: { en: "Viking Orbiter mosaic PIA00422", ar: "فسيفساء فايكنغ PIA00422" }, reference: MARS_FACTS },
       geology: { display: { en: "Layered volcanic rock and canyon sediments", ar: "صخور بركانية متطبقة ورواسب أخدودية" }, detail: { en: "The walls expose stacks of layered volcanic rock; the floor holds landslide deposits and layered sediments.", ar: "تكشف الجدران طبقات متراكمة من الصخور البركانية، ويحمل القاع رواسب انهيارات أرضية ورواسب متطبقة." }, method: QUAL, reference: "https://images.nasa.gov/details/PIA00422" },
       rockSize: MARS_ROCK({ en: "Boulders and landslide debris", ar: "جلاميد وحطام انهيارات أرضية" }, { en: "Giant landslides from the walls spread boulder-rich debris across the canyon floor.", ar: "تنشر الانهيارات الأرضية الضخمة من الجدران حطامًا غنيًا بالجلاميد على قاع الأخدود." }),
       rockDensity: MARS_ROCK({ en: "High near walls, lower on the floor", ar: "عالية قرب الجدران وأقل في القاع" }, { en: "Rock cover is highest at the foot of the walls and in landslide lobes.", ar: "يكون الغطاء الصخري أعلى عند أسفل الجدران وفي ألسنة الانهيارات." }),
-      temperature: { display: { en: "Equatorial Mars: about −80 to 20 °C", ar: "المريخ الاستوائي: نحو −80 إلى 20 °م" }, detail: { en: "Near the equator, daytime ground can reach about 20 °C and nights fall below −80 °C.", ar: "قرب خط الاستواء قد تصل حرارة الأرض نهارًا إلى نحو 20 °م وتنخفض ليلًا إلى ما دون −80 °م." }, reference: MARS_FACTS }
+      temperature: { display: { en: "Up to about 20 °C by day, far below freezing at night", ar: "حتى نحو 20 °م نهارًا، وأقل بكثير من التجمد ليلًا" }, detail: { en: "NASA: Mars can reach about 20 °C near the equator at midday and drop to about −153 °C; nights at the equator fall far below freezing.", ar: "ناسا: قد تصل حرارة المريخ إلى نحو 20 °م قرب خط الاستواء ظهرًا وتنخفض إلى نحو −153 °م، وليالي خط الاستواء أقل بكثير من التجمد." }, reference: MARS_FACTS }
     },
     analogs: [KAWR]
   }),
@@ -428,7 +429,7 @@ GX.SITES = [
       geology: { display: { en: "Old highland crust with dark dune sand", ar: "قشرة مرتفعات قديمة مع رمال كثبان داكنة" }, detail: { en: "Heavily cratered ancient crust; the dunes are made of dark, wind-moved sand.", ar: "قشرة قديمة كثيرة الفوهات، والكثبان مكوّنة من رمال داكنة تحركها الرياح." }, reference: "https://science.nasa.gov/photojournal/dune-fields-in-aonia-planum-and-aonia-terra" },
       rockSize: MARS_ROCK({ en: "Sand in the dune fields, rocks on crater rims", ar: "رمل في حقول الكثبان وصخور على حواف الفوهات" }, { en: "Dune fields are rock-free sand; crater rims and ejecta carry blocks.", ar: "حقول الكثبان رمل خالٍ من الصخور، بينما تحمل حواف الفوهات ومقذوفاتها كتلًا صخرية." }),
       rockDensity: MARS_ROCK({ en: "Very low on dunes", ar: "منخفضة جدًا على الكثبان" }, { en: "As at Al Sharqiya, soft sand rather than rock is the driving hazard.", ar: "كما في رمال الشرقية، الخطر على القيادة هو الرمل الناعم لا الصخور." }),
-      temperature: { display: { en: "Colder than the equator, winter frost", ar: "أبرد من خط الاستواء، صقيع شتوي" }, detail: { en: "At about 52° S, winters are long and cold enough for seasonal frost; Mars averages about −65 °C.", ar: "عند نحو 52° جنوبًا يكون الشتاء طويلًا وباردًا بما يكفي لتكوّن صقيع موسمي، ومتوسط حرارة المريخ نحو −65 °م." }, reference: MARS_FACTS }
+      temperature: { display: { en: "Colder than the equator, winter frost", ar: "أبرد من خط الاستواء، صقيع شتوي" }, detail: { en: "At about 52° S, winters are long and cold enough for seasonal frost; NASA gives Mars a range from about 20 °C down to about −153 °C.", ar: "عند نحو 52° جنوبًا يكون الشتاء طويلًا وباردًا بما يكفي لتكوّن صقيع موسمي، وتذكر ناسا أن حرارة المريخ تتراوح من نحو 20 °م إلى نحو −153 °م." }, reference: MARS_FACTS }
     },
     analogs: [SHARQIYA]
   }),
@@ -494,12 +495,12 @@ GX.ROVERS = {
     full: { en: "Mars Science Laboratory rover", ar: "مركبة مختبر علوم المريخ" },
     model: "assets/models/curiosity.glb", world: "mars", url: "https://science.nasa.gov/mission/msl-curiosity/",
     status: { en: "Exploring Gale Crater since August 2012", ar: "تستكشف فوهة غيل منذ أغسطس 2012" },
-    maxSlope: 30,
+    maxSlope: null,
     specs: [
       { k: { en: "Mass", ar: "الكتلة" }, v: "899 kg" },
       { k: { en: "Size (L × W × H)", ar: "الأبعاد (طول × عرض × ارتفاع)" }, v: "3 × 2.7 × 2.1 m" },
       { k: { en: "Wheels", ar: "العجلات" }, v: { en: "6 aluminium wheels, 50 cm, rocker-bogie", ar: "ست عجلات ألومنيوم قطرها 50 سم، بتعليق روكر-بوجي" } },
-      { k: { en: "Slope capability", ar: "القدرة على صعود المنحدرات" }, v: { en: "Same rocker-bogie family as Perseverance; drivers avoid > 30°", ar: "عائلة روكر-بوجي نفسها في برسفيرانس، ويتجنب السائقون ما فوق 30°" } },
+      { k: { en: "Slope capability", ar: "القدرة على صعود المنحدرات" }, v: { en: "Rocker-bogie; tilted to 31° climbing Mount Sharp (2020)", ar: "روكر-بوجي، ومالت حتى 31° أثناء صعود جبل شارب (2020)" } },
       { k: { en: "Obstacle capability", ar: "القدرة على تجاوز العوائق" }, v: { en: "Rocks up to 75 cm", ar: "صخور حتى 75 سم" } },
       { k: { en: "Top speed", ar: "السرعة القصوى" }, v: "4 cm/s" },
       { k: { en: "Power", ar: "الطاقة" }, v: { en: "MMRTG nuclear generator", ar: "مولد نووي MMRTG" } }
@@ -528,7 +529,7 @@ GX.roverFit = (s, rv) => {
   const st = s.bars, lim = rv.maxSlope, mean = st.slopeMean, flat = st.flatShare;
   if (lim == null) return {
     level: { en: "Fit with route planning", ar: "ملاءمة مع تخطيط المسار" },
-    text: { en: `Mean slope ${mean.toFixed(2)}°; ${flat.toFixed(2)}% of the area is under 10°. NASA does not publish a slope limit for the SEV, so drives follow the gentler ground.`, ar: `متوسط الانحدار ${mean.toFixed(2)}°، و${flat.toFixed(2)}% من المنطقة أقل من 10°. لا تنشر ناسا حدًا للانحدار لمركبة SEV، لذا تتبع القيادة الأرض الألطف.` }
+    text: { en: `Mean slope ${mean.toFixed(2)}°; ${flat.toFixed(2)}% of the area is under 10°. NASA does not publish a single slope limit for ${rv.short}, so drives follow the gentler ground.`, ar: `متوسط الانحدار ${mean.toFixed(2)}°، و${flat.toFixed(2)}% من المنطقة أقل من 10°. لا تنشر ناسا حدًا واحدًا للانحدار لمركبة ${rv.short}، لذا تتبع القيادة الأرض الألطف.` }
   };
   const good = mean <= lim / 3, ok = mean <= lim;
   const level = good ? { en: "Good fit", ar: "ملاءمة جيدة" } : ok ? { en: "Fit with route planning", ar: "ملاءمة مع تخطيط المسار" } : { en: "Partial fit", ar: "ملاءمة جزئية" };
@@ -612,7 +613,9 @@ GX.SOURCES = [
   { label: { en: "NASA Mars 2020 Perseverance rover components and specifications", ar: "مكونات ومواصفات المركبة برسفيرانس (مارس 2020) من ناسا" }, url: "https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/" },
   { label: { en: "Rodriguez-Manfredi et al. (2023) The diverse meteorology of Jezero crater over the first 250 sols of Perseverance on Mars. Nature Geoscience 16", ar: "Rodriguez-Manfredi وآخرون (2023): تنوع الأرصاد الجوية في فوهة جيزيرو خلال أول 250 يومًا مريخيًا لبرسفيرانس. مجلة Nature Geoscience، المجلد 16" }, url: "https://doi.org/10.1038/s41561-022-01084-0" },
   { label: { en: "NASA Mars facts (temperature)", ar: "حقائق ناسا عن المريخ (درجة الحرارة)" }, url: "https://science.nasa.gov/mars/facts/" },
-  { label: { en: "Shackleton crater temperatures (Wikipedia summary of LRO results)", ar: "درجات حرارة فوهة شاكلتون (ملخص ويكيبيديا لنتائج LRO)" }, url: "https://en.wikipedia.org/wiki/Shackleton_(crater)" },
+  { label: { en: "Haruyama et al. (2008) Lack of exposed ice inside lunar south pole Shackleton crater. Science 322, 938–939", ar: "Haruyama وآخرون (2008): غياب الجليد المكشوف داخل فوهة شاكلتون في القطب الجنوبي للقمر. مجلة Science، المجلد 322" }, url: "https://doi.org/10.1126/science.1164020" },
+  { label: { en: "NASA: candidate regions for the Artemis III landing near the lunar South Pole (2022)", ar: "ناسا: المناطق المرشحة لهبوط Artemis III قرب القطب الجنوبي للقمر (2022)" }, url: "https://www.nasa.gov/news-release/nasa-identifies-candidate-regions-for-landing-next-americans-on-moon/" },
+  { label: { en: "JPL: Curiosity takes a selfie before its record climb (2020)", ar: "JPL: كيوريوسيتي تلتقط صورة ذاتية قبل صعودها القياسي (2020)" }, url: "https://www.jpl.nasa.gov/news/nasas-curiosity-mars-rover-takes-a-new-selfie-before-record-climb/" },
   { label: { en: "Devon Island climate, The Canadian Encyclopedia", ar: "مناخ جزيرة ديفون، الموسوعة الكندية" }, url: "https://www.thecanadianencyclopedia.ca/en/article/devon-island" },
   { label: { en: "Oman climate, World Bank Climate Change Knowledge Portal", ar: "مناخ عُمان، بوابة البنك الدولي لمعرفة تغير المناخ" }, url: "https://climateknowledgeportal.worldbank.org/country/oman/climate-data-historical" },
   { label: { en: "NASA Image and Video Library: K-10 rover at Haughton Crater, Haughton-Mars Project 2007 (NASA Ames)", ar: "مكتبة ناسا للصور والفيديو: المركبة K-10 في فوهة هوتون، مشروع هوتون-المريخ 2007 (مركز أميس)" }, url: "https://images.nasa.gov/details/ARC-2007-ACD07-0170-001" }
