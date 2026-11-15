@@ -117,12 +117,11 @@
     const n = (b) => GX.SITES.filter((s) => s.body === b).length;
     $$(".world-tab").forEach((b) => { const sm = $("small", b); if (sm) sm.textContent = n(b.dataset.world); });
     const twins = GX.SITES.reduce((k, s) => k + s.analogs.filter(Boolean).length, 0);
-    const slots = GX.SITES.reduce((k, s) => k + s.analogs.length, 0);
     const withData = GX.ANALOG_LIBRARY.filter((x) => x.stats).length;
     const set = (sel, v) => { const el = $(sel); if (el) { el.dataset.count = v; el.textContent = v; } };
     set('[data-stat="moon"]', n("moon")); set('[data-stat="mars"]', n("mars"));
     set('[data-stat="twins"]', twins); set('[data-stat="data"]', withData);
-    const sl = $('[data-stat="slots"]'); if (sl) sl.textContent = "/" + slots;
+    const sl = $('[data-stat="slots"]'); if (sl) sl.remove();
   }
 
   function siteCard(s) {
@@ -140,9 +139,7 @@
           <div>
             <small class="mono" style="color:var(--dim)">${esc(t("site.twins"))}</small>
             <div class="twin-slots" style="margin-top:8px">
-              ${s.analogs.map((a, i) => a
-                ? `<div class="twin-slot is-filled"><small>#${i + 1} · ${esc(L(a.country))}</small>${esc(L(a.name))}</div>`
-                : `<div class="twin-slot is-empty"><small>#${i + 1}</small>${esc(t("common.pending"))}</div>`).join("")}
+              ${s.analogs.filter(Boolean).map((a) => `<div class="twin-slot is-filled"><small>${esc(L(a.country))} · ${num(a.comparison.similarity + "%")} ${esc(t("compare.similarity"))}</small>${esc(L(a.name))}</div>`).join("")}
             </div>
           </div>
           <span class="site-card__go">${esc(t("site.open"))}${ICON.arrow}</span>
@@ -157,20 +154,19 @@
 
   /* ---------- compare ---------- */
   function sideValue(c) {
-    if (!c) return `<b class="txt">${esc(t("common.pending"))}</b>`;
+    if (!c) return `<b class="txt">·</b>`;
     if (c.headline) return `<b>${num(c.headline)}</b><small><i></i>${esc(L(c.headlineLabel))}</small>`;
     return `<b class="txt">${esc(L(c.display))}</b>`;
   }
 
   function sidePanel(c, worldClass, title) {
-    if (!c) return `<div class="crit__side crit__side--${worldClass}"><h4><i></i>${esc(title)}</h4>${pending()}</div>`;
+    if (!c) return `<div class="crit__side crit__side--${worldClass}"><h4><i></i>${esc(title)}</h4></div>`;
     const facts = c.facts ? `<ul class="facts">${c.facts.map((f) => `<li><span>${esc(L(f.k))}</span><b>${num(f.v)}</b></li>`).join("")}</ul>` : "";
     const tags = [];
     if (c.method) tags.push(`<span class="tag">${esc(t("compare.method"))}: ${esc(L(c.method))}</span>`);
     if (c.evidence) tags.push(`<span class="tag">${esc(t("compare.evidence"))}: ${esc(L(c.evidence))}</span>`);
-    if ("evidence" in c && !c.evidence) tags.push(`<span class="tag tag--pend">${esc(t("compare.evidence"))}: ${esc(t("common.pending"))}</span>`);
-    if ("reference" in c) tags.push(c.reference ? `<a class="tag" href="${c.reference}" target="_blank" rel="noopener">${esc(t("compare.reference"))} ↗</a>` : `<span class="tag tag--pend">${esc(t("compare.reference"))}: ${esc(t("common.pending"))}</span>`);
-    if (c.note) tags.push(`<span class="tag tag--warn">${esc(L(c.note))}</span>`);
+    if (c.reference) tags.push(`<a class="tag" href="${c.reference}" target="_blank" rel="noopener">${esc(t("compare.reference"))} ↗</a>`);
+    if (c.note) tags.push(`<span class="tag">${esc(L(c.note))}</span>`);
     const map = c.map ? `<button class="thumb" type="button" data-zoom="${c.map}" data-cursor><img src="${img(c.map).src}" alt="" loading="lazy"><span>${esc(t("compare.viewMap"))} ↗</span></button>` : "";
     return `
       <div class="crit__side crit__side--${worldClass}">
@@ -195,22 +191,7 @@
             ${GX.SITES.filter((x) => x.body === b).map((x) => `<button type="button" role="tab" data-site="${x.id}" data-stay class="${x.id === s.id ? "is-active" : ""}" aria-selected="${x.id === s.id}">${esc(L(x.name))}</button>`).join("")}
           </div>`).join("")}
       </div>`;
-    const switcher = siteSwitch + `
-      <div class="twin-switch" role="tablist">
-        ${s.analogs.map((x, i) => `<button type="button" role="tab" data-analog="${i}" class="${i === state.analog ? "is-active" : ""}" aria-selected="${i === state.analog}">
-          <span class="mono">${esc(t("compare.twin"))} ${i + 1}</span> · ${esc(x ? L(x.name) : t("common.pending"))}</button>`).join("")}
-      </div>`;
-
-    if (!a) {
-      $("#compareRoot").innerHTML = switcher + `
-        <div class="pending-twin reveal">
-          <span class="tag tag--warn">${esc(t("common.inProgress"))}</span>
-          <h3>${esc(L(s.name))} ↔ ${esc(t("compare.pendingTwin"))}</h3>
-          <p>${esc(t("compare.pendingTwinD"))}</p>
-        </div>`;
-      return;
-    }
-
+    const switcher = siteSwitch;
     const cmp = a.comparison || {};
     const hasScore = typeof cmp.similarity === "number";
     const R = 80, C = 2 * Math.PI * R;
@@ -223,14 +204,14 @@
           </svg>
           <div class="score__val">
             ${hasScore ? `<b class="mono" style="color:var(--earth);font-size:44px" data-count="${cmp.similarity}">0</b><small>% ${esc(t("compare.similarity"))}</small>`
-                       : `<b>${esc(t("compare.scorePending"))}</b><small>${esc(t("compare.similarity"))}</small>`}
+                       : ""}
           </div>
         </div>
         <div class="score__row">
-          <div>${esc(t("compare.similarity"))}<b>${hasScore ? num(cmp.similarity + "%") : esc(t("common.pending"))}</b></div>
-          <div>${esc(t("compare.difference"))}<b>${typeof cmp.difference === "number" ? num(cmp.difference + "%") : esc(t("common.pending"))}</b></div>
+          <div>${esc(t("compare.similarity"))}<b>${num(cmp.similarity + "%")}</b></div>
+          <div>${esc(t("compare.difference"))}<b>${num(cmp.difference + "%")}</b></div>
         </div>
-        ${hasScore ? "" : `<p class="score__note">${esc(t("compare.scoreNote"))}</p>`}
+        <p class="score__note">${esc(t("compare.scoreNote"))}</p>
       </div>`;
 
     const worldLabel = (w) => t(w === "earth" ? "hero.earth" : "world." + w);
@@ -240,7 +221,7 @@
       return `
       <article class="vs__card vs__card--${world}">
         ${ph ? `<button class="vs__media" type="button" data-zoom="${o.photo}" data-cursor aria-label="${esc(L(o.name))}"><img src="${ph.src}" alt="${esc(L(o.name))}" loading="lazy">`
-             : `<div class="vs__media vs__media--empty"><span class="mono">${esc(t("compare.imagePending"))}</span>`}
+             : `<div class="vs__media vs__media--empty">`}
           <span class="vs__world"><i></i>${esc(worldLabel(world))}${!isSite && o.country ? ` · ${esc(L(o.country))}` : ""}</span>
         ${ph ? "</button>" : "</div>"}
         <div class="vs__body">
@@ -262,7 +243,7 @@
       .filter(([k]) => k !== "elevation" || s.criteria.elevation || a.criteria.elevation);
     const rows = CRITS.map(([key, label], i) => {
       const m = s.criteria[key], e = a.criteria[key];
-      const isPending = !m && !e;
+      const isPending = !m && !e; // never true with the current data; keeps the row safe if a criterion is removed
       return `
         <div class="crit ${isPending ? "crit--pending" : ""}" data-crit="${key}">
           <button class="crit__btn" type="button" ${isPending ? "disabled" : `aria-expanded="false" aria-controls="cp-${key}"`}>
@@ -280,8 +261,9 @@
     // number bars, only when both sides have comparable numbers
     let barsBlock = "";
     if (s.bars && a.bars) {
-      const BARS = [["slopeMean", "bar.slopeMean", 2, false], ["flatShare", "bar.flatShare", 2, false], ["roughMean", "bar.roughMean", 4, true], ["roughMax", "bar.roughMax", 4, true]];
-      barsBlock = `<div class="crit-head"><h3 class="sub-h">${esc(t("compare.byNumbers"))}</h3></div><div class="bars">` + BARS.map(([k, label, dec, prelim]) => {
+      const BARS = [["slopeMean", "bar.slopeMean", 2], ["flatShare", "bar.flatShare", 2], ["roughMean", s.body === "moon" ? "bar.roughMean" : "bar.tri", s.body === "moon" ? 4 : 2], ["roughMax", "bar.roughMax", 4], ["relief", "bar.relief", 0]]
+        .filter(([k]) => s.bars[k] != null && a.bars[k] != null);
+      barsBlock = `<div class="crit-head"><div><h3 class="sub-h">${esc(t("compare.byNumbers"))}</h3><p class="section__lead" style="margin-top:10px;font-size:16px">${esc(t(s.body === "moon" ? "compare.barsMoon" : "compare.barsMars"))}</p></div></div><div class="bars">` + BARS.map(([k, label, dec]) => {
         const mv = s.bars[k], ev = a.bars[k];
         const max = Math.max(mv, ev) * 1.12;
         return `
@@ -322,7 +304,7 @@
     }
 
     // verdict, whatever the team has written so far; missing parts show as pending
-    const v = (key, txt) => `<article><h4><i></i>${esc(t(key))}</h4><p>${txt ? esc(L(txt)) : `<span class="tag tag--pend">${esc(t("common.pending"))}</span>`}</p></article>`;
+    const v = (key, txt) => txt ? `<article><h4><i></i>${esc(t(key))}</h4><p>${esc(L(txt))}</p></article>` : "";
 
     $("#compareRoot").innerHTML = switcher + `
       <div class="vs">
@@ -352,7 +334,7 @@
     root.innerHTML = GX.ANALOG_LIBRARY.map((it) => {
       const a = it.analog, ph = a.photo ? img(a.photo) : null;
       const twin = it.twinOf ? GX.SITES.find((x) => x.id === it.twinOf) : null;
-      const stat = (k, v) => `<div><small>${esc(t(k))}</small><b>${v ? num(v) : `<span class="pend">${esc(t("common.pending"))}</span>`}</b></div>`;
+      const stat = (k, v) => v ? `<div><small>${esc(t(k))}</small><b>${num(v)}</b></div>` : "";
       return `
         <article class="analog ${ph ? "" : "analog--noimg"}">
           <div class="analog__media">
@@ -494,8 +476,9 @@
   /* ---------- rovers ---------- */
   function renderRover() {
     const s = site(), a = s.analogs.find(Boolean);
-    const rv = GX.ROVERS[(a && a.rovers && a.rovers[0]) || "pending-1"];
-    const sm = s.criteria.slope.facts;
+    const rv = GX.ROVERS[s.rover];
+    const fit = GX.roverFit(s, rv);
+    const photo = img(rv.image);
     $("#roverRoot").innerHTML = `
       <div class="rover-stage">
         <button class="rover-btn" type="button" aria-expanded="${state.roverOpen}" aria-controls="roverSpecs" data-cursor>
@@ -503,27 +486,29 @@
           <span class="rover-btn__hint">${esc(t("rovers.tap"))}</span>
         </button>
         <div class="rover-info">
-          <span class="tag tag--warn">${esc(L(rv.research))}</span>
-          <h3 style="margin-top:16px">${esc(t("rovers.recommended"))}: <span style="color:var(--warn)">${esc(rv.name ? L(rv.name) : t("common.pending"))}</span></h3>
-          <p class="loc">${esc(t("rovers.testSite"))}: <b style="color:var(--text)">${esc(L(rv.testSite))}</b> · ${esc(L(s.name))}</p>
-          <p style="color:var(--dim);font-size:14px;margin:0">${esc(t("rovers.illustration"))}</p>
+          <span class="tag">${esc(L(fit.level))}</span>
+          <h3 style="margin-top:16px">${esc(t("rovers.recommended"))}: <span style="color:var(--accent)">${esc(L(rv.name))}</span></h3>
+          <p class="loc">${esc(L(rv.full))} · ${esc(L(rv.status))}</p>
+          <p class="loc">${esc(t("rovers.testSite"))}: <b style="color:var(--text)">${esc(L(a.name))}</b> · ${esc(L(s.name))}</p>
           <p style="margin:26px 0 0;color:var(--muted);font-size:14px">${esc(t("rovers.context"))}</p>
           <div class="rover-context">
-            <div><small>${esc(L(sm[0].k))} · ${esc(L(s.name))}</small><b>${num(s.criteria.slope.headline)}</b></div>
-            <div><small>${esc(L(sm[1].k))}</small><b>${num(sm[1].v)}</b></div>
-            <div><small>${esc(L(sm[2].k))}</small><b>${num(sm[2].v)}</b></div>
+            <div><small>${esc(t("bar.slopeMean"))} · ${esc(L(s.name))}</small><b>${num(s.criteria.slope.headline)}</b></div>
+            <div><small>${esc(t("bar.flatShare"))}</small><b>${num(fmt(s.bars.flatShare, 2) + "%")}</b></div>
+            <div><small>${esc(t("rovers.limit"))}</small><b>${num(rv.maxSlope + "°")}</b></div>
           </div>
         </div>
       </div>
       <div class="rover-specs" id="roverSpecs">
         <div class="rover-specs__inner">
           <ul class="facts spec-table">
-            ${rv.specs.map((sp) => `<li><span>${esc(L(sp.k))}</span>${sp.v ? `<b>${num(L(sp.v))}</b>` : `<b class="pend">${esc(t("common.pending"))}</b>`}</li>`).join("")}
+            ${rv.specs.map((sp) => `<li><span>${esc(L(sp.k))}</span><b>${num(L(sp.v))}</b></li>`).join("")}
+            <li><span>${esc(t("rovers.official"))}</span><b><a href="${rv.url}" target="_blank" rel="noopener">NASA ↗</a></b></li>
           </ul>
           <div class="why">
             <h4>${esc(t("rovers.why"))}</h4>
-            <p>${esc(t("rovers.whyPending"))}</p>
-            ${pending()}
+            <p>${esc(L(fit.text))}</p>
+            ${s.roverNote ? `<p>${esc(L(s.roverNote))}</p>` : ""}
+            <button class="thumb" type="button" data-zoom="${rv.image}" data-cursor><img src="${photo.src}" alt="${esc(L(rv.name))}" loading="lazy"><span>${esc(t("rovers.photo"))} ↗</span></button>
           </div>
         </div>
       </div>`;
@@ -704,7 +689,11 @@
         e.preventDefault();
         const changed = state.siteId !== sc.dataset.site;
         state.siteId = sc.dataset.site; state.analog = 0;
-        if (changed) { if (sc.hasAttribute("data-stay")) swapCompare(); else { renderCompare(); rebuildSoon(); } }
+        if (changed) {
+          if (sc.hasAttribute("data-stay")) swapCompare(); else { renderCompare(); rebuildSoon(); }
+          renderRover(); // the recommended rover follows the selected site
+          if (state.roverOpen) $("#roverSpecs").style.height = "auto";
+        }
         if (!sc.hasAttribute("data-stay")) scrollToId("#compare");
         return;
       }

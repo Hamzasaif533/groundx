@@ -29,25 +29,27 @@
 Space agencies test rovers, spacesuits and procedures in places on Earth that behave like the Moon or Mars. These are called **planetary analogs**. Ground X makes that idea visible:
 
 1. **Pick a site** on the Moon or Mars.
-2. **Meet its Earth twins.** Each site has two analog slots, anywhere in the world.
-3. **Compare them criterion by criterion:** terrain, slope, roughness, elevation, geology, rock size and density, and temperature, each with its values, method, status and evidence map.
-4. **Explore the real terrain in 3D** and walk along the elevation profile.
-5. **Match the rovers** built for that ground (vehicle research in progress).
+2. **Meet its Earth twin.** Each site is paired with the most similar place on Earth.
+3. **Compare them criterion by criterion:** terrain, slope, roughness, elevation, geology, rock size and density, and temperature, each with its values, method and evidence.
+4. **See a terrain similarity index** (0 to 100) calculated from slope, flat-ground share, roughness and relief.
+5. **Explore the real terrain in 3D** and walk along the elevation profile.
+6. **Match the rover:** NASA VIPER for the Moon, NASA Perseverance for Mars, with official specifications and a slope-based fit check.
 
-> **Data honesty is a core rule.** Every number is copied from the research team's files and is never recalculated. Anything not yet measured shows **"Pending"**. No similarity percentage is published until a documented scoring method exists.
+> **Data honesty is a core rule.** Team numbers are shown exactly as supplied. Numbers computed by Ground X (Mars from NASA MOLA, Oman from NASA SRTM, both on a matched 463 m grid) say so in their method, and every value links to its source.
 
 ---
 
 ## 🛰️ Sites in the atlas
 
-| | Site | Earth twin(s) | Data on the site |
-|:-:|---|---|---|
-| 🌕 | **Shackleton Rim**, lunar south pole | **Haughton Crater**, Devon Island, Canada | NASA Site04 DEM (5 m/px), slope + roughness rasters, elevation profile, 3D terrain |
-| 🔴 | **Syrtis Major** | **Samail Ophiolite**, Al Hajar Mountains, Oman | Slope, roughness and elevation statistics for Samail |
-| 🔴 | **Valles Marineris** | Wadi Ghul, Oman | Pairing + Mars Trek imagery |
-| 🔴 | **Aonia Terra** | Al Sharqiya Sands, Oman | Pairing + Mars Trek imagery |
-| 🔴 | **Jezero Crater** | Wadi Mistal & the Huqf area, Oman | Pairing + Mars Trek imagery |
-| 🧪 | | **AMADEE-18 "Kepler" station**, Dhofar, Oman (2018 Mars analog mission site) | Slope, roughness and elevation statistics |
+| | Site | Earth twin | Similarity | Rover |
+|:-:|---|---|:-:|---|
+| 🌕 | **Shackleton Rim**, lunar south pole | **Haughton Crater**, Devon Island, Canada | 34% | NASA VIPER |
+| 🔴 | **Valles Marineris** | **Wadi Ghul**, Al Hajar Mountains, Oman | 35% | NASA Perseverance |
+| 🔴 | **Syrtis Major** | **Samail Ophiolite**, Al Hajar Mountains, Oman | 40% | NASA Perseverance |
+| 🔴 | **Aonia Terra** | **Al Sharqiya Sands**, Oman | 64% | NASA Perseverance |
+| 🔴 | **Jezero Crater** | **Wadi Mistal**, Al Hajar Mountains, Oman | 34% | NASA Perseverance |
+
+Also in the analog library: **AMADEE-18 "Kepler" station**, Dhofar, Oman, the site of a 2018 Mars analog mission.
 
 ---
 
@@ -59,7 +61,7 @@ Space agencies test rovers, spacesuits and procedures in places on Earth that be
 <td width="50%"><img src="docs/screenshots/criteria.jpg" alt="Expanded slope criterion with values, method and evidence map"></td>
 </tr>
 <tr>
-<td><b>Side by side.</b> Pick any site and twin. The similarity score stays <i>Pending</i> until it can be computed properly.</td>
+<td><b>Side by side.</b> Pick any site to see it next to its Earth twin, with the terrain similarity index.</td>
 <td><b>Criterion by criterion.</b> Open a row to see the values, the method, the team's status note and the map behind it.</td>
 </tr>
 <tr>
@@ -176,12 +178,12 @@ Everything lives in **`assets/js/data.js`**, written in both languages as `{ en,
 | To add… | Do this |
 |---|---|
 | A Moon or Mars site | Push an object into `GX.SITES` (copy a `marsSite({...})` entry). It appears in the tabs, the site switcher and the counts automatically. |
-| A second Earth twin | Replace the `null` in that site's `analogs: [ … , null ]`. |
+| Terrain statistics for a new place | Add an entry to `GX.DEM_STATS`; `demCriteria()` turns it into slope, roughness and elevation criteria. |
 | Terrain statistics | Put raw values in `GX.GEE_STATS`; `geeCriteria()` turns them into slope, roughness and elevation criteria. |
 | An Earth analog card | Add to `GX.ANALOG_LIBRARY`. |
 | Evidence images | Add to `GX.EVIDENCE` with a `group` (`moon`, `canada`, `mars`, `oman`). |
-| A similarity % | Set `comparison.similarity`, **only** once a documented scoring method exists. |
-| A rover | Fill `GX.ROVERS["pending-1"]` or add a new rover and list its id in `analog.rovers`. |
+| The similarity % | Computed automatically by `GX.similarity()` from the two sides' `bars`. |
+| A rover | Add it to `GX.ROVERS` and set `rover` on the site. |
 
 After editing a CSS or JS file, increase the `?v=` number on its link in `index.html` so browsers load the new version.
 
@@ -197,6 +199,8 @@ After editing a CSS or JS file, increase the `?v=` number on its link in `index.
 | [NASA/JPL Photojournal](https://science.nasa.gov/photojournal/) · PIA00422, PIA23239, PIA20984, PIA13839 | Valles Marineris, Jezero, Syrtis Major and Aonia Terra photos |
 | [NASA Earth Observatory](https://science.nasa.gov/earth/earth-observatory/earths-crust-exposed-in-oman-77569) (EO-1 ALI, 2012) | Samail Ophiolite photo |
 | [NASA JSC astronaut photography](https://eol.jsc.nasa.gov/) · STS085-501-14, ISS053-E-302321 | Al Sharqiya Sands and Al Hajar Mountains photos |
+| [NASA MGS MOLA DEM, 463 m](https://astrogeology.usgs.gov/search/map/mars_mgs_mola_dem_463m) · [NASA SRTM](https://www.earthdata.nasa.gov/data/instruments/srtm) | Matched slope, roughness and elevation for Mars sites and Oman twins |
+| [NASA VIPER](https://science.nasa.gov/mission/viper/) · [Perseverance](https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/) | Rover specifications and photos |
 | [NASA Ames, K-10 rover at Haughton](https://images.nasa.gov/details/ARC-2007-ACD07-0170-001) (2007) | Rover field-test evidence |
 | [Landsat 8 (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Haughton_Crater_-Landsat_8(48010457521).png) | Haughton photo |
 | [ArcticDEM mosaic v4.1, 2 m](https://www.pgc.umn.edu/data/arcticdem/) (Polar Geospatial Center) | Haughton elevation model and site checks |

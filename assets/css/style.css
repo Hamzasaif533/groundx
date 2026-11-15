@@ -1180,3 +1180,13 @@ html[data-theme="light"] .theme-btn .i-moon { transform: translateY(-120%) rotat
 
 /* every image fills its frame (no letterboxing) */
 .shot__img img, .site-card__media img, .analog__media img, .vs__media img, .thumb img { object-fit: cover; }
+
+/* rover photo inside the "why it fits" card */
+.why .thumb { display: block; position: relative; margin-top: 4px; }
+.why .thumb img { width: 100%; height: auto; aspect-ratio: 16 / 10; display: block; }
+.why .thumb span { position: absolute; inset-inline-start: 10px; bottom: 10px; padding: 4px 10px; border-radius: 999px; background: rgba(var(--bg-rgb), .75); color: var(--text); font-size: 13px; }
+.rover-specs__inner { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+.spec-table li { flex-wrap: wrap; gap: 4px 16px; }
+.spec-table li b { text-align: end; white-space: normal; overflow-wrap: anywhere; font-family: var(--font); min-width: 0; flex: 1 1 auto; }
+.spec-table li span { flex: 0 1 auto; }
+@media (max-width: 1080px) { .rover-specs__inner { grid-template-columns: minmax(0, 1fr); } }
